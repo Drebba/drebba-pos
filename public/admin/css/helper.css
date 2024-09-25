@@ -1,0 +1,68 @@
+.mt-05 {
+    margin-top: 2px;
+}
+
+.w-80px {
+    width: 80px !important;
+}
+.w-100px {
+    width: 100px !important;
+}
+.w-125px {
+    width: 125px !important;
+}
+
+.w-200px {
+    width: 200px !important;
+}
+
+
+.max-w-100px {
+    max-width: 100px !important;
+}
+.max-w-125px {
+    max-width: 125px !important;
+}
+
+/*========== Min ========*/
+.min-w-150px {
+    min-width: 150px;
+}
+.min-w-200px {
+    min-width: 200px;
+}
+.min-w-250px {
+    min-width: 250px;
+}
+
+@media screen and (min-width: 992px) {
+    .w-lg-auto {
+        width: auto !important;
+    }
+}
+@media screen and (min-width: 768px) {
+    .w-md-auto {
+        width: auto !important;
+    }
+}
+@media screen and (max-width: 991px) {
+    .d-lg-down-none {
+        display: none !important;
+    }
+}
+
+
+.w-20px {
+    width: 20px;
+}
+.w-25px {
+    width: 25px;
+}
+
+
+/*======== Sticky ===========*/
+.sticky-top-80 {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 80pxs;
+}
