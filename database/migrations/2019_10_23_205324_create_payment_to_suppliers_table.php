@@ -15,7 +15,7 @@ class CreatePaymentToSuppliersTable extends Migration
     {
         Schema::create('payment_to_suppliers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('branch_id');
+            $table->integer('business_id');
             $table->integer('purchase_id')->nullable();
             $table->integer('supplier_id');
             $table->date('payment_date');

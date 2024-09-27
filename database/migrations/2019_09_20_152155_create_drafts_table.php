@@ -15,6 +15,7 @@ class CreateDraftsTable extends Migration
     {
         Schema::create('drafts', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('business_id');
             $table->string('inquiry_id');
             $table->integer('customer_id');
             $table->integer('branch_id');

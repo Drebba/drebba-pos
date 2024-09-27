@@ -9,6 +9,27 @@
 <div class="aside-menu-divider"></div>
 
 <ul class="aside-nav-menu">
+
+    @canany(['do:anything'])
+    <li class="aside-nav-heading"> {{__('pages.Business')}} </li>
+    <li class="aside-nav-item toggleable-group">
+        <a class="aside-nav-link toggler {{ active_if_match('businesses') }} " href="javascript:void(0)">
+            <span class="aside-nav-icon aside-tooltip" data-bs-placement="top" title="{{__('pages.manage_business')}}"><i class="fas fa-boxes"></i></span>
+            <span class="aside-nav-text">Business</span>
+            <span class="aside-nav-dropdown-icon"></span>
+        </a>
+        <div class="aside-dropdown toggleable-menu {{ active_if_match('businesses') }}">
+            <ul class="aside-submenu">
+                @can('do:anything')
+                    <a class="aside-nav-link {{ active_if_full_match('category') }}" href="{{route('businesses.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">Business</span></a>
+                @endcan
+
+            </ul>
+        </div>
+    </li>
+    @endcan
+
+
     @canany(['manage_category', 'manage_tax', 'manage_product', 'manage_unit'])
         <li class="aside-nav-heading"> {{__('pages.sells_marketing')}} </li>
         <li class="aside-nav-item toggleable-group">

@@ -15,8 +15,8 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('business_id');
             $table->string('invoice_id');
-            $table->integer('branch_id');
             $table->integer('supplier_id');
             $table->double('total_amount');
             $table->double('paid_amount');

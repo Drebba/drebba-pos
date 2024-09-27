@@ -15,6 +15,7 @@ class CreateExpensesTable extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('business_id');
             $table->string('expense_id');
             $table->integer('branch_id');
             $table->integer('expense_category_id');

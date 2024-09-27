@@ -15,6 +15,7 @@ class CreateDraftProductsTable extends Migration
     {
         Schema::create('draft_products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('business_id');
             $table->integer('draft_id');
             $table->integer('product_id');
             $table->double('purchase_price');

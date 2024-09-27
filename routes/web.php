@@ -54,7 +54,7 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('category', 'Backend\CategoryController');
     Route::resource('unit', 'Backend\UnitController');
     Route::resource('user', 'Backend\UserController');
-    Route::resource('branch', 'Backend\BranchController');
+    Route::resource('businesses', 'Backend\BusinessController');
     Route::resource('supplier', 'Backend\SupplierController');
     Route::get('change-supplier-status/{id}', 'Backend\SupplierController@changeStatus')->name('change-supplier-status');
     Route::resource('customer', 'Backend\CustomerController');

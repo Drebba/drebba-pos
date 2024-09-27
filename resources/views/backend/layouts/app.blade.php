@@ -80,7 +80,7 @@
         // Toggle the state
         isToggled = !isToggled;
         // Store the updated state in localStorage
-        localStorage.setItem('wrappingEnable', isToggled);
+        // localStorage.setItem('wrappingEnable', isToggled);
     });
 
 

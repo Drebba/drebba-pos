@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBranchesTable extends Migration
+class CreateBusinessesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateBranchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('businesses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title');
-            $table->text('short_description')->nullable();
-            $table->string('address');
-            $table->string('contact_person');
+            $table->string('name');
+            $table->string('email');
             $table->string('phone');
+            $table->string('contact_person');
+            $table->string('address');
             $table->boolean('status')->default(1)->comment('1=Active,2=InActive');
+            $table->text('short_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

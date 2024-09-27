@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Toastr;
 
-class BranchController extends Controller
+class BusinessController extends Controller
 {
     /**
      * Display a listing of the resource.

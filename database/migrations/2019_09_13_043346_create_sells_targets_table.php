@@ -15,7 +15,7 @@ class CreateSellsTargetsTable extends Migration
     {
         Schema::create('sells_targets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('branch_id');
+            $table->integer('business_id');
             $table->string('month');
             $table->double('target_amount');
             $table->timestamps();

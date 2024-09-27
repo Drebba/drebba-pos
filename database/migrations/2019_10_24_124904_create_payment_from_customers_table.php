@@ -15,7 +15,7 @@ class CreatePaymentFromCustomersTable extends Migration
     {
         Schema::create('payment_from_customers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('branch_id');
+            $table->integer('business_id');
             $table->integer('customer_id');
             $table->integer('sell_id');
             $table->date('payment_date');

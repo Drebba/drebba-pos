@@ -15,6 +15,7 @@ class CreateRequisitionsTable extends Migration
     {
         Schema::create('requisitions', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('business_id');
             $table->string('requisition_id');
             $table->integer('requisition_from');
             $table->integer('requisition_to');

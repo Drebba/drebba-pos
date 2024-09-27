@@ -17,7 +17,7 @@ class CreateSellsTable extends Migration
             $table->bigIncrements('id');
             $table->string('invoice_id');
             $table->integer('customer_id');
-            $table->integer('branch_id');
+            $table->integer('business_id');
             $table->integer('created_by');
             $table->double('sub_total');
             $table->double('discount')->default(0);
