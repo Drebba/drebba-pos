@@ -16,7 +16,7 @@ class ChartApiController extends Controller
 {
     public function dashboard(){
 
-        $branch_id = Auth::user()->branch_id;
+        $business_id = Auth::user()->business_id;
         $last_30_days_sell = [];
         $key = 0;
         for ($i=30; $i >= 0 ; $i--)
@@ -28,7 +28,7 @@ class ChartApiController extends Controller
                 $amount = Sell::where('sell_date', $date_info)->sum('grand_total_price');
                 $last_30_days_sell[$key]['total_sell_amount'] = number_format($amount, 2, '.', '');
             }else{
-                $amount = Sell::where('branch_id', $branch_id)->where('sell_date', $date_info)->sum('grand_total_price');
+                $amount = Sell::where('business_id', $business_id)->where('sell_date', $date_info)->sum('grand_total_price');
                 $last_30_days_sell[$key]['total_sell_amount'] = number_format($amount, 2, '.', '');
             }
             $key++;
@@ -50,7 +50,7 @@ class ChartApiController extends Controller
             if (Auth::user()->can('access_to_all_branch')){
                 $last_30_days_sell[$key]['total_sell_amount'] = SellProduct::where('product_id', $id)->where('sell_date', $date_info)->sum('total_price');
             }else{
-                $last_30_days_sell[$key]['total_sell_amount'] = SellProduct::where('product_id', $id)->where('branch_id', auth()->user()->employee->branch->id)->where('sell_date', $date_info)->sum('total_price');
+                $last_30_days_sell[$key]['total_sell_amount'] = SellProduct::where('product_id', $id)->where('business_id', auth()->user()->employee->branch->id)->where('sell_date', $date_info)->sum('total_price');
             }
             $key++;
         }
@@ -71,7 +71,7 @@ class ChartApiController extends Controller
             if (Auth::user()->can('access_to_all_branch')){
                 $sell_info[$key]['total_sell_amount'] = Sell::where('sell_date', $date_info)->sum('grand_total_price');
             }else{
-                $sell_info[$key]['total_sell_amount'] = Sell::where('branch_id', Auth::user()->branch_id)->where('sell_date', $date_info)->sum('grand_total_price');
+                $sell_info[$key]['total_sell_amount'] = Sell::where('business_id', Auth::user()->business_id)->where('sell_date', $date_info)->sum('grand_total_price');
             }
             $key++;
         }
@@ -92,7 +92,7 @@ class ChartApiController extends Controller
             if (Auth::user()->can('access_to_all_branch')){
                 $sell_info[$key]['total_sell_amount'] = Sell::where('sell_date', $date_info)->sum('grand_total_price');
             }else{
-                $sell_info[$key]['total_sell_amount'] = Sell::where('branch_id', Auth::user()->branch_id)->where('sell_date', $date_info)->sum('grand_total_price');
+                $sell_info[$key]['total_sell_amount'] = Sell::where('business_id', Auth::user()->business_id)->where('sell_date', $date_info)->sum('grand_total_price');
             }
             $key++;
         }
@@ -118,7 +118,7 @@ class ChartApiController extends Controller
         }
 
 
-        $branch_id = $selected_branch ? [$selected_branch] : Sell::select('branch_id')->distinct()->get();
+        $business_id = $selected_branch ? [$selected_branch] : Sell::select('business_id')->distinct()->get();
 
         if ($search_type == 'month'){
             $start_date = Carbon::parse($selected_month)->startOfMonth($selected_month)->format('Y-m-d');
@@ -128,7 +128,7 @@ class ChartApiController extends Controller
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
                 $sells = Sell::where('sell_date', $date->format('Y-m-d'));
                 if ($selected_branch != null){
-                    $sells = $sells->where('branch_id', $selected_branch);
+                    $sells = $sells->where('business_id', $selected_branch);
                 }
                 $sell_info[$key]['currency'] = get_option('app_currency') . ' ';
                 $sell_info[$key]['sell_date'] = $date->format('Y-m-d');
@@ -147,7 +147,7 @@ class ChartApiController extends Controller
 
                 $sells = Sell::whereMonth('sell_date', $i)->whereYear('sell_date', $year);
                 if ($selected_branch != null){
-                    $sells = $sells->where('branch_id', $selected_branch);
+                    $sells = $sells->where('business_id', $selected_branch);
                 }
 
                 $sell_info[$i-1]['currency'] = get_option('app_currency') . ' ';
@@ -171,7 +171,7 @@ class ChartApiController extends Controller
             if (Auth::user()->can('access_to_all_branch')) {
                 $purchase_info[$key]['total_purchase_amount'] = Purchase::where('purchase_date', $date_info)->sum('total_amount');
             }else{
-                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('branch_id', Auth::user()->branch_id)
+                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('business_id', Auth::user()->business_id)
                     ->where('purchase_date', $date_info)
                     ->sum('total_amount');
             }
@@ -194,7 +194,7 @@ class ChartApiController extends Controller
             if (Auth::user()->can('access_to_all_branch')) {
                 $purchase_info[$key]['total_purchase_amount'] = Purchase::where('purchase_date', $date_info)->sum('total_amount');
             }else{
-                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('branch_id', Auth::user()->branch_id)
+                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('business_id', Auth::user()->business_id)
                     ->where('purchase_date', $date_info)
                     ->sum('total_amount');
             }
@@ -231,7 +231,7 @@ class ChartApiController extends Controller
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
                 $purchase = Purchase::where('purchase_date', $date->format('Y-m-d'));
                 if ($selected_branch != null){
-                    $purchase = $purchase->where('branch_id', $selected_branch);
+                    $purchase = $purchase->where('business_id', $selected_branch);
                 }
                 $purchase_info[$key]['purchase_date'] = $date->format('Y-m-d');
                 $purchase_info[$key]['total_purchase_amount'] = $purchase->sum('total_amount');
@@ -249,7 +249,7 @@ class ChartApiController extends Controller
                 $purchase = Purchase::whereYear('purchase_date', $year)->whereMonth('purchase_date', $i);
 
                 if ($selected_branch){
-                    $purchase = $purchase->where('branch_id', $selected_branch);
+                    $purchase = $purchase->where('business_id', $selected_branch);
                 }
 
                 $purchase_info[$i]['currency'] = get_option('app_currency') . ' ';

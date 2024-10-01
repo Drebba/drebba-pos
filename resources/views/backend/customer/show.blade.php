@@ -108,42 +108,6 @@
                     </div>
                 </div>
 
-                @can('access_to_all_branch')
-                    <div class="wiz-card h-auto mb-3">
-                        <div class="wiz-card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-sm wiz-table">
-                                    <thead>
-                                    <tr class="bg-secondary text-white">
-                                        <th>{{__('pages.branch')}}</th>
-                                        <th>{{__('pages.total_purchase')}}</th>
-                                        <th>{{__('pages.total_paid')}}</th>
-                                        <th>{{__('pages.total_due')}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($sell_by_branches as $key => $sell_by_branch)
-                                        <tr>
-                                            <td>{{$sell_by_branch['branch_name']}}</td>
-                                            <td>{{get_option('app_currency')}}{{number_format($sell_by_branch['sells']->sum('grand_total_price'),2)}}</td>
-                                            <td>
-                                                {{get_option('app_currency')}}{{number_format($sell_by_branch['sells']->sum('paid_amount'),2)}}
-                                            </td>
-                                            <td>{{get_option('app_currency')}}{{number_format($sell_by_branch['sells']->sum('due_amount'),2)}}</td>
-                                        </tr>
-                                    @endforeach
-                                    <tr>
-                                        <td class="text-right pr-2"><b>Total</b></td>
-                                        <td><b>{{get_option('app_currency')}}{{number_format($customer->sells->sum('grand_total_price'),2)}}</b></td>
-                                        <td><b>{{get_option('app_currency')}}{{number_format($customer->sells->sum('paid_amount'),2)}}</b></td>
-                                        <td><b>{{get_option('app_currency')}}{{number_format($customer->sells->sum('due_amount'),2)}}</b></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                @endcan
 
                 @if($sells->count() > 0)
                     <div class="wiz-card h-auto">

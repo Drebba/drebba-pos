@@ -6,32 +6,6 @@
             </div>
         </div>
 
-        @if (Auth::user()->can('access_to_all_branch'))
-            <div class="col-sm-6 col-md-4 col-lg">
-                <div class="form-group">
-                    <select name="requisition_from" class="form-select select2-basic">
-                        <option value="">{{__('pages.requisition_form')}}</option>
-                        @foreach($branches as $branch)
-                            <option value="{{$branch->id}}" {{Request::get('requisition_from') == $branch->id ? 'selected' : ''}}>{{$branch->title}} </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        @else
-            <input type="hidden" name="requisition_from" value="{{Auth::user()->branch_id}}">
-        @endif
-
-        <div class="col-sm-6 col-md-4 col-lg">
-            <div class="form-group">
-                <select name="requisition_to" class="form-select select2-basic">
-                    <option value="">{{__('pages.requisition_to')}}</option>
-                    @foreach($branches as $branch)
-                        <option value="{{$branch->id}}" {{Request::get('requisition_to') == $branch->id ? 'selected' : ''}}>{{$branch->title}} </option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-
         <div class="col-sm-6 col-md-4 col-lg">
             <div class="form-group">
                 <input type="text" name="start_date" data-date-format="yyyy-mm-dd" value="{{Request::get('start_date')}}" class="datepicker form-control" placeholder="{{__('pages.start_date')}}" autocomplete="off">

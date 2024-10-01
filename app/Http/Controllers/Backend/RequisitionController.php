@@ -54,7 +54,6 @@ class RequisitionController extends Controller
 
         return view('backend.requisition.index',[
             'requisitions' => $requisitions,
-            'branches' => Branch::all(),
         ]);
     }
 
@@ -68,7 +67,6 @@ class RequisitionController extends Controller
 
         return view('backend.requisition.index',[
             'requisitions' => $requisitions,
-            'branches' => Branch::all(),
         ]);
     }
 
@@ -131,10 +129,10 @@ class RequisitionController extends Controller
         $requisition = Requisition::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             $result = 0;
-            if ($requisition->requisition_to == Auth::user()->branch_id){
+            if ($requisition->requisition_to == Auth::user()->business_id){
                 $result = 1;
             }
-            if ($requisition->requisition_from == Auth::user()->branch_id){
+            if ($requisition->requisition_from == Auth::user()->business_id){
                 $result = 1;
             }
 
@@ -164,10 +162,10 @@ class RequisitionController extends Controller
 
         if (!Auth::user()->can('access_to_all_branch')) {
             $result = 0;
-            if ($requisition->requisition_to == Auth::user()->branch_id){
+            if ($requisition->requisition_to == Auth::user()->business_id){
                 $result = 1;
             }
-            if ($requisition->requisition_from == Auth::user()->branch_id){
+            if ($requisition->requisition_from == Auth::user()->business_id){
                 $result = 1;
             }
 
@@ -302,13 +300,13 @@ class RequisitionController extends Controller
              * যে  রিকুইজিশন রিকোয়েস্ট সেন্ড করেছেন তার স্টক (+) হবে
              */
             $product_stock_history_req_form = ProductStockHistory::withoutGlobalScopes(['branch'])
-                ->where('branch_id', $requisition->requisition_from)
+                ->where('business_id', $requisition->requisition_from)
                 ->where('product_id', $requisition_product->product_id)
                 ->first();
 
             if (!$product_stock_history_req_form){
                 $product_stock_history_req_form = new ProductStockHistory();
-                $product_stock_history_req_form->branch_id = $requisition->requisition_from;
+                $product_stock_history_req_form->business_id = $requisition->requisition_from;
                 $product_stock_history_req_form->product_id = $requisition_product->product_id;
                 $product_stock_history_req_form->save();
             }
@@ -320,13 +318,13 @@ class RequisitionController extends Controller
              * যার কাছে রিকুইজিশন রিকোয়েস্ট পাঠানো হয়েছে তার স্টক থেকে  (-) হবে
              */
             $product_stock_history_req_to = ProductStockHistory::withoutGlobalScopes(['branch'])
-                ->where('branch_id', $requisition->requisition_to)
+                ->where('business_id', $requisition->requisition_to)
                 ->where('product_id', $requisition_product->product_id)
                 ->first();
 
             if (!$product_stock_history_req_to){
                 $product_stock_history_req_to = new ProductStockHistory();
-                $product_stock_history_req_to->branch_id = $requisition->requisition_to;
+                $product_stock_history_req_to->business_id = $requisition->requisition_to;
                 $product_stock_history_req_to->product_id = $requisition_product->product_id;
                 $product_stock_history_req_to->save();
             }
@@ -382,10 +380,10 @@ class RequisitionController extends Controller
         $requisition = Requisition::findOrFail($requisition_id);
         if (!Auth::user()->can('access_to_all_branch')) {
             $result = 0;
-            if ($requisition->requisition_to == Auth::user()->branch_id){
+            if ($requisition->requisition_to == Auth::user()->business_id){
                 $result = 1;
             }
-            if ($requisition->requisition_from == Auth::user()->branch_id){
+            if ($requisition->requisition_from == Auth::user()->business_id){
                 $result = 1;
             }
 

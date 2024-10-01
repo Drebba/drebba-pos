@@ -5,22 +5,6 @@
                 <input type="text" name="invoice_id" placeholder="{{__('pages.invoice_id')}}" class="form-control">
             </div>
         </div>
-
-        {{-- @if (Auth::user()->can('access_to_all_branch'))
-            <div class="col-sm-6 col-md-4 col-lg">
-                <div class="form-group">
-                    <select name="branch_id" class="form-control select2-basic">
-                        <option value="">{{__('pages.all_branch')}}</option>
-                        @foreach($branches as $branch)
-                            <option value="{{$branch->id}}" {{ Request::get('branch_id') == $branch->id ? 'selected' : ''}}>{{$branch->title}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        @else
-            <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-        @endif --}}
-
         <div class="col-sm-6 col-md-4 col-lg">
             <div class="form-group">
                 <select name="supplier_id" class="form-control select2-basic">

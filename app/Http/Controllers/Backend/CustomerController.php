@@ -85,18 +85,10 @@ class CustomerController extends Controller
         $sells = Sell::where('customer_id', $id)->orderBy('id', 'DESC')->paginate(20);
 
         $customer = Customer::findOrFail($id);
-        $branches = Branch::all();
-        $sell_by_branches = [];
-
-        foreach ($branches as $key => $branch) {
-            $sell_by_branches[$key]['branch_name'] = $branch->title;
-            $sell_by_branches[$key]['sells'] = Sell::where('customer_id', $customer->id)->where('branch_id', $branch->id)->get();
-        }
 
         return view('backend.customer.show',[
             'customer' => $customer,
             'sells' => $sells,
-            'sell_by_branches' => $sell_by_branches,
         ]);
     }
 

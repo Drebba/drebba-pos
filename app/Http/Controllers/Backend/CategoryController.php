@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -23,7 +22,7 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.index',[
-            'categories' => Category::orderBy('id', 'DESC')->get()
+            'categories' => Category::where('business_id',Auth::user()->business_id)->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -39,7 +38,7 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.create',[
-            'categories' => Category::orderBy('id', 'DESC')->get()
+            'categories' =>Auth::user()->business()->category()->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -57,6 +56,7 @@ class CategoryController extends Controller
 
         $category = new Category();
         $category->title = $request->category['title'];
+        $category->business_id = Auth::user()->business_id;
         $category->save();
         return response($category);
     }
@@ -85,7 +85,7 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.edit',[
-            'category' => Category::findOrFail($id)
+            'category' => Auth::user()->business()->category->where('id',$id)->first()
         ]);
     }
 
@@ -102,7 +102,7 @@ class CategoryController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $category = Category::findOrFail($id);
+        $category = Auth::user()->business()->category()->where('id',$id)->first();
         $category->title = $request->category['title'];
         $category->save();
         return response()->json(['success', 'category Successfully Updated']);
@@ -121,7 +121,7 @@ class CategoryController extends Controller
         } // end permission checking
 
 
-        Category::destroy($id);
+        Auth::user()->business()->category()->where('id',$id)->delete();
         return response()->json(['success', 'Category has been deleted successfully']);
     }
 }

@@ -121,44 +121,6 @@
                     </div>
                 </div>
 
-                @can('access_to_all_branch')
-                    <div class="wiz-box mb-3">
-                        <div class="table-responsive">
-                            <table class="table table-bordered text-center table-sm wiz-table mw-col-width-skip-first mb-0">
-                                <thead>
-                                <tr class="bg-secondary text-white">
-                                    <th>{{__('pages.branch')}}</th>
-                                    <th>{{__('pages.total_purchase')}}</th>
-                                    <th>{{__('pages.total_paid')}}</th>
-                                    <th>{{__('pages.total_due')}}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($purchase_by_branches as $key => $purchase_by_branch)
-                                    <tr>
-                                        <td>{{$purchase_by_branch['branch_name']}}</td>
-                                        <td>{{get_option('app_currency')}}{{number_format($purchase_by_branch['total_purchase']->sum('total_amount'),2)}}</td>
-                                        <td>
-                                            {{get_option('app_currency')}}
-                                            {{number_format($purchase_by_branch['total_purchase']->sum('paid_amount') + $purchase_by_branch['payment']->sum('amount'),2)}}
-                                        </td>
-                                        <td>{{get_option('app_currency')}}{{number_format($purchase_by_branch['total_purchase']->sum('due_amount') - $purchase_by_branch['payment']->sum('amount'),2)}}</td>
-                                    </tr>
-                                @endforeach
-                                <tr>
-                                    <td class="text-right pr-2"><b>Total</b></td>
-                                    <td><b>{{get_option('app_currency')}}{{number_format($supplier->purchase->sum('total_amount'),2)}}</b></td>
-                                    <td><b>{{get_option('app_currency')}}{{number_format($supplier->purchase->sum('paid_amount') + $supplier->payments->sum('amount'),2)}}</b></td>
-                                    <td><b>{{get_option('app_currency')}}{{number_format($supplier->purchase->sum('due_amount') - $supplier->payments->sum('amount'),2)}}</b></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                @endcan
-
-
-
                 <div class="wiz-box">
                     <div class="table-responsive">
                         <table class="table table-bordered text-center table-sm wiz-table mw-col-width-skip-first">

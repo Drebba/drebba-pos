@@ -11,21 +11,6 @@
                                 <input type="text" name="month" data-date-format="yyyy-M"  value="{{Request::get('month')}}"  placeholder="{{__('pages.select_month')}}" id="datepicker" class="form-control" autocomplete="off">
                             </div>
                         </div>
-
-                        @can('access_to_all_branch')
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <select name="branch_id" class="form-select select2-basic">
-                                        <option value="">{{__('pages.all_branch')}}</option>
-                                        @foreach($branches as $branch)
-                                            <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @else
-                            <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                        @endcan
                     </div>
 
                     <div class="form-group align-self-end">
@@ -44,22 +29,7 @@
                             <div class="form-group">
                                 <input type="text" name="year" data-date-format="yyyy"  value="{{Request::get('year')}}"  placeholder="{{__('pages.select_year')}}" id="yearPicker" class="form-control" autocomplete="off">
                             </div>
-                        </div>
-
-                        @can('access_to_all_branch')
-                        <div class="col-md-6">
-                            <div class="form-group text-left">
-                                <select name="branch_id" class="form-select select2-basic">
-                                    <option value="">{{__('pages.all_branch')}}</option>
-                                    @foreach($branches as $branch)
-                                        <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        @else
-                            <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                        @endcan
+                        </div>0]8
                     </div>
 
                     <div class="form-group align-self-end">

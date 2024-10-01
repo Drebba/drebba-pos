@@ -25,7 +25,6 @@ return [
 
     'crm' => 'CRM',
     'manage_branch' => 'Manage Branch',
-    'branches' => 'All Branches',
     'manage_sells_target' => 'Manage Sales Target',
     'manage_customers' => 'Manage Customers',
     'manage_suppliers' => 'Manage Suppliers',
@@ -52,8 +51,6 @@ return [
     'sales_of_month' => 'Sales of This Month',
     'total_sales_amount' => 'Total Sales Amount',
     'sales_summary_last_30_days' => 'Sales Summery of Last 30 Days',
-    'branches_target_this_month' => 'Branches Target (This Month)',
-
     'purchase_of_month' => 'Purchase of This Month',
     'total_purchase_amount' => 'Total Purchase Amount',
 
@@ -334,7 +331,6 @@ return [
     'complete' => 'Complete',
     'purchase_quantity' => 'Purchase Quantity',
     'sell_quantity' => 'Sales Quantity',
-    'received_from_others_branches' => 'Received from Others Branch',
     'sell_summary' => 'Sales Summary',
     'unit_price' => 'Unit Price',
     'summary' => 'Summary',

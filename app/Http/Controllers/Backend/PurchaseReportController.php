@@ -48,7 +48,6 @@ class PurchaseReportController extends Controller
         }
 
         return view('backend.report.purchase.summary.index',[
-            'branches' => Branch::all(),
             'suppliers' => Supplier::orderBy('id', 'DESC')->get(),
             'purchases' => $purchases
         ]);
@@ -69,7 +68,6 @@ class PurchaseReportController extends Controller
         $purchase_info = $this->statisticsFilterQuery($request);
 
         return view('backend.report.purchase.statistics.index',[
-            'branches' => Branch::all(),
             'purchase_info' => $purchase_info
         ]);
     }
@@ -82,7 +80,6 @@ class PurchaseReportController extends Controller
 
         $purchase_info = $this->statisticsFilterQuery($request);
         return view('backend.report.purchase.statistics.filter-result',[
-            'branches' => Branch::all(),
             'purchase_info' => $purchase_info
         ]);
     }
@@ -112,7 +109,6 @@ class PurchaseReportController extends Controller
 
         $purchase_info = $this->lastDynamicDaysStatisticsQuery($days);
         return view('backend.report.purchase.statistics.dynamic-days',[
-            'branches' => Branch::all(),
             'days' => $days,
             'purchase_info' => $purchase_info
         ]);
@@ -162,7 +158,6 @@ class PurchaseReportController extends Controller
         }
 
         return view('backend.report.purchase.product-wise.index',[
-            'branches' => Branch::all(),
             'products' => Product::orderBy('title')->get(),
             'purchase_products' => $purchase_products,
         ]);
@@ -200,7 +195,6 @@ class PurchaseReportController extends Controller
         return view('backend.report.purchase.purchases.index',[
             'purchases' => $purchases,
             'suppliers' => Supplier::orderBy('id', 'DESC')->get(),
-            'branches' => Branch::all(),
         ]);
     }
 
@@ -226,8 +220,8 @@ class PurchaseReportController extends Controller
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
         }
 
-        if ($request->branch_id){
-            $purchases = $purchases->where('branch_id', $request->branch_id);
+        if ($request->business_id){
+            $purchases = $purchases->where('business_id', $request->business_id);
         }
 
         $purchases = $purchases->get()
@@ -246,8 +240,8 @@ class PurchaseReportController extends Controller
             $purchase_info = [];
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
                 $purchase = Purchase::where('purchase_date', $date->format('Y-m-d'));
-                if ($request->branch_id){
-                    $purchase = $purchase->where('branch_id', $request->branch_id);
+                if ($request->business_id){
+                    $purchase = $purchase->where('business_id', $request->business_id);
                 }
                 $purchase_info[$key]['purchase_date'] = $date->format('Y-m-d');
                 $purchase_info[$key]['total_purchase_amount'] = $purchase->sum('total_amount');
@@ -262,8 +256,8 @@ class PurchaseReportController extends Controller
 
                 $purchase = Purchase::whereYear('purchase_date', $year)->whereMonth('purchase_date', $i);
 
-                if ($request->branch_id){
-                    $purchase = $purchase->where('branch_id', $request->branch_id);
+                if ($request->business_id){
+                    $purchase = $purchase->where('business_id', $request->business_id);
                 }
 
                 $purchase_info[$i]['purchase_date'] = $month_name;
@@ -279,7 +273,7 @@ class PurchaseReportController extends Controller
                 if (Auth::user()->can('access_to_all_branch')) {
                     $purchase_info[$key]['total_purchase_amount'] = Purchase::where('purchase_date', $date_info)->sum('total_amount');
                 }else{
-                    $purchase_info[$key]['total_purchase_amount'] = Purchase::where('branch_id', Auth::user()->branch_id)
+                    $purchase_info[$key]['total_purchase_amount'] = Purchase::where('business_id', Auth::user()->business_id)
                         ->where('purchase_date', $date_info)
                         ->sum('total_amount');
                 }
@@ -302,7 +296,7 @@ class PurchaseReportController extends Controller
             if (Auth::user()->can('access_to_all_branch')) {
                 $purchase_info[$key]['total_purchase_amount'] = Purchase::where('purchase_date', $date_info)->sum('total_amount');
             }else{
-                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('branch_id', Auth::user()->branch_id)
+                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('business_id', Auth::user()->business_id)
                     ->where('purchase_date', $date_info)
                     ->sum('total_amount');
             }
@@ -326,9 +320,9 @@ class PurchaseReportController extends Controller
              $purchase_products = $purchase_products->where('product_id', $product_id);
          }
 
-        if ($request->branch_id){
-            $purchase_id_from_branch_id = Purchase::where('branch_id', $request->branch_id)->pluck('id')->all();
-            $purchase_products = $purchase_products->whereIn('purchase_id', $purchase_id_from_branch_id);
+        if ($request->business_id){
+            $purchase_id_from_business_id = Purchase::where('business_id', $request->business_id)->pluck('id')->all();
+            $purchase_products = $purchase_products->whereIn('purchase_id', $purchase_id_from_business_id);
         }
 
         return $purchase_products = $purchase_products->get()->groupBy('product_id');
@@ -346,8 +340,8 @@ class PurchaseReportController extends Controller
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
         }
 
-        if ($request->branch_id){
-            $purchases = $purchases->where('branch_id', $request->branch_id);
+        if ($request->business_id){
+            $purchases = $purchases->where('business_id', $request->business_id);
         }
 
 
@@ -363,8 +357,8 @@ class PurchaseReportController extends Controller
         $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();;
         $end_date = $request->end_date ? $request->end_date : Purchase::latest()->pluck('purchase_date')->first();
 
-        if ($request->branch_id != ''){
-            $branch =  Branch::findOrFail($request->branch_id);
+        if ($request->business_id != ''){
+            $branch =  Branch::findOrFail($request->business_id);
             $branch_name = $branch->title;
         }else{
             $branch_name = 'All';

@@ -22,8 +22,7 @@ class StockReportController extends Controller
 
         $products = Product::all();
         return view('backend.report.stock.index',[
-            'products' => $products,
-            'branches' =>Branch::all()
+            'products' => $products
         ]);
     }
 
@@ -32,12 +31,12 @@ class StockReportController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        if ($request->branch_id != ''){
+        if ($request->business_id != ''){
             $products = Product::with('productStockHistories', 'unit')->get();
 
             $product_requisitions = [];
             foreach ($products as $key => $product){
-                $productStockHistories = $product->productStockHistories->where('branch_id', $request->branch_id);
+                $productStockHistories = $product->productStockHistories->where('business_id', $request->business_id);
 
                 $product_requisitions[$key]['product_id'] = $product->id;
                 $product_requisitions[$key]['product_title'] = $product->title;
@@ -51,15 +50,14 @@ class StockReportController extends Controller
                 $product_requisitions[$key]['current_stock'] = ($product_requisitions[$key]['purchase_qty'] + $product_requisitions[$key]['branch_requisitions_from_qty']) - ($product_requisitions[$key]['sell_qty'] + $product_requisitions[$key]['branch_requisitions_to_qty']);
                 $product_requisitions[$key]['unit'] = $product->unit->title ?? '';
 
-//                $product_requisitions[$key]['total_purchase_value'] = $product->purchaseProducts->where('branch_id', $request->branch_id)->sum('total_price');
+//                $product_requisitions[$key]['total_purchase_value'] = $product->purchaseProducts->where('business_id', $request->business_id)->sum('total_price');
 //                $product_requisitions[$key]['branch_requisitions_to_qty'] =$this->branchRequisitionToQty($request, $product);
 //                $product_requisitions[$key]['branch_requisitions_from_qty'] = $this->branchRequisitionFromQty($request, $product);
-//                $product_requisitions[$key]['sell_qty'] = $product->sellProducts->where('branch_id', $request->branch_id)->sum('quantity');
+//                $product_requisitions[$key]['sell_qty'] = $product->sellProducts->where('business_id', $request->business_id)->sum('quantity');
             }
 
 
             return view('backend.report.stock.filter',[
-                'branches' => Branch::all(),
                 'product_requisitions' => $product_requisitions,
             ]);
         }else{
@@ -112,8 +110,8 @@ class StockReportController extends Controller
                     $sellQuantity = $product->sellProducts->sum('quantity');
                     $current_stock_qty = $product->purchaseProducts->sum('quantity') - $product->sellProducts->sum('quantity');
                 } else {
-                    $purchaseQuantity = $product->purchaseProducts->where('branch_id', Auth::user()->branch_id)->sum('quantity');
-                    $sellQuantity = $product->sellProducts->where('branch_id', Auth::user()->branch_id)->sum('quantity');
+                    $purchaseQuantity = $product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
+                    $sellQuantity = $product->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
                     $current_stock_qty =  productAvailableTransactionStockQty($product->id);
                 }
 
@@ -138,7 +136,7 @@ class StockReportController extends Controller
     }
 
     private function branchRequisitionFromQty($request, $product){
-        $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $request->branch_id)
+        $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $request->business_id)
             ->where('status', 2)
             ->pluck('id')
             ->all();
@@ -149,7 +147,7 @@ class StockReportController extends Controller
     }
 
     private function branchRequisitionToQty($request, $product){
-        $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $request->branch_id)
+        $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $request->business_id)
             ->where('status', 2)
             ->pluck('id')
             ->all();

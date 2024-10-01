@@ -10,12 +10,7 @@
                         <button id="btnGroupDrop1" type="button" class="btn btn-secondary btn-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{__('pages.all_branch')}}
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="{{route('home')}}">{{__('pages.all_branch')}}</a>
-                            @foreach($branches as $key => $branch)
-                                <a class="dropdown-item" href="{{route('dashboard-by-branch', $branch->id)}}">{{$branch->title}}</a>
-                            @endforeach
-                        </div>
+
                     </div>
                 </div>
             </div>

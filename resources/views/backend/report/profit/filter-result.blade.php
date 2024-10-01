@@ -24,20 +24,6 @@
                                         </div>
                                     </div>
 
-                                    @can('access_to_all_branch')
-                                        <div class="col-md-6">
-                                            <div class="form-group text-left">
-                                                <select name="branch_id" class="form-control select2-basic">
-                                                    <option value="">{{__('pages.all_branch')}}</option>
-                                                    @foreach($branches as $branch)
-                                                        <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                                    @endcan
                                 </div>
                                 <div class="form-group pt-2 pt-md-0 text-end">
                                     <button class="btn btn-brand btn-brand-primary">{{__('pages.search')}}</button>
@@ -56,20 +42,7 @@
                                             <input type="text" name="year" data-date-format="yyyy"  value="{{Request::get('year')}}"  placeholder="{{__('pages.select_year')}}" id="yearPicker" class="form-control" autocomplete="off">
                                         </div>
                                     </div>
-                                    @can('access_to_all_branch')
-                                        <div class="col-md-6">
-                                            <div class="form-group text-left">
-                                                <select name="branch_id" class="form-control select2-basic">
-                                                    <option value="">{{__('pages.all_branch')}}</option>
-                                                    @foreach($branches as $branch)
-                                                        <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                                    @endcan
+
                                 </div>
 
                                 <div class="form-group pt-2 pt-md-0 text-end">
@@ -118,8 +91,8 @@
                                     <td>{{$key+1}}</td>
                                     {{-- @can('access_to_all_branch')
                                         <td>
-                                            @if(Request::get('branch_id'))
-                                                {{\App\Models\Branch::findOrFail(Request::get('branch_id'))->title}}
+                                            @if(Request::get('business_id'))
+                                                {{\App\Models\Branch::findOrFail(Request::get('business_id'))->title}}
                                             @else
                                                 All Branch
                                             @endif

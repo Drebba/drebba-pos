@@ -69,16 +69,16 @@ class VeuApiController extends Controller
 
 
     public function productAvailableStockQtyWithoutSellInvoice($product_id, $sell_id){
-        $branch_id = Auth::user()->branch_id;
+        $business_id = Auth::user()->business_id;
 
         /**
          * Debit Quantity
          **/
-        $total_purchase_products_qty = PurchaseProduct::where('branch_id', $branch_id)
+        $total_purchase_products_qty = PurchaseProduct::where('business_id', $business_id)
             ->where('product_id', $product_id)
             ->sum('quantity');
 
-        $branch_requisitions_from = Requisition::where('requisition_from', $branch_id)
+        $branch_requisitions_from = Requisition::where('requisition_from', $business_id)
             ->where('status', 2)
             ->select('id')
             ->distinct()
@@ -94,12 +94,12 @@ class VeuApiController extends Controller
          * Credit Quantity
          **/
 
-        $total_sell_products_qty = SellProduct::where('branch_id', $branch_id)
+        $total_sell_products_qty = SellProduct::where('business_id', $business_id)
             ->where('sell_id', '!=', $sell_id)
             ->where('product_id', $product_id)
             ->sum('quantity');
 
-        $branch_requisitions_to = Requisition::where('requisition_to', $branch_id)
+        $branch_requisitions_to = Requisition::where('requisition_to', $business_id)
             ->where('status', 2)
             ->select('id')
             ->distinct()
@@ -141,8 +141,8 @@ class VeuApiController extends Controller
 
     public function supplierDue($id){
 
-        $dueAmount = Purchase::where('branch_id', Auth::user()->branch_id)->where('supplier_id', $id)->sum('total_amount');
-        $paidAmount =  PaymentToSupplier::where('branch_id', Auth::user()->branch_id)->where('supplier_id', $id)->sum('amount');
+        $dueAmount = Purchase::where('business_id', Auth::user()->business_id)->where('supplier_id', $id)->sum('total_amount');
+        $paidAmount =  PaymentToSupplier::where('business_id', Auth::user()->business_id)->where('supplier_id', $id)->sum('amount');
 
         $due =  $dueAmount - $paidAmount;
 
@@ -157,17 +157,7 @@ class VeuApiController extends Controller
         return response($customers);
     }
 
-    public function branches()
-    {
-        $branches = Branch::all();
-        return response($branches);
-    }
 
-    public function branchesWithoutMe()
-    {
-        $branches = Branch::where('id', '!=', Auth::user()->branch_id)->get();
-        return response($branches);
-    }
 
     public function storeCustomer(Request $request){
         $customer = new Customer();

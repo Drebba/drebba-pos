@@ -37,13 +37,12 @@ class ProfitLoosReportController extends Controller
         }
 
         return view('backend.report.profit.index',[
-            'branches' => Branch::all(),
             'profit_info' => $profit_info,
         ]);
     }
 
     public function filter(Request $request){
-        $branch_id = $request->branch_id ? [$request->branch_id] : Sell::distinct('branch_id')->pluck('branch_id')->all();
+        $business_id = $request->business_id ? [$request->business_id] : Sell::distinct('business_id')->pluck('business_id')->all();
 
         if ($request->search_type == 'month'){
             $start_date = Carbon::parse($request->month)->startOfMonth($request->month)->format('Y-m-d');
@@ -52,9 +51,9 @@ class ProfitLoosReportController extends Controller
             $profit_info = [];
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
                 $profit_info[$key]['date'] = Carbon::parse($date)->format(get_option('app_date_format'));
-                $profit_info[$key]['income'] = $this->incomeByDate($date, $branch_id);
-                $profit_info[$key]['expense'] = $this->expenseByDate($date, $branch_id);
-                $profit_info[$key]['profit_loss'] = $this->incomeByDate($date, $branch_id) - $this->expenseByDate($date, $branch_id);
+                $profit_info[$key]['income'] = $this->incomeByDate($date, $business_id);
+                $profit_info[$key]['expense'] = $this->expenseByDate($date, $business_id);
+                $profit_info[$key]['profit_loss'] = $this->incomeByDate($date, $business_id) - $this->expenseByDate($date, $business_id);
             }
         }else{
             $year = $request->year ? $request->year : Carbon::now()->format('Y');
@@ -64,29 +63,28 @@ class ProfitLoosReportController extends Controller
                 $month_name = $this->monthName($i);
 
                 $profit_info[$i]['date'] = $month_name;
-                $profit_info[$i]['income'] = $this->incomeByMonth($year, $i+1, $branch_id);
-                $profit_info[$i]['expense'] = $this->expenseByMonth($year, $i+1, $branch_id);
-                $profit_info[$i]['profit_loss'] = $this->incomeByMonth($year, $i+1, $branch_id) - $this->expenseByMonth($year, $i+1, $branch_id);
+                $profit_info[$i]['income'] = $this->incomeByMonth($year, $i+1, $business_id);
+                $profit_info[$i]['expense'] = $this->expenseByMonth($year, $i+1, $business_id);
+                $profit_info[$i]['profit_loss'] = $this->incomeByMonth($year, $i+1, $business_id) - $this->expenseByMonth($year, $i+1, $business_id);
             }
         }
 
 
         return view('backend.report.profit.filter-result',[
-            'branches' => Branch::all(),
             'profit_info' => $profit_info,
         ]);
     }
 
-    private function expenseByDate($date, $branch_id){
-        $expense =  Expense::whereIn('branch_id', $branch_id)->where('expense_date', $date)->sum('amount');
-        $supplier_payment = PaymentToSupplier::whereIn('branch_id', $branch_id)->where('payment_date', $date)->sum('amount');
+    private function expenseByDate($date, $business_id){
+        $expense =  Expense::whereIn('business_id', $business_id)->where('expense_date', $date)->sum('amount');
+        $supplier_payment = PaymentToSupplier::whereIn('business_id', $business_id)->where('payment_date', $date)->sum('amount');
 
         return  $expense + $supplier_payment;
     }
 
-    private function incomeByDate($date, $branch_id){
-        $sell =  Sell::whereIn('branch_id', $branch_id)->where('sell_date', $date)->sum('paid_amount');
-        $payment_from_customer = PaymentFromCustomer::whereIn('branch_id', $branch_id)->where('payment_date', $date)->sum('amount');
+    private function incomeByDate($date, $business_id){
+        $sell =  Sell::whereIn('business_id', $business_id)->where('sell_date', $date)->sum('paid_amount');
+        $payment_from_customer = PaymentFromCustomer::whereIn('business_id', $business_id)->where('payment_date', $date)->sum('amount');
 
         return  $sell + $payment_from_customer;
     }
@@ -98,24 +96,24 @@ class ProfitLoosReportController extends Controller
         return $month_name;
     }
 
-    private function incomeByMonth($year, $month, $branch_id){
-        $sell =  Sell::whereIn('branch_id', $branch_id)->whereYear('sell_date', '=', $year)
+    private function incomeByMonth($year, $month, $business_id){
+        $sell =  Sell::whereIn('business_id', $business_id)->whereYear('sell_date', '=', $year)
             ->whereMonth('sell_date', '=', $month)
             ->sum('paid_amount');
 
-        $payment_from_customer = PaymentFromCustomer::whereIn('branch_id', $branch_id)->whereYear('payment_date', '=', $year)
+        $payment_from_customer = PaymentFromCustomer::whereIn('business_id', $business_id)->whereYear('payment_date', '=', $year)
             ->whereMonth('payment_date', '=', $month)
             ->sum('amount');
 
         return  $sell + $payment_from_customer;
     }
 
-    private function expenseByMonth($year, $month, $branch_id){
-        $expense =  Expense::whereIn('branch_id', $branch_id)->whereYear('expense_date', '=', $year)
+    private function expenseByMonth($year, $month, $business_id){
+        $expense =  Expense::whereIn('business_id', $business_id)->whereYear('expense_date', '=', $year)
             ->whereMonth('expense_date', '=', $month)
             ->sum('amount');
 
-        $supplier_payment = PaymentToSupplier::whereIn('branch_id', $branch_id)->whereYear('payment_date', '=', $year)
+        $supplier_payment = PaymentToSupplier::whereIn('business_id', $business_id)->whereYear('payment_date', '=', $year)
             ->whereMonth('payment_date', '=', $month)
             ->sum('amount');
 

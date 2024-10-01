@@ -32,8 +32,8 @@ class SellReportController extends Controller
 
         $sells = Sell::orderByDesc('sell_date');
 
-        if ($request->branch_id != ''){
-            $sells = Sell::where('branch_id', $request->branch_id);
+        if ($request->business_id != ''){
+            $sells = Sell::where('business_id', $request->business_id);
         }
 
         $sells = $sells->whereBetween('sell_date', [$start_date, $end_date])->get()
@@ -52,7 +52,6 @@ class SellReportController extends Controller
         }
 
         return view('backend.report.sell.summary.index',[
-            'branches' => Branch::all(),
             'sells' => $sells
         ]);
     }
@@ -71,7 +70,6 @@ class SellReportController extends Controller
         $sell_info = $this->sellsStatisticsFilterQuery($request);
 
         return view('backend.report.sell.statistics.index',[
-            'branches' => Branch::all(),
             'sell_info' => $sell_info
         ]);
     }
@@ -84,7 +82,6 @@ class SellReportController extends Controller
 
         $sell_info = $this->sellsStatisticsFilterQuery($request);
         return view('backend.report.sell.statistics.filter-result',[
-            'branches' => Branch::all(),
             'sell_info' => $sell_info
         ]);
     }
@@ -124,7 +121,6 @@ class SellReportController extends Controller
         }
 
         return view('backend.report.sell.statistics.dynamic-days',[
-            'branches' => Branch::all(),
             'days' => $days,
             'sell_info' => $sell_info
         ]);
@@ -180,7 +176,6 @@ class SellReportController extends Controller
         }
 
         return view('backend.report.sell.product-wise.index',[
-            'branches' => Branch::all(),
             'products' => Product::orderBy('title')->get(),
             'sell_products' => $sell_products,
         ]);
@@ -202,8 +197,8 @@ class SellReportController extends Controller
 
          $sells = Sell::orderByDesc('id');
 
-         if ($request->branch_id){
-            $sells  = $sells->where('branch_id', $request->branch_id);
+         if ($request->business_id){
+            $sells  = $sells->where('business_id', $request->business_id);
          }
 
          $sells = $sells->whereBetween('sell_date', [$start_date, $end_date])->paginate(50);
@@ -226,7 +221,6 @@ class SellReportController extends Controller
          return view('backend.report.sell.sells.sells',[
             'sells' => $sells,
             'customers' => Customer::orderBy('id', 'DESC')->get(),
-            'branches' => Branch::all(),
          ]);
     }
 
@@ -239,8 +233,8 @@ class SellReportController extends Controller
         $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();
         $end_date = $request->end_date ? $request->end_date : Sell::latest()->pluck('sell_date')->first();
 
-        if ($request->branch_id != ''){
-            $branch =  Branch::findOrFail($request->branch_id);
+        if ($request->business_id != ''){
+            $branch =  Branch::findOrFail($request->business_id);
             $branch_name = $branch->title;
         }else{
             $branch_name = 'All';
@@ -282,8 +276,8 @@ class SellReportController extends Controller
             $sell_info = [];
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
                 $sells = Sell::where('sell_date', $date->format('Y-m-d'));
-                if ($request->branch_id){
-                    $sells = $sells->where('branch_id', $request->branch_id);
+                if ($request->business_id){
+                    $sells = $sells->where('business_id', $request->business_id);
                 }
 
                 $sell_info[$key]['sell_date'] = $date->format('Y-m-d');
@@ -298,8 +292,8 @@ class SellReportController extends Controller
 
 
                 $sells = Sell::whereMonth('sell_date', $i)->whereYear('sell_date', $year);
-                if ($request->branch_id){
-                    $sells = $sells>where('branch_id', $request->branch_id);
+                if ($request->business_id){
+                    $sells = $sells>where('business_id', $request->business_id);
                 }
 
                 $sell_info[$i-1]['sell_date'] = $month_name;
@@ -344,9 +338,9 @@ class SellReportController extends Controller
             $sell_products  = $sell_products->where('product_id', $request->product_id);
         }
 
-        if ($request->branch_id){
-            $sell_id_from_branch_id = Sell::where('branch_id', $request->branch_id)->pluck('id')->all();
-            $sell_products  = $sell_products->whereIn('sell_id', $sell_id_from_branch_id);
+        if ($request->business_id){
+            $sell_id_from_business_id = Sell::where('business_id', $request->business_id)->pluck('id')->all();
+            $sell_products  = $sell_products->whereIn('sell_id', $sell_id_from_business_id);
         }
 
        return $sell_products = $sell_products->whereBetween('sell_date', [$start_date, $end_date])

@@ -12,20 +12,6 @@
                             </div>
                         </div>
 
-                        @can('access_to_all_branch')
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <select name="branch_id" class="form-select select2-basic">
-                                        <option value="">{{__('pages.all_branch')}}</option>
-                                        @foreach($branches as $branch)
-                                            <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @else
-                            <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                        @endcan
                     </div>
 
 
@@ -47,22 +33,6 @@
                                 <input type="text" name="year" data-date-format="yyyy"  value="{{Request::get('year')}}"  placeholder="{{__('pages.select_year')}}" id="yearPicker" class="form-control" autocomplete="off">
                             </div>
                         </div>
-
-                        @can('access_to_all_branch')
-                            <div class="col-md-6">
-                                <div class="form-group text-left">
-                                    <select name="branch_id" class="form-select select2-basic">
-                                        <option value="">{{__('pages.all_branch')}}</option>
-                                        @foreach($branches as $branch)
-                                            <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @else
-                            <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                        @endcan
-                    </div>
 
                     <div class=" align-self-end">
                         <button class="btn btn-brand btn-brand-primary">{{__('pages.search')}}</button>

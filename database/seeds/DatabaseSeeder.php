@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         if(Settings::count() == 0){
             $this->call(AppSettings::class);
         }

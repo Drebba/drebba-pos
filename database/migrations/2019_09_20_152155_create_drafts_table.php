@@ -18,7 +18,7 @@ class CreateDraftsTable extends Migration
             $table->integer('business_id');
             $table->string('inquiry_id');
             $table->integer('customer_id');
-            $table->integer('branch_id');
+            $table->integer('business_id');
             $table->double('sub_total');
             $table->double('discount');
             $table->double('grand_total_price');

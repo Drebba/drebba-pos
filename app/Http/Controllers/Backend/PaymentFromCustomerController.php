@@ -28,7 +28,7 @@ class PaymentFromCustomerController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-       $sells = Sell::where('branch_id', Auth::user()->branch_id)
+       $sells = Sell::where('business_id', Auth::user()->business_id)
            ->where('due_amount', '>', 'paid_amount');
 
        if ($request->customer_id){
@@ -102,12 +102,12 @@ class PaymentFromCustomerController extends Controller
 
     public function pdf(Request $request)
     {
-        $branch_id = $request->branch_id ? [$request->branch_id] : PaymentFromCustomer::select('branch_id')->distinct()->get();
+        $business_id = $request->business_id ? [$request->business_id] : PaymentFromCustomer::select('business_id')->distinct()->get();
         $customer_id = $request->customer_id ? [$request->customer_id] : PaymentFromCustomer::select('customer_id')->distinct()->get();
         $start_date = $request->start_date ? $request->start_date : PaymentFromCustomer::oldest()->pluck('payment_date')->first();
         $end_date = $request->end_date ? $request->end_date : PaymentFromCustomer::latest()->pluck('payment_date')->first();
 
-        $payments = PaymentFromCustomer::whereIn('branch_id', $branch_id)
+        $payments = PaymentFromCustomer::whereIn('business_id', $business_id)
             ->whereIn('customer_id', $customer_id)
             ->whereBetween('payment_date', [$start_date, $end_date])
             ->orderBY('id', 'DESC')
@@ -115,8 +115,8 @@ class PaymentFromCustomerController extends Controller
 
 
 
-        if ($request->branch_id != ''){
-            $branch =  Branch::findOrFail($request->branch_id);
+        if ($request->business_id != ''){
+            $branch =  Branch::findOrFail($request->business_id);
             $branch_name = $branch->title;
         }else{
             $branch_name = 'All';

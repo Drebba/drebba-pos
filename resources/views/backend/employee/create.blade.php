@@ -152,24 +152,6 @@
                                 </div>
                             </div>
 
-                            @can('access_to_all_branch')
-                                <div class="col-md-4 col-lg-3">
-                                    <div class="form-group">
-                                        <label for="branch_id" class="custom-label">{{__('pages.branch')}} <span class="text-danger">*</span></label>
-                                        <select name="branch_id" id="branch_id" class="form-select select2-basic">
-                                            <option value="">{{__('pages.select_branch')}}</option>
-                                            @foreach($branches as $branch)
-                                                <option value="{{$branch->id}}" {{old('branch_id') == $branch->id ? 'selected' : ''}}>{{$branch->title}}</option>
-                                            @endforeach
-                                        </select>
-                                        @if ($errors->has('branch_id'))
-                                            <div class="error">{{ $errors->first('branch_id') }}</div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @else
-                                <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-                            @endif
 
                             <div class="col-md-4 col-lg-3">
                                 <div class="form-group">

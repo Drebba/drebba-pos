@@ -23,12 +23,6 @@ class AppSettings extends Seeder
             'status' => 1,
         ]);
 
-        Language::create([
-            'language' => 'EN ( English )',
-            'iso_code' => 'en',
-            'flag' => 'backend/img/flag/en.png',
-            'status' => 1,
-        ]);
 
         Currency::create([
             'title' => 'USD', 'currency' => '$'

@@ -54,7 +54,7 @@
     <input type="hidden" value="{{url('/')}}" id="baseUrl">
     <input type="hidden" value="{{Request::get('month') ? Request::get('month') : 'a'}}" id="selected_month">
     <input type="hidden" value="{{Request::get('year') ? Request::get('year') : 'a'}}" id="selected_year">
-    <input type="hidden" value="{{Request::get('branch_id') ? Request::get('branch_id') : 'a'}}" id="selected_branch">
+    <input type="hidden" value="{{Request::get('business_id') ? Request::get('business_id') : 'a'}}" id="selected_branch">
     <input type="hidden" value="{{Request::get('search_type')}}" id="search_type">
 @endsection
 

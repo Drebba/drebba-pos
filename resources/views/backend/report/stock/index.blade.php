@@ -27,28 +27,6 @@
         </div>
     </div>
 
-    <div class="wiz-box mb-3">
-        @can('access_to_all_branch')
-            <form action="{{url('report/stock-report/filter')}}" method="get">
-                <div class="d-flex gap-3">
-                    <div class="flex-grow-1">
-                        <div class="form-group">
-                            <select name="branch_id" class="form-control select2-basic">
-                                <option value="">{{__('pages.all_branch')}}</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{$branch->id}}">{{$branch->title}} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <button class="btn btn-brand-primary btn-brand">{{__('pages.search')}}</button>
-                    </div>
-                </div>
-            </form>
-        @endcan
-    </div>
 
     <div class="wiz-card">
         <div class="wiz-card-header">
@@ -96,7 +74,7 @@
                                 @can('access_to_all_branch')
                                     {{$product->purchaseProducts->sum('quantity')}} {{$product->unit->title ?? ''}}
                                 @else
-                                    {{$product->purchaseProducts->where('branch_id', Auth::user()->branch_id)->sum('quantity')}} {{$product->unit->title ?? ''}}
+                                    {{$product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity')}} {{$product->unit->title ?? ''}}
                                 @endcan
                             </td>
 
@@ -104,7 +82,7 @@
                                 @can('access_to_all_branch')
                                     {{$product->sellProducts->sum('quantity')}} {{$product->unit->title ?? ''}}
                                 @else
-                                    {{$product->sellProducts->where('branch_id', Auth::user()->branch_id)->sum('quantity')}} {{$product->unit->title ?? ''}}
+                                    {{$product->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity')}} {{$product->unit->title ?? ''}}
                                 @endcan
                             </td>
 
@@ -119,7 +97,7 @@
                                     @endphp
                                 @else
                                     @php
-                                        $total_purchase = $product->purchaseProducts->where('branch_id', Auth::user()->branch_id)->sum('total_price');
+                                        $total_purchase = $product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('total_price');
                                     @endphp
                                 @endcan
 

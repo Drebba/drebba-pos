@@ -53,17 +53,6 @@
                     </div>
 
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="app_language" class="custom-label">{{__('pages.default_language')}}  <span class="text-danger">*</span></label>
-                            <select name="app_language" class="form-control select2">
-                                @foreach($languages as $language)
-                                    <option value="{{$language->iso_code}}" {{get_option('app_language') == $language->iso_code ? 'selected' : ''}} >{{$language->language}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
 
                     <div class="col-md-6">
                         <div class="form-group">

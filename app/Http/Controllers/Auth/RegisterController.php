@@ -57,7 +57,7 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         $user  = new User();
-        $user->branch_id = 1;
+        $user->business_id = 1;
         $user->email = $request->email;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);

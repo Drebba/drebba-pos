@@ -100,7 +100,6 @@ class SettingsController extends Controller
     {
         return view('backend.settings.general',[
             'customers' => Customer::all(),
-            'languages' => Language::where('status', 1)->get(),
         ]);
     }
 

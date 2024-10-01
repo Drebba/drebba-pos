@@ -57,7 +57,6 @@ class PurchaseController extends Controller
         return view('backend.purchase.index',[
             'purchases' => $purchases,
             'suppliers' => Supplier::all(),
-            'branches' => Branch::all(),
         ]);
     }
 
@@ -126,7 +125,7 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($purchase->branch_id != Auth::user()->branch_id){
+            if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -143,7 +142,7 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::findOrFail($purchase_id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($purchase->branch_id != Auth::user()->branch_id){
+            if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -172,7 +171,7 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($purchase->branch_id != Auth::user()->branch_id){
+            if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -263,20 +262,20 @@ class PurchaseController extends Controller
             $purchase_product->purchase_id = $purchase->id;
             $purchase_product->product_id = $cart_product['id'];
             $purchase_product->purchase_date = $purchase->purchase_date;
-            $purchase_product->branch_id = $purchase->branch_id;
+            $purchase_product->business_id = $purchase->business_id;
             $purchase_product->fill($cart_product);
             $purchase_product->total_price = $cart_product['purchase_price'] * $cart_product['quantity'];
             $purchase_product->save();
 
 
             // Update Product Stock History
-            $product_stock_history = ProductStockHistory::where('branch_id', $purchase->branch_id)
+            $product_stock_history = ProductStockHistory::where('business_id', $purchase->business_id)
                 ->where('product_id', $purchase_product->product_id)
                 ->first();
 
             if (!$product_stock_history){
                 $product_stock_history = new ProductStockHistory();
-                $product_stock_history->branch_id = $purchase->branch_id;
+                $product_stock_history->business_id = $purchase->business_id;
                 $product_stock_history->product_id = $purchase_product->product_id;
                 $product_stock_history->save();
             }
@@ -293,7 +292,7 @@ class PurchaseController extends Controller
             $purchase_product->purchase_id = $purchase->id;
             $purchase_product->product_id = $cart_product['id'];
             $purchase_product->purchase_date = $purchase->purchase_date;
-            $purchase_product->branch_id = $purchase->branch_id;
+            $purchase_product->business_id = $purchase->business_id;
             $purchase_product->fill($cart_product);
             $purchase_product->total_price = $cart_product['purchase_price'] * $cart_product['quantity'];
             $purchase_product->save();

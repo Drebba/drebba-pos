@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Branch;
+use App\Models\Business;
 use App\Models\Employee;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -34,7 +35,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'branch_id',
+        'name', 'email', 'business_id',
     ];
 
     /**
@@ -55,7 +56,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function branch(){
-        return $this->belongsTo(Branch::class);
+    public function business(){
+        return $this->belongsTo(Business::class);
     }
 }

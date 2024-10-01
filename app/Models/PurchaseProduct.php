@@ -28,7 +28,7 @@ class PurchaseProduct extends Model
 
         if (!Auth::user()->can('access_to_all_branch')) {
             static::addGlobalScope('branch', function (Builder $builder) {
-                $builder->where('branch_id', '=', Auth::user()->branch_id);
+                $builder->where('business_id', '=', Auth::user()->business_id);
             });
         }
     }

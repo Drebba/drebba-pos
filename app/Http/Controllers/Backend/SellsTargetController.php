@@ -41,9 +41,7 @@ class SellsTargetController extends Controller
         } // end permission checking
 
 
-        return view('backend.sells-target.create',[
-            'branches' => Branch::all()
-        ]);
+        return view('backend.sells-target.create');
     }
 
     /**
@@ -63,9 +61,9 @@ class SellsTargetController extends Controller
             Toastr::error('Already set target for this month', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
             return redirect()->route('branch-sells-target.index');
         }
-        foreach ($targets['branch_id'] as $key => $target){
+        foreach ($targets['business_id'] as $key => $target){
             $sells_target = new SellsTarget();
-            $sells_target->branch_id = $target;
+            $sells_target->business_id = $target;
             $sells_target->month = $month;
             $sells_target->target_amount = $targets['target_amount'][$key];
             $sells_target->save();
@@ -120,9 +118,9 @@ class SellsTargetController extends Controller
         $targets = $request->all();
         $month = Carbon::parse($request->month)->format('Y-m');
         SellsTarget::where('month', $month)->delete();
-        foreach ($targets['branch_id'] as $key => $target){
+        foreach ($targets['business_id'] as $key => $target){
             $sells_target = new SellsTarget();
-            $sells_target->branch_id = $target;
+            $sells_target->business_id = $target;
             $sells_target->month = $month;
             $sells_target->target_amount = $targets['target_amount'][$key];
             $sells_target->save();

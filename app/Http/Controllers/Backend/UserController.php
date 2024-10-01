@@ -38,9 +38,7 @@ class UserController extends Controller
         } // end permission checking
 
 
-        return view ('backend.user.create', [
-            'branches' => Branch::where('status', 1)->get()
-        ]);
+        return view ('backend.user.create');
     }
 
     /**

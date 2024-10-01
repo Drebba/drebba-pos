@@ -164,17 +164,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="branch_id" class="custom-label">{{__('pages.branch')}} <span class="text-danger">*</span></label>
-                                <select name="branch_id" id="branch_id" class="form-select select2-basic">
-                                    <option value="">{{__('pages.select_branch')}}</option>
-                                    @foreach($branches as $branch)
-                                        <option value="{{$branch->id}}" {{$employee->branch_id == $branch->id ? 'selected' : ''}}>{{$branch->title}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">

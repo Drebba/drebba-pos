@@ -5,13 +5,6 @@
             <div class="col-md-4">
 
                 <div class="sell-card-group">
-                    <div class="sell-card-header pb-2 mb-2">
-                        <div class="wiz-box p-2">
-                            <div class="select-customer">
-                                <v-select  :options="branches" v-model="branch" label="title" placeholder="Select Branch"></v-select>
-                            </div>
-                        </div>
-                    </div>
 
 
                     <div class="sell-card-body">
@@ -226,7 +219,6 @@
                 products: [],
                 product: {},
                 carts: [],
-                branches: [],
                 my_branch: [],
                 branch: {},
                 filter: {
@@ -333,10 +325,6 @@
                 this.products = response.data;
             });
 
-            axios.get('../vue/api/branches-without-me').then((response) => {
-                this.branches = response.data;
-                this.branch = null;
-            });
 
             axios.get('../vue/api/get-app-configs').then((response) => {
                 this.configs = response.data;

@@ -37,7 +37,7 @@ class Requisition extends Model
         self::creating(function($model){
             $model->created_by =  auth()->user()->id;
             $model->requisition_date =  Carbon::now();
-            $model->requisition_from =  Auth::user()->branch_id;
+            $model->requisition_from =  Auth::user()->business_id;
             $model->requisition_id =  get_option('requisition_id_prefix').str_pad(Requisition::count()+1,get_option('invoice_length'),0,STR_PAD_LEFT);
         });
     }

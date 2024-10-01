@@ -23,27 +23,6 @@
                             <input type="text" name="month" data-date-format="yyyy-M"   placeholder="{{__('pages.select_month')}}" id="monthpicker" class="form-control month-picker" autocomplete="off" required>
                         </div>
                     </div>
-
-                    @foreach($branches as $branch)
-                        <div class="mb-3">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="hidden" name="branch_id[]" value="{{$branch->id}}" class="form-control" required>
-                                        <input type="text" value="{{$branch->title}}" class="form-control" required readonly>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <input type="number" name="target_amount[]" step="1" min="1"  placeholder="Target Amount"  class="form-control" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-
-
                     <div class="d-flex justify-content-end py-3">
                         <button type="submit" class="btn btn-brand btn-brand-primary">{{__('pages.save')}}</button>
                     </div>

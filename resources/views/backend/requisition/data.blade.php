@@ -37,7 +37,7 @@
             <td>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                     <a href="{{route('requisition.show', [$requisition->id])}}" class="mx-2"><i class="bi bi-eye"></i></a>
-                    @if($requisition->requisition_from == Auth::user()->branch_id && $requisition->status == 0)
+                    @if($requisition->requisition_from == Auth::user()->business_id && $requisition->status == 0)
                         <a href="{{route('requisition.edit', [$requisition->id])}}" class="mx-2 text-brand-primary"><i class="bi bi-pencil"></i> {{$requisition->sttaus}}</a>
                         <a href="javascript:void(0);" onclick="$(this).confirmDelete($('#delete-{{$key}}')) " class="mx-2 text-danger"><i class="bi bi-trash3"></i></a>
                         <form action="{{ route('requisition.destroy',$requisition->id) }}" method="post" id="delete-{{$key}}"> @csrf @method('delete') </form>

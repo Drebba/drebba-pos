@@ -102,12 +102,6 @@ class TrashController extends Controller
         return redirect()->back();
     }
 
-    public function branches()
-    {
-        return view('backend.trash.branches',[
-            'branches' => Branch::where('deleted_at', '!=', NULL)->withTrashed()->get()
-        ]);
-    }
     public function branchRestore(Request $request)
     {
         $branch =  Branch::where('id', $request->id)->withTrashed()->firstOrFail();

@@ -32,7 +32,7 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="hidden" name="branch_id[]" value="{{$sell_target->branch_id}}" class="form-control" required>
+                                                <input type="hidden" name="business_id[]" value="{{$sell_target->business_id}}" class="form-control" required>
                                                 <input type="text" value="{{$sell_target->branch->title}}" class="form-control" required readonly>
                                             </div>
                                         </div>

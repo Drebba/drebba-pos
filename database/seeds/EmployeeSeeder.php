@@ -37,7 +37,7 @@ class EmployeeSeeder extends Seeder
             'user_id' => $user->id,
             'department_id' => $department->id,
             'designation_id' => $designation->id,
-            'branch_id' => $branch->id,
+            'business_id' => $branch->id,
         ]);
 
         Supplier::create([

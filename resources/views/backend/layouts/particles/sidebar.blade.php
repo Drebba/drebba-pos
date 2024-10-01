@@ -10,7 +10,7 @@
 
 <ul class="aside-nav-menu">
 
-    @canany(['do:anything'])
+    {{-- @canany(['do:anything'])
     <li class="aside-nav-heading"> {{__('pages.Business')}} </li>
     <li class="aside-nav-item toggleable-group">
         <a class="aside-nav-link toggler {{ active_if_match('businesses') }} " href="javascript:void(0)">
@@ -27,7 +27,7 @@
             </ul>
         </div>
     </li>
-    @endcan
+    @endcan --}}
 
 
     @canany(['manage_category', 'manage_tax', 'manage_product', 'manage_unit'])
@@ -181,29 +181,6 @@
             </div>
         </li>
     @endcan
-
-
-    {{-- @canany(['manage_branch', 'manage_sells_target'])
-        <li class="aside-nav-item toggleable-group">
-            <a class="aside-nav-link toggler {{ active_if_match('branch') }} {{ active_if_match('branch-sells-target') }}" href="javascript:void(0)" data-toggle="collapse" data-target="#branch" aria-expanded="true" aria-controls="branch">
-                <span class="aside-nav-icon"><i class="fas fa-code-branch"></i></span>
-                <span class="aside-nav-text">{{__('pages.manage_branch')}}</span>
-                <span class="aside-nav-dropdown-icon"></span>
-            </a>
-            <div class="aside-dropdown toggleable-menu {{ active_if_match('branch') }} {{ active_if_match('branch-sells-target') }}">
-                <div class="aside-submenu">
-                    @can('manage_branch')
-                        <a class="aside-nav-link {{ active_if_full_match('branch') }} {{ active_if_full_match('branch/*/edit') }} {{ active_if_full_match('branch/create') }}" href="{{route('branch.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.branches')}}</span></a>
-                    @endcan
-
-                    @can('manage_sells_target')
-                        <a class="aside-nav-link {{ active_if_full_match('branch-sells-target') }} {{ active_if_full_match('branch-sells-target/create') }}  {{ active_if_full_match('branch-sells-target/*') }} {{ active_if_full_match('branch-sells-target/*/edit') }}" href="{{route('branch-sells-target.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.manage_sells_target')}}</span> </a>
-                    @endcan
-                </div>
-            </div>
-        </li>
-    @endcan --}}
-
 
     @canany(['manage_customer', 'manage_supplier'])
         <li class="aside-nav-item toggleable-group">

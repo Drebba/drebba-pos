@@ -1,6 +1,6 @@
 <input type="hidden" name="start_date" value="{{Request::get('start_date')}}">
 <input type="hidden" name="end_date" value="{{Request::get('end_date')}}">
-<input type="hidden" name="branch_id" value="{{Request::get('branch_id')}}">
+<input type="hidden" name="business_id" value="{{Request::get('business_id')}}">
 <input type="hidden" name="supplier_id" value="{{Request::get('supplier_id')}}">
 <input type="hidden" name="by_duration" value="{{Request::get('by_duration')}}">
 <input type="hidden" name="search_type" value="{{Request::get('search_type')}}">

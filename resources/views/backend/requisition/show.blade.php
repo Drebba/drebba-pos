@@ -2,7 +2,7 @@
 @section('title') {{__('pages.requisition')}}  @endsection
 @section('content')
 
-    @if($requisition->status == 0 && $requisition->requisition_from != Auth::user()->branch_id)
+    @if($requisition->status == 0 && $requisition->requisition_from != Auth::user()->business_id)
         <div id="app">
             <show-requisition :requisition="{{ $requisition }}"></show-requisition>
         </div>
@@ -12,7 +12,7 @@
             <div class="wiz-box d-flex justify-content-between align-items-center mb-3">
                 <h6 class="wiz-card-title">{{__('pages.requisition_details')}}</h6>
                 <div class="btn-group btn-group-sm custom-btn-group" role="group">
-                    @if($requisition->requisition_from == Auth::user()->branch_id && $requisition->status == 0)
+                    @if($requisition->requisition_from == Auth::user()->business_id && $requisition->status == 0)
                         <a href="{{route('requisition.edit', [$requisition->id])}}" class="btn btn-brand-primary rounded-0"><i class="bi bi-pencil me-1"></i> Edit </a>
                     @endif
                     <a href="{{url('/export/requisition/print-invoice/id='.$requisition->id.'/type={print}')}}" target="_blank" class="btn btn-brand-warning"><i class="fa fa-print me-1"></i> Print </a>
@@ -157,13 +157,13 @@
                     </div>
 
                     <div>
-                        @if($requisition->requisition_from == Auth::user()->branch_id && $requisition->status == 1)
+                        @if($requisition->requisition_from == Auth::user()->business_id && $requisition->status == 1)
                             <div class="py-3 d-flex justify-content-end">
                                 <a href="{{route('requisition-received', [$requisition->id])}}" class="btn btn-brand btn-brand-primary" onclick="return confirm('Are you sure. you want to receive this requisition ? ')"> Received </a>
                             </div>
                         @endif
 
-                        @if($requisition->requisition_from == Auth::user()->branch_id && $requisition->status < 2)
+                        @if($requisition->requisition_from == Auth::user()->business_id && $requisition->status < 2)
                             <div class="py-3 d-flex justify-content-end">
                                 <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModalLong" class="btn btn-brand btn-brand-danger"> Cancel </a>
                             </div>

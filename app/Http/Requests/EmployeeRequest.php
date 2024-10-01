@@ -36,7 +36,7 @@ class EmployeeRequest extends FormRequest
             'address' => ['required'],
             'department_id' => ['required','numeric'],
             'designation_id' => ['required','numeric'],
-            'branch_id' => ['required','numeric'],
+            'business_id' => ['required','numeric'],
             'role' => ['required'],
             'email' => ['required','string','max:255','unique:users'],
         ];

@@ -13,19 +13,13 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/local/{ln}', function ($ln) {
-    $is_rtl_support = \App\Models\Language::where('iso_code', $ln)->orderBy('id', 'DESC')->select('is_rtl_support')->first()->is_rtl_support;
-    session(['local' => $ln]);
-    session(['is_rtl_support' => $is_rtl_support]);
-    \Illuminate\Support\Facades\App::setLocale(session()->get('local'));
-    return redirect()->back();
-});
 
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::middleware('auth', 'active')->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index');
 
     Route::resource('sells', 'Backend\SellController');
     Route::resource('branch-sells-target', 'Backend\SellsTargetController');
@@ -85,7 +79,6 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('designation-trash', 'Backend\TrashController@designation')->name('designation-trash');
         Route::post('designation-restore-ok', 'Backend\TrashController@designationRestore')->name('designation-restore-ok');
 
-        Route::get('branch-trash', 'Backend\TrashController@branches')->name('branch-trash');
         Route::post('branch-restore-ok', 'Backend\TrashController@branchRestore')->name('branch-restore-ok');
     });
 
@@ -186,8 +179,6 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('categories','Backend\VeuApiController@categories');
         Route::get('brands','Backend\VeuApiController@brands');
         Route::get('customers','Backend\VeuApiController@customers');
-        Route::get('branches','Backend\VeuApiController@branches');
-        Route::get('branches-without-me','Backend\VeuApiController@branchesWithoutMe');
         Route::post('store-customer','Backend\VeuApiController@storeCustomer');
         Route::post('store-sell','Backend\SellController@store');
         Route::post('store-draft','Backend\DraftController@store');

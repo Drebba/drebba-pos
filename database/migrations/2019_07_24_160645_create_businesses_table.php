@@ -15,6 +15,7 @@ class CreateBusinessesTable extends Migration
     {
         Schema::create('businesses', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('owner_id')->nullable();
             $table->string('name');
             $table->string('email');
             $table->string('phone');
@@ -34,6 +35,6 @@ class CreateBusinessesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('businesses');
     }
 }

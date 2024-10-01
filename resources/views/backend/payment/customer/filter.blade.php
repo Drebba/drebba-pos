@@ -18,7 +18,7 @@
                                     <form action="{{url('report/payment/customer')}}" method="get" target="_blank">
                                         <input type="hidden" name="start_date" value="{{Request::get('start_date')}}">
                                         <input type="hidden" name="end_date" value="{{Request::get('end_date')}}">
-                                        <input type="hidden" name="branch_id" value="{{Request::get('branch_id')}}">
+                                        <input type="hidden" name="business_id" value="{{Request::get('business_id')}}">
                                         <input type="hidden" name="customer_id" value="{{Request::get('customer_id')}}">
                                         <button type="submit" class="btn btn-warning btn-block rounded-0 pl-2 pr-2"><i class="fa fa-print mr-2"></i> {{__('pages.print')}} </button>
                                     </form>

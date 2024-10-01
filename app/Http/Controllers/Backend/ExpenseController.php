@@ -30,8 +30,8 @@ class ExpenseController extends Controller
             $expenses = $expenses->where('expense_id', 'like', '%'.$request->expense_id.'%');
         }
 
-        if ($request->branch_id){
-            $expenses = $expenses->where('branch_id', $request->branch_id);
+        if ($request->business_id){
+            $expenses = $expenses->where('business_id', $request->business_id);
         }
 
         if ($request->expense_category_id){
@@ -50,7 +50,6 @@ class ExpenseController extends Controller
 
         return view('backend.expense.index',[
             'expenses' => $expenses,
-            'branches' => Branch::all(),
             'expense_categories' => ExpenseCategory::all(),
         ]);
     }
@@ -68,7 +67,6 @@ class ExpenseController extends Controller
         } // end permission checking
 
         return view('backend.expense.create',[
-            'branches' => Branch::all(),
             'expense_categories' => ExpenseCategory::all(),
         ]);
     }
@@ -119,14 +117,13 @@ class ExpenseController extends Controller
 
         $expenses = Expense::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($expenses->branch_id != Auth::user()->branch_id){
+            if ($expenses->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
 
         return view('backend.expense.edit',[
             'expense' => $expenses,
-            'branches' => Branch::all(),
             'expense_categories' => ExpenseCategory::all(),
         ]);
     }
@@ -146,7 +143,7 @@ class ExpenseController extends Controller
 
         $expenses = Expense::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($expenses->branch_id != Auth::user()->branch_id){
+            if ($expenses->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }

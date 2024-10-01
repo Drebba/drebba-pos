@@ -38,8 +38,8 @@ class SellController extends Controller
 
         $sells = Sell::orderBy('id', 'DESC');
 
-        if ($request->branch_id){
-            $sells = $sells->where('branch_id', $request->branch_id);
+        if ($request->business_id){
+            $sells = $sells->where('business_id', $request->business_id);
         }
 
         if ($request->customer_id){
@@ -62,7 +62,6 @@ class SellController extends Controller
         return view('backend.sell.index', [
             'sells' => $sells,
             'customers' => Customer::all(),
-            'branches' => Branch::all(),
         ]);
     }
 
@@ -130,7 +129,7 @@ class SellController extends Controller
         $sell = Sell::with('sellProducts')->findOrFail($id);
 
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($sell->branch_id != Auth::user()->branch_id){
+            if ($sell->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -155,7 +154,7 @@ class SellController extends Controller
 
         $sell = Sell::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($sell->branch_id != Auth::user()->branch_id){
+            if ($sell->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -233,7 +232,7 @@ class SellController extends Controller
 //
 //        $sell = Sell::findOrFail(decrypt($sell_id));
 //        if (!Auth::user()->can('access_to_all_branch')) {
-//            if ($sell->branch_id != Auth::user()->branch_id){
+//            if ($sell->business_id != Auth::user()->business_id){
 //                return redirect()->back()->with(denied());
 //            }
 //        }
@@ -258,7 +257,7 @@ class SellController extends Controller
         $sell = Sell::findOrFail(decrypt($sell_id));
 
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($sell->branch_id != Auth::user()->branch_id){
+            if ($sell->business_id != Auth::user()->business_id){
                 return redirect()->back()->with('denied');
             }
         }
@@ -313,7 +312,7 @@ class SellController extends Controller
             $sell_product->sell_id = $sell->id;
             $sell_product->product_id = $cart_product['id'];
             $sell_product->sell_date = $sell->sell_date;
-            $sell_product->branch_id = $sell->branch_id;
+            $sell_product->business_id = $sell->business_id;
             $sell_product->fill($cart_product);
             $sell_product->total_price = number_format($cart_product['total_price'], 2);
             $sell_product->save();
@@ -322,13 +321,13 @@ class SellController extends Controller
             $product->save();
 
             // Update Product Stock History
-            $product_stock_history = ProductStockHistory::where('branch_id', $sell->branch_id)
+            $product_stock_history = ProductStockHistory::where('business_id', $sell->business_id)
                 ->where('product_id', $product->id)
                 ->first();
 
             if (!$product_stock_history){
                 $product_stock_history = new ProductStockHistory();
-                $product_stock_history->branch_id = $sell->branch_id;
+                $product_stock_history->business_id = $sell->business_id;
                 $product_stock_history->product_id = $product->id;
                 $product_stock_history->save();
             }
@@ -348,7 +347,7 @@ class SellController extends Controller
             $sell_product->sell_id = $sell->id;
             $sell_product->product_id = $cart_product['id'];
             $sell_product->sell_date = $sell->sell_date;
-            $sell_product->branch_id = $sell->branch_id;
+            $sell_product->business_id = $sell->business_id;
             $sell_product->fill($cart_product);
             $sell_product->total_price = number_format($cart_product['total_price'], 2);
             $sell_product->save();

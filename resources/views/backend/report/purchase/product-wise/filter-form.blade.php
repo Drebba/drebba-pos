@@ -10,20 +10,6 @@
             </select>
         </div>
 
-        @can('access_to_all_branch')
-            <div class="col-sm-6 col-md-4 col-lg">
-                <div class="form-group">
-                    <select name="branch_id" class="form-select select2-basic">
-                        <option value="">{{__('pages.all_branch')}}</option>
-                        @foreach($branches as $branch)
-                            <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected': ''}}>{{$branch->title}} </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        @else
-            <input type="hidden" name="branch_id" value="{{Auth::user()->branch_id}}">
-        @endcan
 
         <div class="col-sm-6 col-md-4 col-lg">
             <div class="form-group">

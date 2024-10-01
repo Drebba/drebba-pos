@@ -15,7 +15,7 @@ class DraftController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $drafts = Draft::where('branch_id', Auth::user()->branch_id)->orderBy('id', 'DESC')->with('draftProducts')->with('customer')->get();
+        $drafts = Draft::where('business_id', Auth::user()->business_id)->orderBy('id', 'DESC')->with('draftProducts')->with('customer')->get();
         return response($drafts);
     }
     public function store(Request $request){

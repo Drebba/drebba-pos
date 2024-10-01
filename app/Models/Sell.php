@@ -48,13 +48,13 @@ class Sell extends Model
         self::creating(function($model){
             $model->created_by =  auth()->user()->id;
             $model->sell_date =  Carbon::now();
-            $model->branch_id =  Auth::user()->branch_id;
+            $model->business_id =  Auth::user()->business_id;
             $model->invoice_id = get_option('sell_invoice_prefix').str_pad(Sell::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT);
         });
 
         if (!Auth::user()->can('access_to_all_branch')) {
             static::addGlobalScope('branch', function (Builder $builder) {
-                $builder->where('branch_id', '=', Auth::user()->branch_id);
+                $builder->where('business_id', '=', Auth::user()->business_id);
             });
         }
     }

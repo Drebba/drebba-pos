@@ -35,13 +35,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        if ($request->get('set_lang')) {
-            $is_rtl_support = \App\Models\Language::where('iso_code', get_option('app_language'))->orderBy('id', 'DESC')->select('is_rtl_support')->first()->is_rtl_support;
-            session(['local' => get_option('app_language')]);
-            session(['is_rtl_support' => $is_rtl_support]);
-             \Illuminate\Support\Facades\App::setLocale(session()->get('local'));
-            return redirect('home');
-        }
+
 
         $sells_targets = SellsTarget::where('month', Carbon::now()->format('Y-m'))->get();
 
@@ -49,29 +43,21 @@ class HomeController extends Controller
         $low_stock_products = $collection->sortBy('current_stock_quantity')->take(10);
         $trending_products = $collection->sortByDesc('total_sell_qty')->take(10);
 
-        $branches = Branch::all();
 
         return view('backend/dashboard',[
             'sells_targets' => $sells_targets,
             'low_stock_products' => $low_stock_products->values()->all(),
             'trending_products' => $trending_products->values()->all(),
-            'branches' => $branches,
         ]);
     }
 
     public function dashboardSellPurchaseData(){
-        if (Auth::user()->can('access_to_all_branch')){
-            $sell_of_this_month = Sell::whereMonth('sell_date', Carbon::now()->format('m-Y'))->sum('grand_total_price');
-            $total_sell = Sell::sum('grand_total_price');
-            $purchase_of_this_month = Purchase::whereMonth('purchase_date', Carbon::now()->format('m-Y'))->sum('total_amount');
-            $total_purchase = Purchase::sum('total_amount');
-        }else{
-            $branch_id = Auth::user()->branch_id;
-            $sell_of_this_month = Sell::where('branch_id', $branch_id)->whereMonth('sell_date', Carbon::now()->format('m-Y'))->sum('grand_total_price');
-            $total_sell = Sell::where('branch_id', $branch_id)->sum('grand_total_price');
-            $purchase_of_this_month = Purchase::where('branch_id', $branch_id)->whereMonth('purchase_date', Carbon::now()->format('m-Y'))->sum('total_amount');
-            $total_purchase = Purchase::where('branch_id', $branch_id)->sum('total_amount');
-        }
+
+            $business_id = Auth::user()->business_id;
+            $sell_of_this_month = Sell::where('business_id', $business_id)->whereMonth('sell_date', Carbon::now()->format('m-Y'))->sum('grand_total_price');
+            $total_sell = Sell::where('business_id', $business_id)->sum('grand_total_price');
+            $purchase_of_this_month = Purchase::where('business_id', $business_id)->whereMonth('purchase_date', Carbon::now()->format('m-Y'))->sum('total_amount');
+            $total_purchase = Purchase::where('business_id', $business_id)->sum('total_amount');
 
 
         $data = [];
@@ -104,10 +90,10 @@ class HomeController extends Controller
             $expense =  Expense::where('expense_date', $date)->sum('amount');
             $supplier_payment = PaymentToSupplier::where('payment_date', $date)->sum('amount');
         }else{
-            $branch_id = Auth::user()->branch_id;
+            $business_id = Auth::user()->business_id;
 
-            $expense =  Expense::where('branch_id', $branch_id)->where('expense_date', $date)->sum('amount');
-            $supplier_payment = PaymentToSupplier::where('branch_id', $branch_id)->where('payment_date', $date)->sum('amount');
+            $expense =  Expense::where('business_id', $business_id)->where('expense_date', $date)->sum('amount');
+            $supplier_payment = PaymentToSupplier::where('business_id', $business_id)->where('payment_date', $date)->sum('amount');
         }
 
         return  $expense + $supplier_payment;
@@ -118,10 +104,10 @@ class HomeController extends Controller
             $sell =  Sell::where('sell_date', $date)->sum('paid_amount');
             $payment_from_customer = PaymentFromCustomer::where('payment_date', $date)->sum('amount');
         }else{
-            $branch_id = Auth::user()->branch_id;
+            $business_id = Auth::user()->business_id;
 
-            $sell =  Sell::where('branch_id', $branch_id)->where('sell_date', $date)->sum('paid_amount');
-            $payment_from_customer = PaymentFromCustomer::where('branch_id', $branch_id)->where('payment_date', $date)->sum('amount');
+            $sell =  Sell::where('business_id', $business_id)->where('sell_date', $date)->sum('paid_amount');
+            $payment_from_customer = PaymentFromCustomer::where('business_id', $business_id)->where('payment_date', $date)->sum('amount');
         }
 
         return  $sell + $payment_from_customer;

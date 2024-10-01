@@ -37,7 +37,7 @@ class Purchase extends Model
         self::creating(function($model){
             $model->created_by =  Auth::id();
             $model->purchase_date =  Carbon::now();
-            $model->branch_id =  Auth::user()->branch_id;
+            $model->business_id =  Auth::user()->business_id;
             $model->invoice_id = get_option('purchase_invoice_prefix').str_pad(Purchase::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT);
         });
     }

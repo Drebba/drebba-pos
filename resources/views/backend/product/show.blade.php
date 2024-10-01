@@ -125,23 +125,6 @@
                         <div class="col-xl-4 col-md-6">
                             <div class="summary-card">
                                 <div class="me-3">
-                                    <h6 class="summary-card-title">{{__('pages.received_from_others_branches')}}</h6>
-                                    <h3 class="summary-card-value">
-                                        {{$product->productStockHistory->req_received  ?? 0}}
-                                        <small>{{$product->unit ? $product->unit->title : ''}}</small>
-                                    </h3>
-                                </div>
-                                <div>
-                                    <span class="summary-card-icon btn-soft-success"><i class="fa-solid fa-list-check"></i></span>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-xl-4 col-md-6">
-                            <div class="summary-card">
-                                <div class="me-3">
                                     <h6 class="summary-card-title">{{__('pages.send_to_others_branch')}}</h6>
                                     <h3 class="summary-card-value">
                                         {{$product->productStockHistory->req_send ?? 0}}

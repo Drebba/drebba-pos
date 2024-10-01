@@ -28,8 +28,8 @@
                 </td>
                 {{-- @can('access_to_all_branch')
                 <td class="text-center">
-                    @if(Request::get('branch_id'))
-                        {{\App\Models\Branch::findOrFail(Request::get('branch_id'))->title}}
+                    @if(Request::get('business_id'))
+                        {{\App\Models\Branch::findOrFail(Request::get('business_id'))->title}}
                     @else
                         All Branch
                     @endif

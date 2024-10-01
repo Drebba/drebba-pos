@@ -42,11 +42,11 @@
                                 <tr>
                                     <td>{{$branch_target->branch->title}}</td>
                                     <td class="text-center">{{get_option('app_currency')}}{{number_format($branch_target->target_amount, 2)}}</td>
-                                    <td class="text-center">{{get_option('app_currency')}}{{number_format(monthlySells($branch_target->branch_id, $key), 2)}}</td>
+                                    <td class="text-center">{{get_option('app_currency')}}{{number_format(monthlySells($branch_target->business_id, $key), 2)}}</td>
                                     <td>
                                         @php
-                                            if(monthlySells($branch_target->branch_id, $key) > 0){
-                                                $result = monthlySells($branch_target->branch_id, $key) * 100 / $branch_target->target_amount;
+                                            if(monthlySells($branch_target->business_id, $key) > 0){
+                                                $result = monthlySells($branch_target->business_id, $key) * 100 / $branch_target->target_amount;
                                             }else{
                                                 $result = 0;
                                             }

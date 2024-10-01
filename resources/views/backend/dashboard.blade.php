@@ -102,64 +102,6 @@
                 </div>
             </div>
 
-            {{-- <div class="col-md-6 col-12">
-                <div class="wiz-card">
-                    <div class="wiz-card-body">
-                        <h5 class="wiz-card-title">{{__('pages.branches_target_this_month')}}</h5>
-
-                        @foreach($sells_targets as $key => $sell_target)
-                            @php
-                                if(monthlySells($sell_target->branch_id, $sell_target->month) > 0){
-                                    $result = monthlySells($sell_target->branch_id, $sell_target->month) * 100 / $sell_target->target_amount;
-                                }else{
-                                    $result = 0;
-                                }
-                            @endphp
-
-                            <h4 class="small font-weight-bold">{{$sell_target->branch->title}} <span class="float-right">{{number_format($result,2)}}%</span></h4>
-                            <div class="progress mb-4">
-                                @if($result < 15)
-                                    <div class="progress-bar progress-bar-striped bg-danger w10p" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">{{number_format($result,2)}}% {{__('pages.complete')}}</div>
-                                @elseif($result < 40)
-                                    <div class="progress-bar progress-bar-striped bg-warning dwp-{{round($result)}}" role="progressbar" aria-valuenow="{{$result}}" aria-valuemin="0" aria-valuemax="100">{{number_format($result,2)}}% {{__('pages.complete')}}</div>
-                                @elseif($result < 60)
-                                    <div class="progress-bar progress-bar-striped bg-info dwp-{{round($result)}}" role="progressbar" aria-valuenow="{{$result}}" aria-valuemin="0" aria-valuemax="100">{{number_format($result,2)}}% {{__('pages.complete')}}</div>
-                                @elseif($result < 80)
-                                    <div class="progress-bar progress-bar-striped bg-info dwp-{{round($result)}}" role="progressbar" aria-valuenow="{{$result}}" aria-valuemin="0" aria-valuemax="100">{{number_format($result,2)}}% {{__('pages.complete')}}</div>
-                                @else
-                                    <div class="progress-bar progress-bar-striped bg-info dwp-{{round($result)}}" role="progressbar" aria-valuenow="{{$result}}" aria-valuemin="0" aria-valuemax="100">{{number_format($result,2)}}% {{__('pages.complete')}}</div>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-12">
-                <div class="wiz-card">
-                    <div class="wiz-card-body">
-                        <h5 class="wiz-card-title">Notifications</h5>
-
-                        <table class="table table-sm table-bordered w-100 wiz-table">
-                            <thead>
-                            <tr class="bg-secondary text-white">
-                                <th>{{__('pages.sl')}}</th>
-                                <th>Message</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach(notifications() as $key => $_notification)
-                                <tr>
-                                    <td>{{$key+1}}</td>
-                                    <td class="text-left">{!! $_notification->message !!}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> --}}
-
 
             <div class="col-md-6 col-12 pr-1">
                 <div class="wiz-card">

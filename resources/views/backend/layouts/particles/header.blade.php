@@ -81,17 +81,6 @@
 
 
 
-            <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    @foreach(languages() as $app_lang)
-                        @if(config('app.locale') == $app_lang->iso_code)
-                            <img class="lan-flag" src="{{asset($app_lang->flag)}}">
-                        @endif
-                    @endforeach
-                </a>
-
-            </li>
-
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow px-2 px-xl-0">

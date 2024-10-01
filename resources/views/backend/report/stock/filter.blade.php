@@ -27,29 +27,6 @@
             </div>
         </div>
 
-        <div class="wiz-box mb-3">
-            @can('access_to_all_branch')
-                <form action="{{url('report/stock-report/filter')}}" method="get">
-                    <div class="d-flex gap-3">
-                        <div class="flex-grow-1">
-                            <div class="form-group text-left">
-                                <select name="branch_id" class="form-control select2-basic">
-                                    <option value="">{{__('pages.all_branch')}}</option>
-                                    @foreach($branches as $branch)
-                                        <option value="{{$branch->id}}" {{Request::get('branch_id') == $branch->id ? 'selected' : ''}}>{{$branch->title}} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <button class="btn btn-brand-primary btn-brand">{{__('pages.search')}}</button>
-                        </div>
-                    </div>
-                </form>
-            @endcan
-        </div>
-
         <div class="wiz-card">
             <div class="wiz-card-header">
                 <h5 class="wiz-card-title">Stock Report</h5>

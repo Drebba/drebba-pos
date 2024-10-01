@@ -31,8 +31,8 @@ class PaymentToSupplierController extends Controller
         $payments = PaymentToSupplier::orderBY('id', 'DESC');
 
 
-        if ($request->branch_id){
-            $payments = $payments->where('branch_id', $request->branch_id);
+        if ($request->business_id){
+            $payments = $payments->where('business_id', $request->business_id);
         }
 
         if ($request->supplier_id){
@@ -50,7 +50,6 @@ class PaymentToSupplierController extends Controller
 
         return view('backend.payment.supplier.index',[
             'payments' => $payments,
-            'branches' => Branch::all(),
             'suppliers' => Supplier::all(),
         ]);
     }
@@ -116,7 +115,7 @@ class PaymentToSupplierController extends Controller
 
        $payment = PaymentToSupplier::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($payment->branch_id != Auth::user()->branch_id){
+            if ($payment->business_id != Auth::user()->business_id){
                 return redirect('home')->with(denied());
             }
         }
@@ -138,7 +137,7 @@ class PaymentToSupplierController extends Controller
     {
         $payment = PaymentToSupplier::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($payment->branch_id != Auth::user()->branch_id){
+            if ($payment->business_id != Auth::user()->business_id){
                 return redirect('home')->with(denied());
             }
         }
@@ -160,7 +159,7 @@ class PaymentToSupplierController extends Controller
     {
         $payment = PaymentToSupplier::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
-            if ($payment->branch_id != Auth::user()->branch_id){
+            if ($payment->business_id != Auth::user()->business_id){
                 return redirect('home')->with(denied());
             }
         }
@@ -173,20 +172,20 @@ class PaymentToSupplierController extends Controller
 
     public function pdf(Request $request)
     {
-        $branch_id = $request->branch_id ? [$request->branch_id] : PaymentToSupplier::select('branch_id')->distinct()->get();
+        $business_id = $request->business_id ? [$request->business_id] : PaymentToSupplier::select('business_id')->distinct()->get();
         $supplier_id = $request->supplier_id ? [$request->supplier_id] : PaymentToSupplier::select('supplier_id')->distinct()->get();
         $start_date = $request->start_date ? $request->start_date : PaymentToSupplier::oldest()->pluck('payment_date')->first();
         $end_date = $request->end_date ? $request->end_date : PaymentToSupplier::latest()->pluck('payment_date')->first();
 
-        $payments = PaymentToSupplier::whereIn('branch_id', $branch_id)
+        $payments = PaymentToSupplier::whereIn('business_id', $business_id)
             ->whereIn('supplier_id', $supplier_id)
             ->whereBetween('payment_date', [$start_date, $end_date])
             ->orderBY('id', 'DESC')
             ->get();
 
 
-        if ($request->branch_id != ''){
-            $branch =  Branch::findOrFail($request->branch_id);
+        if ($request->business_id != ''){
+            $branch =  Branch::findOrFail($request->business_id);
             $branch_name = $branch->title;
         }else{
             $branch_name = 'All';

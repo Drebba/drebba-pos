@@ -34,7 +34,7 @@ class EmployeeController extends Controller
         } // end permission checking
 
 //        foreach (User::all() as $key => $user){
-//            $user->branch_id = $user->employee->branch_id;
+//            $user->business_id = $user->employee->business_id;
 //            $user->save();
 //        }
 
@@ -59,7 +59,6 @@ class EmployeeController extends Controller
         return view('backend.employee.create', [
             'departments' => Department::orderBy('title', 'asc')->get(),
             'designations' => Designation::orderBy('title', 'asc')->get(),
-            'branches' => Branch::orderBy('title', 'asc')->get(),
             'roles' => Role::get(),
         ]);
     }
@@ -103,7 +102,7 @@ class EmployeeController extends Controller
     {
         $employee = Employee::findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')){
-            if ($employee->branch_id  = Auth::user()->branch_id){
+            if ($employee->business_id  = Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -136,7 +135,7 @@ class EmployeeController extends Controller
        $employee = Employee::findOrFail($id);
 
         if (!Auth::user()->can('access_to_all_branch')){
-            if ($employee->branch_id  = Auth::user()->branch_id){
+            if ($employee->business_id  = Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }
@@ -153,7 +152,6 @@ class EmployeeController extends Controller
         return view('backend.employee.edit', [
             'departments' => Department::orderBy('title', 'asc')->get(),
             'designations' => Designation::orderBy('title', 'asc')->get(),
-            'branches' => Branch::orderBy('title', 'asc')->get(),
             'roles' => Role::get(),
             'selected_role_id' => $selected_role_id,
             'employee' => Employee::findOrFail($id),
@@ -177,7 +175,7 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
 
         if (!Auth::user()->can('access_to_all_branch')){
-            if ($employee->branch_id  = Auth::user()->branch_id){
+            if ($employee->business_id  = Auth::user()->business_id){
                 return redirect()->back()->with(denied());
             }
         }

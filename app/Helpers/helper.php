@@ -30,12 +30,12 @@ function toggle_status($status){
     }
 }
 
-function monthlySells($branch_id, $key)
+function monthlySells($business_id, $key)
 {
     $yearMonthArray = explode('-', $key);
     $year = $yearMonthArray[0];
     $month = $yearMonthArray[1];
-    return \App\Models\Sell::where('branch_id', $branch_id)->whereYear('sell_date', $year)->whereMonth('sell_date', $month)->sum('grand_total_price');
+    return \App\Models\Sell::where('business_id', $business_id)->whereYear('sell_date', $year)->whereMonth('sell_date', $month)->sum('grand_total_price');
 }
 
 function productAvailableTransactionStockQty($product)
@@ -49,9 +49,9 @@ function productAvailableTransactionStockQty($product)
 
 function productReceivedFromOthersBranch($product_id)
 {
-    $branch_id = Auth::user()->branch_id;
+    $business_id = Auth::user()->business_id;
 
-    $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $branch_id)
+    $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $business_id)
         ->where('status', 2)
         ->select('id')
         ->distinct()
@@ -65,9 +65,9 @@ function productReceivedFromOthersBranch($product_id)
 }
 
 function productSendToOthersBranch($product_id){
-    $branch_id = Auth::user()->branch_id;
+    $business_id = Auth::user()->business_id;
 
-    $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $branch_id)
+    $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $business_id)
         ->where('status', 2)
         ->select('id')
         ->distinct()
@@ -86,8 +86,8 @@ function pendingRequisition()
     }else{
         $requisitions = Requisition::where('status', 0)
             ->where(function($query){
-                $query->where('requisition_from',  Auth::user()->branch_id);
-                $query->orWhere('requisition_to', Auth::user()->branch_id);
+                $query->where('requisition_from',  Auth::user()->business_id);
+                $query->orWhere('requisition_to', Auth::user()->business_id);
             })
             ->orderBy('id', 'DESC')
             ->count();
@@ -105,7 +105,7 @@ function notifications()
     }
 
 
-    return $notifications = \App\Models\Notification::where('message_to', Auth::user()->branch_id)
+    return $notifications = \App\Models\Notification::where('message_to', Auth::user()->business_id)
         ->where('is_click', 0)
         ->where('status', 1)
         ->orderBy('id', 'DESC')
@@ -124,21 +124,6 @@ function get_option($option_key)
 }
 
 
-//function get_option($option_key)
-//{
-//    if (Settings::where('option_key', $option_key)->count() > 0)
-//    {
-//        $option = \App\Models\Settings::where('option_key', $option_key)->first();
-//        return $option->option_value;
-//    } else {
-//        return '';
-//    }
-//}
-
-function languages()
-{
-    return \App\Models\Language::where('status', 1)->get();
-}
 
 function toastrMessage($message_type, $message)
 {

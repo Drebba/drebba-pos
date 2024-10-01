@@ -32,41 +32,41 @@ class WebRoueScopeMiddleware
         if (Auth::check()){
             if (!Auth::user()->can('access_to_all_branch')) {
                 Sell::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
                 SellProduct::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
                 Purchase::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
                 PurchaseProduct::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
                 Requisition::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('requisition_from', Auth::user()->branch_id);
-                    $builder->orWhere('requisition_to', Auth::user()->branch_id);
+                    $builder->where('requisition_from', Auth::user()->business_id);
+                    $builder->orWhere('requisition_to', Auth::user()->business_id);
                 });
 
                 Expense::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
 
                 PaymentToSupplier::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
                 PaymentFromCustomer::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
 
                 Employee::addGlobalScope('branch', function (Builder $builder) {
-                    $builder->where('branch_id',  Auth::user()->branch_id);
+                    $builder->where('business_id',  Auth::user()->business_id);
                 });
             }
 

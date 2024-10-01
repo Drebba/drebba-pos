@@ -17,7 +17,7 @@ class CreateExpensesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('business_id');
             $table->string('expense_id');
-            $table->integer('branch_id');
+            $table->integer('business_id');
             $table->integer('expense_category_id');
             $table->date('expense_date');
             $table->double('amount');

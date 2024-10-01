@@ -85,24 +85,17 @@ class SupplierController extends Controller
         if (Auth::user()->can('access_to_all_branch')) {
             $purchases = Purchase::where('supplier_id', $id)->paginate(50);
         }else{
-            $purchases = Purchase::where('branch_id', Auth::user()->branch_id)->where('supplier_id', $id)->paginate(50);
+            $purchases = Purchase::where('business_id', Auth::user()->business_id)->where('supplier_id', $id)->paginate(50);
         }
 
         $supplier = Supplier::findOrFail($id);
-        $branches = Branch::all();
-        $purchase_by_branches = [];
 
-        foreach ($branches as $key => $branch) {
-            $purchase_by_branches[$key]['branch_name'] = $branch->title;
-            $purchase_by_branches[$key]['total_purchase'] = Purchase::where('supplier_id', $id)->where('branch_id', $branch->id)->get();
-            $purchase_by_branches[$key]['payment'] = PaymentToSupplier::where('supplier_id', $id)->where('branch_id', $branch->id)->get();
-        }
+
 
 
         return view('backend.supplier.show',[
             'supplier' => $supplier,
             'purchases' => $purchases,
-            'purchase_by_branches' => $purchase_by_branches,
         ]);
     }
 

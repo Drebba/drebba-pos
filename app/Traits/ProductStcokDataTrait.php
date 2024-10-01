@@ -19,20 +19,20 @@ trait ProductStcokDataTrait
         $branch = Auth::user()->branch;
 
 
-        $product_stock_history = ProductStockHistory::where('branch_id', $branch->id)
+        $product_stock_history = ProductStockHistory::where('business_id', $branch->id)
             ->where('product_id', $product->id)
             ->first();
 
         if (!$product_stock_history){
             $product_stock_history = new ProductStockHistory();
-            $product_stock_history->branch_id = $branch->id;
+            $product_stock_history->business_id = $branch->id;
             $product_stock_history->product_id = $product->id;
             $product_stock_history->save();
         }
 
 
         $sell_products = SellProduct::where('product_id', $product->id)
-            ->where('branch_id', $branch->id)
+            ->where('business_id', $branch->id)
             ->sum('quantity');
 
         $product_stock_history->sell_qty = $sell_products;
@@ -43,9 +43,9 @@ trait ProductStcokDataTrait
          * PurchaseProduct
          */
         $purchase_products = PurchaseProduct::where('product_id', $product->id)
-            ->where('branch_id', $branch->id)
+            ->where('business_id', $branch->id)
             ->sum('quantity');
-        
+
 
         $product_stock_history->purchase_qty = $purchase_products;
         $product_stock_history->save();
@@ -91,20 +91,20 @@ trait ProductStcokDataTrait
     {
         $branch = Auth::user()->employee->branch;
 
-        $product_stock_history = ProductStockHistory::where('branch_id', $branch->id)
+        $product_stock_history = ProductStockHistory::where('business_id', $branch->id)
             ->where('product_id', $product->id)
             ->first();
 
         if (!$product_stock_history){
             $product_stock_history = new ProductStockHistory();
-            $product_stock_history->branch_id = $branch->id;
+            $product_stock_history->business_id = $branch->id;
             $product_stock_history->product_id = $product->id;
             $product_stock_history->save();
         }
 
 
         $sell_products = SellProduct::where('product_id', $product->id)
-            ->where('branch_id', $branch->id)
+            ->where('business_id', $branch->id)
             ->sum('quantity');
 
         $product_stock_history->sell_qty = $sell_products;
@@ -116,19 +116,19 @@ trait ProductStcokDataTrait
     {
         $branch = Auth::user()->employee->branch;
 
-        $product_stock_history = ProductStockHistory::where('branch_id', $branch->id)
+        $product_stock_history = ProductStockHistory::where('business_id', $branch->id)
             ->where('product_id', $product->id)
             ->first();
 
         if (!$product_stock_history){
             $product_stock_history = new ProductStockHistory();
-            $product_stock_history->branch_id = $branch->id;
+            $product_stock_history->business_id = $branch->id;
             $product_stock_history->product_id = $product->id;
             $product_stock_history->save();
         }
 
         $purchase_products = PurchaseProduct::where('product_id', $product->id)
-            ->where('branch_id', $branch->id)
+            ->where('business_id', $branch->id)
             ->sum('quantity');
 
         $product_stock_history->purchase_qty = $purchase_products;
@@ -141,13 +141,13 @@ trait ProductStcokDataTrait
     {
         $branch = Auth::user()->employee->branch;
 
-        $product_stock_history = ProductStockHistory::where('branch_id', $branch->id)
+        $product_stock_history = ProductStockHistory::where('business_id', $branch->id)
             ->where('product_id', $product->id)
             ->first();
 
         if (!$product_stock_history){
             $product_stock_history = new ProductStockHistory();
-            $product_stock_history->branch_id = $branch->id;
+            $product_stock_history->business_id = $branch->id;
             $product_stock_history->product_id = $product->id;
             $product_stock_history->save();
         }

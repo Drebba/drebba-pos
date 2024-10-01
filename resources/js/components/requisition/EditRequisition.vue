@@ -4,13 +4,7 @@
         <div class="row sell-pos">
             <div class="col-md-4">
                 <div class="sell-card-group">
-                    <div class="sell-card-header">
-                        <div class="wiz-box">
-                            <div class="select-customer">
-                                <v-select  :options="branches" v-model="branch" label="title" placeholder="Select Branch"></v-select>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="sell-card-body">
                         <div class="wiz-box d-flex flex-column h-100">
@@ -228,7 +222,6 @@
                 products: [],
                 product: {},
                 carts: [],
-                branches: [],
                 branch: {},
                 filter: {
                     search: '',
@@ -343,9 +336,7 @@
                 this.lang = response.data;
             });
 
-            axios.get('../../vue/api/branches').then((response) => {
-                this.branches = response.data;
-            });
+
 
             axios.get('../../vue/api/get-app-configs').then((response) => {
                 this.configs = response.data;
