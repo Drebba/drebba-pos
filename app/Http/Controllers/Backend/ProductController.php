@@ -3,23 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\ProductRequest;
-use App\Models\Branch;
-use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Requisition;
-use App\Models\RequisitionProduct;
-use App\Models\Sell;
-use App\Models\SellProduct;
-use App\Models\Tax;
-use App\Models\Unit;
 use App\Traits\ProductStcokDataTrait;
 use App\Traits\RedirectControlTrait;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Toastr;
 use Milon\Barcode\DNS1D;
@@ -41,7 +32,7 @@ class ProductController extends Controller
         } // end permission checking
 
 
-        $products = Product::orderBy('id', 'DESC');
+        $products = Auth::user()->business->product()->orderBy('id', 'DESC');
 
         if ($request->category_id != ''){
             $products = $products->where('category_id', $request->category_id);
@@ -78,9 +69,9 @@ class ProductController extends Controller
         } // end permission checking
 
         return view('backend.product.create', [
-            'categories' => Category::where('status', '1')->get(),
-            'taxes' => Tax::orderBy('title', 'asc')->get(),
-            'units' => Unit::orderBy('title', 'asc')->get(),
+            'categories' => Auth::user()->business->catgeory()->where('status', '1')->get(),
+            'taxes' => Auth::user()->business->tax()->orderBy('title', 'asc')->get(),
+            'units' => Auth::user()->business->unit()->orderBy('title', 'asc')->get(),
             'new_sku' => str_pad(Product::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT),
         ]);
     }
@@ -108,6 +99,7 @@ class ProductController extends Controller
         ]);
 
         $product = new Product();
+        $request['business_id']=Auth::user()->business_id;
         $product->fill($request->all());
         if($request->hasFile('thumbnail')){
             $product->thumbnail = $request->thumbnail->move('uploads/product/', Str::random(40) . '.' . $request->thumbnail->extension());
@@ -129,7 +121,7 @@ class ProductController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $product = Product::with('unit','productStockHistory', 'productStockHistories', 'sellProducts')->findOrFail($id);
+        $product = Auth::user()->business->product()->with('unit','productStockHistory', 'productStockHistories', 'sellProducts')->findOrFail($id);
         $last_30_days_sell = $this->last30DaysSell($product);
 
         $this->meargeStockQty($product);
@@ -151,11 +143,10 @@ class ProductController extends Controller
         if (!Auth::user()->can('manage_product')) {
             return redirect('home')->with(denied());
         } // end permission checking
-
-        $data['product'] = Product::findOrFail($id);
-        $data['categories'] = Category::where('status', '1')->orderBy('title', 'asc')->get();
-        $data['taxes'] = Tax::orderBy('title', 'asc')->get();
-        $data['units'] = Unit::orderBy('title', 'asc')->get();
+        $data['product'] = Auth::user()->business->product()->where('id',$id)->first();
+        $data['categories'] = Auth::user()->business->category()->where('status', '1')->orderBy('title', 'asc')->get();
+        $data['taxes'] = Auth::user()->business->tax()->orderBy('title', 'asc')->get();
+        $data['units'] = Auth::user()->business->unit()->orderBy('title', 'asc')->get();
 
         return view('backend.product.edit', $data);
     }
@@ -185,7 +176,7 @@ class ProductController extends Controller
 
     public function changeStatus($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Auth::user()->business->product()->where('id',$id)->first();
         $product->status = $product->status == 0 ? 1 : 0;
         $product->save();
 
@@ -205,7 +196,7 @@ class ProductController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        Product::destroy($id);
+        Auth::user()->business->product()->where('id',$id)->delete();
         Toastr::error('Product has been deleted', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         return redirect()->back();
     }

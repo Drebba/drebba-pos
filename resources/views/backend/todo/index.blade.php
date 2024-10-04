@@ -27,7 +27,7 @@
                                     <tr class="{{$todo->status == 1 ? 'bg-success' : 'bg-warning'}}">
                                         <td>{{$key+1}}</td>
                                         <td>{{$todo->title}}</td>
-                                        <td>{{$todo->created_at->format(get_option('app_date_format'))}}</td>
+                                        <td>@dateformat($todo->created_at)</td>
                                         <td class="font-14">
                                             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                                                 <a href="javascript:void(0);" onclick="$(this).confirmDelete($('#delete-{{$key}}')) "><i class="bi bi-trash text-danger"></i></a>

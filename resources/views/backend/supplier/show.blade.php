@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <td>{{__('pages.created_at')}}:</td>
-                                    <td>{{$supplier->created_at->format(get_option('app_date_format'))}}</td>
+                                    <td>@dateformat($supplier->created_at)</td>
                                 </tr>
 
                                 <tr>
@@ -147,7 +147,7 @@
                                             {{$purchase->invoice_id}}
                                         </a>
                                     </td>
-                                    <td>{{$purchase->purchase_date->format(get_option('app_date_format'))}}</td>
+                                    <td>@dateformat($purchase->purchase_date)</td>
                                     @if (Auth::user()->can('access_to_all_branch'))
                                         <td>
                                             {{$purchase->branch->title}}

@@ -10,18 +10,19 @@ class Business extends Model
     use HasFactory;
 
     public function category(){
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(Category::class);
     }
 
     public function product(){
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class);
     }
 
     public function tax(){
-        return $this->belongsTo(Tax::class);
+        return $this->hasMany(Tax::class);
     }
 
     public function unit(){
-        return $this->belongsTo(Unit::class);
+        return $this->hasMany(Unit::class);
     }
+
 }

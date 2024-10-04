@@ -4,7 +4,7 @@
         <tr class="bg-secondary text-white">
             <th colspan="9">
                 @if(Request::get('by_duration') == 'Y-m-d' or Request::get('by_duration') == '')
-                    {{\Carbon\Carbon::parse($key)->format(get_option('app_date_format'))}}
+                @dateformat($key)
                 @else
                     {{$key}}
                 @endif
@@ -47,7 +47,7 @@
                 @endcan
 
                 @if(Request::get('by_duration') != 'Y-m-d')
-                <td class="text-center">{{$single_sell->sell_date->format(get_option('app_date_format'))}}</td>
+                <td class="text-center">@dateformat($single_sell->sell_date)</td>
                 @endif
 
                 <td class="text-center"> {{get_option('app_currency')}}{{number_format($single_sell->sub_total, 2)}} </td>

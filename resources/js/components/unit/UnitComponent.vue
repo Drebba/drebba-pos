@@ -146,8 +146,16 @@
                 }).then((willDelete) => {
                     if (willDelete) {
                         axios.delete('unit/' + id).then((response) => {
-                            this.units.splice(index, 1);
-                            toastr["error"]("Unit has been deleted");
+                            if(response.data[0]=='success'){
+                                this.units.splice(index, 1);
+                               toastr["success"](response.data[1]);
+
+                            }else{
+                                toastr["error"](response.data[1]);
+
+                            }
+
+
                         }).catch((error) =>{
                             console.error(error);
                         });

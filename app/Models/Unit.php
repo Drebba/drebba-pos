@@ -9,4 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Unit extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public function product(){
+        return $this->hasMany(Product::class, 'unit_id', 'id');
+    }
 }

@@ -167,20 +167,23 @@
                         </a>
                     </li>
                 @endcan
+
+            </ul>
+            <ul class="navbar-nav nav-menu py-2 py-lg-0 mb-0 ms-auto">
                 @can('create_sell_invoice')
-                    <li class="nav-item">
-                        <a class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('sell.create')}}">
-                            <i class="fa fa-plus me-2"></i> <span> {{__('pages.create_invoice')}} </span>
-                        </a>
-                    </li>
-                @endcan
-                @can('manage_requisition')
-                    <li class="nav-item">
-                        <a class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('requisition.index')}}">
-                            <i class="fa fa-list me-2"></i> <span> {{__('pages.requisition')}} </span>
-                        </a>
-                    </li>
-                @endcan
+                <li class="nav-item">
+                    <a class="text-nowrap btn btn-danger btn-sm" href="{{route('sell.create')}}">
+                        <i class="fa fa-print me-2"></i> POS </span>
+                    </a>
+                </li>
+            @endcan
+            @can('manage_requisition')
+                <li class="nav-item">
+                    <a class="text-nowrap btn btn-success btn-sm" href="{{route('requisition.index')}}">
+                        <i class="fa fa-shopping-cart me-2"></i>Order
+                    </a>
+                </li>
+            @endcan
             </ul>
         </div>
     </nav>

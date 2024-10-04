@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UnitRequest;
+use App\Models\Product;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class UnitController extends Controller
         } // end permission checking
 
         return view('backend.unit.index',[
-            'units' => Unit::orderBy('id', 'DESC')->get()
+            'units' =>Auth::user()->business->unit()->get()
         ]);
     }
 
@@ -38,7 +39,7 @@ class UnitController extends Controller
         } // end permission checking
 
         return view('backend.unit.create',[
-            'units' => Unit::orderBy('id', 'DESC')->get()
+            'units' => Auth::user()->business->unit()->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -56,6 +57,7 @@ class UnitController extends Controller
 
         $unit = new Unit();
         $unit->title = $request->unit['title'];
+        $unit->business_id=Auth::user()->business_id;
         $unit->save();
         return response($unit);
     }
@@ -84,7 +86,7 @@ class UnitController extends Controller
         } // end permission checking
 
         return view('backend.unit.edit',[
-            'unit' => Unit::findOrFail($id)
+            'unit' => Auth::user()->business->unit()->firstOrFail($id)
         ]);
     }
 
@@ -101,7 +103,7 @@ class UnitController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $unit = Unit::findOrFail($id);
+        $unit = Auth::user()->business->unit()->where('id',$id)->firstOrFail();
         $unit->title = $request->unit['title'];
         $unit->save();
         return response()->json(['success', 'Unit Successfully Updated']);
@@ -118,9 +120,10 @@ class UnitController extends Controller
         if (!Auth::user()->can('manage_unit')) {
             return redirect('home')->with(denied());
         } // end permission checking
-
-
-        Unit::destroy($id);
+        if (Product::where('unit_id',$id)->first()) {
+            return response()->json(['error', "Unit can't be deleted"]);
+        }
+        Auth::user()->business->unit()->where('id',$id)->delete();
         return response()->json(['success', 'Unit has been deleted successfully']);
     }
 }

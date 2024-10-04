@@ -87,7 +87,6 @@ class Product extends Model
     public function productStockHistories(){
         return $this->hasMany(ProductStockHistory::class)
 //            ->orderByDesc('id')
-            ->with('branch')
             ->withoutGlobalScopes();
     }
 

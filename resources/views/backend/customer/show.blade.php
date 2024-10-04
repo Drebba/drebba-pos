@@ -117,9 +117,7 @@
                             <thead>
                             <tr class="bg-secondary text-white">
                                 <th>{{__('pages.invoice_id')}}</th>
-                                @can('access_to_all_branch')
-                                    <th>{{__('pages.branch')}}</th>
-                                @endcan
+
                                 <th>{{__('pages.sell_date')}}</th>
                                 <th>{{__('pages.sub_total')}}</th>
                                 <th>{{__('pages.discount')}}</th>
@@ -137,9 +135,6 @@
                                             {{$sell->invoice_id}}
                                         </a>
                                     </td>
-                                    @can('access_to_all_branch')
-                                        <td>{{$sell->branch->title}}</td>
-                                    @endcan
                                     <td>{{$sell->sell_date->format(get_option('app_date_format'))}}</td>
                                     <td> {{get_option('app_currency')}}{{number_format($sell->sub_total, 2)}} </td>
                                     <td> {{get_option('app_currency')}}{{number_format($sell->discount, 2)}} </td>

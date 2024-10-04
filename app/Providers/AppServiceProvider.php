@@ -41,6 +41,9 @@ class AppServiceProvider extends ServiceProvider
                 $allOptions['general_settings'] = Settings::all()->pluck('option_value', 'option_key')->toArray();
                 config($allOptions);
             }
+            Blade::directive('formatdate', function ($date) {
+                return "<?php echo Carbon\Carbon::parse($date)->format(get_option('app_date_format')); ?>";
+            });
         } catch (\Exception $e) {
             //
         }

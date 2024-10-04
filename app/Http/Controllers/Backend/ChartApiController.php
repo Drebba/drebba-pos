@@ -47,11 +47,7 @@ class ChartApiController extends Controller
             $last_30_days_sell[$key]['currency'] = get_option('app_currency') . ' ';
             $last_30_days_sell[$key]['sell_date'] = $date_info;
 
-            if (Auth::user()->can('access_to_all_branch')){
-                $last_30_days_sell[$key]['total_sell_amount'] = SellProduct::where('product_id', $id)->where('sell_date', $date_info)->sum('total_price');
-            }else{
-                $last_30_days_sell[$key]['total_sell_amount'] = SellProduct::where('product_id', $id)->where('business_id', auth()->user()->employee->branch->id)->where('sell_date', $date_info)->sum('total_price');
-            }
+                $last_30_days_sell[$key]['total_sell_amount'] = SellProduct::where('product_id', $id)->where('business_id', auth()->user()->business_id)->where('sell_date', $date_info)->sum('total_price');
             $key++;
         }
 

@@ -19,7 +19,7 @@
             <td>{{$requisition->requisitionFrom->title}}</td>
             <td>{{$requisition->requisitionTo->title}}</td>
             <td>
-                {{$requisition->requisition_date->format(get_option('app_date_format'))}}
+                @dateformat($requisition->requisition_date)
             </td>
             <td>
                 @if($requisition->status == 0)

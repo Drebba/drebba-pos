@@ -6,7 +6,8 @@ use App\Http\Requests\TaxRequest;
 use App\Models\Tax;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class TaxController extends Controller
 {
@@ -21,7 +22,7 @@ class TaxController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $data['taxes'] = Tax::orderBy('id', 'DESC')->get();
+        $data['taxes'] = Auth::user()->business->tax()->orderBy('id', 'DESC')->get();
         return view('backend.tax.index', $data);
     }
 
@@ -32,7 +33,7 @@ class TaxController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        return response(Tax::orderBy('id', 'DESC')->get());
+        return response(Auth::user()->business->tax()->orderBy('id', 'DESC')->get());
     }
 
     /**
@@ -60,6 +61,7 @@ class TaxController extends Controller
         $tax = new Tax();
         $tax->title = $request->tax['title'];
         $tax->value = $request->tax['value'];
+        $tax->business_id = Auth::user()->business_id;
         $tax->save();
         return response($tax);
     }
@@ -99,7 +101,7 @@ class TaxController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $tax = Tax::findOrFail($id);
+        $tax = Auth::user()->business->tax()->firstOrFail($id);
         $tax->title = $request->tax['title'];
         $tax->value = $request->tax['value'];
         $tax->save();
@@ -118,7 +120,11 @@ class TaxController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        Tax::destroy($id);
+        if (Product::where('tax_id',$id)->first()) {
+            return response()->json(['error', "Tax can't be deleted"]);
+        }
+        Auth::user()->business->tax()->where('id',$id)->delete();
+
         return response()->json(['success', 'Tax Deleted'], 200);
     }
 }

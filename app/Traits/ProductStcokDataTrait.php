@@ -16,23 +16,23 @@ trait ProductStcokDataTrait
 {
     private function meargeStockQty($product)
     {
-        $branch = Auth::user()->branch;
+        $business = Auth::user()->business_id;
 
 
-        $product_stock_history = ProductStockHistory::where('business_id', $branch->id)
+        $product_stock_history = ProductStockHistory::where('business_id', $business)
             ->where('product_id', $product->id)
             ->first();
 
         if (!$product_stock_history){
             $product_stock_history = new ProductStockHistory();
-            $product_stock_history->business_id = $branch->id;
+            $product_stock_history->business_id = $business;
             $product_stock_history->product_id = $product->id;
             $product_stock_history->save();
         }
 
 
         $sell_products = SellProduct::where('product_id', $product->id)
-            ->where('business_id', $branch->id)
+            ->where('business_id', $business)
             ->sum('quantity');
 
         $product_stock_history->sell_qty = $sell_products;
@@ -43,7 +43,7 @@ trait ProductStcokDataTrait
          * PurchaseProduct
          */
         $purchase_products = PurchaseProduct::where('product_id', $product->id)
-            ->where('business_id', $branch->id)
+            ->where('business_id', $business)
             ->sum('quantity');
 
 
@@ -57,7 +57,7 @@ trait ProductStcokDataTrait
          * Requisition
          */
 
-        $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $branch->id)
+        $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $business)
             ->where('status', 2)
             ->pluck('id')
             ->all();
@@ -70,7 +70,7 @@ trait ProductStcokDataTrait
 
 
 
-        $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $branch->id)
+        $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $business)
             ->where('status', 2)
             ->pluck('id')
             ->all();

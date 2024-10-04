@@ -125,21 +125,6 @@
                         <div class="col-xl-4 col-md-6">
                             <div class="summary-card">
                                 <div class="me-3">
-                                    <h6 class="summary-card-title">{{__('pages.send_to_others_branch')}}</h6>
-                                    <h3 class="summary-card-value">
-                                        {{$product->productStockHistory->req_send ?? 0}}
-                                        <small>{{$product->unit ? $product->unit->title : ''}}</small>
-                                    </h3>
-                                </div>
-                                <div>
-                                    <span class="summary-card-icon btn-soft-"><i class="bi bi-send-check"></i></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-md-6">
-                            <div class="summary-card">
-                                <div class="me-3">
                                     <h6 class="summary-card-title">{{__('pages.stock_quantity')}}</h6>
                                     <h3 class="summary-card-value">
                                         {{$product->current_stock_quantity ?? 0}}
@@ -205,16 +190,16 @@
                                     <thead>
                                     <tr class="bg-secondary text-white">
                                         <th>{{__('pages.sl')}}</th>
-                                        <th class="text-center">{{__('pages.branch_name')}}</th>
+                                        <th class="text-center">Date</th>
                                         <th class="text-center">{{__('pages.stock_quantity')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($product->productStockHistories as $key => $branch_product)
-                                        <tr class="@if($branch_product->stock_quantity < 1 ) bg-danger text-white @elseif($branch_product->stock_quantity < 20) bg-warning text-white @else  @endif">
+                                    @foreach($product->productStockHistories as $key => $prod)
+                                        <tr class="@if($prod->stock_quantity < 1 ) bg-danger text-white @elseif($prod->stock_quantity < 20) bg-warning text-white @else  @endif">
                                             <th>{{$key + 1}}</th>
-                                            <td class="text-center">{{$branch_product->branch->title}}</td>
-                                            <td class="text-center">{{$branch_product->stock_quantity}}</td>
+                                            <td class="text-center">@formatdate($prod->created_at)</td>
+                                            <td class="text-center">{{$prod->stock_quantity}}</td>
                                         </tr>
                                     @endforeach
 

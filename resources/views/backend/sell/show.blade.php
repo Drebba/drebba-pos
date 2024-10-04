@@ -73,7 +73,7 @@
                     <tr>
                         <td>{{__('pages.sell_date')}}</td>
                         <td>
-                            {{$sell->sell_date->format(get_option('app_date_format'))}} {{\Carbon\Carbon::parse($sell->created_at)->format('h:i:A')}}
+                            @dateformat($sell->sell_date) {{\Carbon\Carbon::parse($sell->created_at)->format('h:i:A')}}
                         </td>
                     </tr>
 

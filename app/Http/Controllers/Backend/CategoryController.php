@@ -22,7 +22,8 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.index',[
-            'categories' => Category::where('business_id',Auth::user()->business_id)->orderBy('id', 'DESC')->get()
+            'categories' =>Auth::user()->business->category()
+            ->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -38,7 +39,7 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.create',[
-            'categories' =>Auth::user()->business()->category()->orderBy('id', 'DESC')->get()
+            'categories' =>Auth::user()->business->category()->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -85,7 +86,7 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.edit',[
-            'category' => Auth::user()->business()->category->where('id',$id)->first()
+            'category' => Auth::user()->business->category()->where('id',$id)->first()
         ]);
     }
 
@@ -102,7 +103,7 @@ class CategoryController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $category = Auth::user()->business()->category()->where('id',$id)->first();
+        $category = Auth::user()->business->category()->where('id',$id)->firstOrFail();
         $category->title = $request->category['title'];
         $category->save();
         return response()->json(['success', 'category Successfully Updated']);
@@ -121,7 +122,7 @@ class CategoryController extends Controller
         } // end permission checking
 
 
-        Auth::user()->business()->category()->where('id',$id)->delete();
+        Auth::user()->business->category()->where('id',$id)->delete();
         return response()->json(['success', 'Category has been deleted successfully']);
     }
 }

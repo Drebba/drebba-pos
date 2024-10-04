@@ -81,7 +81,7 @@
                                     <td>{{$sell->branch->title}}</td>
                                 @endcan
                                 <td>{{$sell->customer->name}}</td>
-                                <td>{{$sell->sell_date->format(get_option('app_date_format'))}}</td>
+                                <td>@dateformat($sell->sell_date)</td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->sub_total, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->discount, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->grand_total_price, 2)}} </td>
