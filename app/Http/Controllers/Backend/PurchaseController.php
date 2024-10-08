@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Branch;
 use App\Models\PaymentToSupplier;
 use App\Models\Product;
 use App\Models\ProductStockHistory;
 use App\Models\Purchase;
-use App\Models\PurchasePayment;
 use App\Models\PurchaseProduct;
-use App\Models\Supplier;
 use App\Traits\ProductStcokDataTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use App\Models\Sell;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade as PDF;
 
 class PurchaseController extends Controller
@@ -32,16 +30,14 @@ class PurchaseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-
-        $purchases = Purchase::orderBy('id', 'DESC');
-
+        $purchases = Auth::user()->business->purchase()->orderBy('id', 'DESC');
         if ($request->supplier_id){
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
         }
 
         if ($request->start_date != '' || $request->end_date != ''){
-            $start_date = $request->start_date ? $request->start_date : Sell::oldest()->pluck('purchase_date')->first();
-            $end_date = $request->end_date ? $request->end_date : Sell::latest()->pluck('purchase_date')->first();
+            $start_date = $request->start_date ;
+            $end_date = $request->end_date;
 
             $purchases = $purchases->whereBetween('purchase_date', [$start_date, $end_date]);
         }
@@ -50,13 +46,12 @@ class PurchaseController extends Controller
             $purchases = $purchases->where('invoice_id', 'like', '%'.$request->invoice_id.'%');
         }
 
-
-        $purchases = $purchases->with('supplier', 'branch')->paginate(50);
+        $purchases = $purchases->paginate(50);
 
 
         return view('backend.purchase.index',[
             'purchases' => $purchases,
-            'suppliers' => Supplier::all(),
+            'suppliers' => Auth::user()->business->supplier,
         ]);
     }
 
@@ -123,7 +118,7 @@ class PurchaseController extends Controller
         } // end permission checking
 
 
-        $purchase = Purchase::findOrFail($id);
+        $purchase = Auth::user()->business->purchase()->where('id',$id)->firstOrFail();
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -140,7 +135,7 @@ class PurchaseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $purchase = Purchase::findOrFail($purchase_id);
+        $purchase =Auth::user()->business->purchase()->where('id',$id)->firstOrFail();
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -195,14 +190,14 @@ class PurchaseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $purchase = Purchase::findOrFail($id);
+        $purchase = Auth::user()->business->purchase()->where('id',$id)->firstOrFail();
         $purchase->supplier_id = $request->supplier['id'];
         $purchase->total_amount = $request->summary['total_amount'];
         $purchase->paid_amount = $request->summary['paid_amount'];
         $purchase->due_amount = $request->summary['due_amount'];
         $purchase->save();
 
-        PurchaseProduct::where('purchase_id', $id)->delete();
+        Auth::user()->business->purchaseProduct()->where('purchase_id',$id)->delete();
         $this->updatePurchaseProducts($request, $purchase);
 
         $check_payment = PaymentToSupplier::where('purchase_id', $purchase->id)->count();
@@ -221,7 +216,7 @@ class PurchaseController extends Controller
             }
         }
 
-        $data = Purchase::where('id', $purchase->id)
+        $data =Auth::user()->business->purchase()->where('id',$id)
             ->with('purchaseProducts')
             ->with('supplier')
             ->first();
@@ -243,8 +238,8 @@ class PurchaseController extends Controller
         } // end permission checking
 
 
-        PurchaseProduct::where('purchase_id', $id)->delete();
-        Purchase::destroy($id);
+        Auth::user()->business->purchaseProduct()->where('purchase_id',$id)->firstOrFail();
+        Auth::user()->business->purchase()->where('id',$id)->delete();
         return redirect()->back()->with('success','Purchase has been deleted successfully');
     }
 

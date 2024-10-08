@@ -129,9 +129,7 @@
                                 <th>{{__('pages.sl')}}</th>
                                 <th>{{__('pages.invoice_id')}}</th>
                                 <th>{{__('pages.date')}}</th>
-                                @if (Auth::user()->can('access_to_all_branch'))
-                                    <th>{{__('pages.branch')}}</th>
-                                @endif
+
                                 <th>{{__('pages.total_amount')}}</th>
                                 <th>{{__('pages.paid_amount')}}</th>
                                 <th>{{__('pages.due_amount')}}</th>
@@ -148,11 +146,7 @@
                                         </a>
                                     </td>
                                     <td>@dateformat($purchase->purchase_date)</td>
-                                    @if (Auth::user()->can('access_to_all_branch'))
-                                        <td>
-                                            {{$purchase->branch->title}}
-                                        </td>
-                                    @endif
+
                                     <td> {{get_option('app_currency')}}{{number_format($purchase->total_amount, 2)}} </td>
                                     <td> {{get_option('app_currency')}}{{number_format($purchase->paid_amount, 2)}} </td>
                                     <td> {{get_option('app_currency')}}{{number_format($purchase->due_amount, 2)}} </td>

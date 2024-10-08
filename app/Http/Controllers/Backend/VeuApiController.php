@@ -18,7 +18,7 @@ use App\Models\Settings;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class VeuApiController extends Controller
 {
@@ -46,7 +46,7 @@ class VeuApiController extends Controller
     }
     public function products()
     {
-        $products = Product::where('status', 1)
+        $products = Auth::user()->business->product()->where('status', 1)
             ->with('tax')
             ->with('unit')
             ->get();
@@ -54,7 +54,7 @@ class VeuApiController extends Controller
     }
 
     public function productsWithPaginate(){
-        $products = Product::where('status', 1)
+        $products = Auth::user()->business->product()->where('status', 1)
             ->with('tax')
             ->with('unit')
             ->paginate(20);
@@ -123,7 +123,7 @@ class VeuApiController extends Controller
 
     public function categories()
     {
-        $categories = Category::where('status', 1)->orderBy('id', 'DESC')->get();
+        $categories = Auth::user()->business->category()->where('status', 1)->orderBy('id', 'DESC')->get();
         return response($categories);
     }
 
@@ -135,7 +135,7 @@ class VeuApiController extends Controller
 
     public function suppliers()
     {
-        $suppliers = Supplier::where('status', 1)->get();
+        $suppliers = Auth::user()->business->supplier()->where('status', 1)->get();
         return response($suppliers);
     }
 
@@ -153,7 +153,7 @@ class VeuApiController extends Controller
     }
 
     public function customers(){
-        $customers = Customer::where('status', 1)->get();
+        $customers = Auth::user()->business->customer()->where('status', 1)->get();
         return response($customers);
     }
 

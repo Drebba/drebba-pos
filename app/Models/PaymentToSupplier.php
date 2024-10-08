@@ -12,10 +12,7 @@ class PaymentToSupplier extends Model
 
     protected $dates = ['payment_date'];
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class)->withTrashed();
-    }
+
 
     public function supplier()
     {

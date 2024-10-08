@@ -69,7 +69,7 @@ class ProductController extends Controller
         } // end permission checking
 
         return view('backend.product.create', [
-            'categories' => Auth::user()->business->catgeory()->where('status', '1')->get(),
+            'categories' => Auth::user()->business->category()->where('status', '1')->get(),
             'taxes' => Auth::user()->business->tax()->orderBy('title', 'asc')->get(),
             'units' => Auth::user()->business->unit()->orderBy('title', 'asc')->get(),
             'new_sku' => str_pad(Product::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT),

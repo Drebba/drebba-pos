@@ -19,9 +19,6 @@ class ProductStockHistory extends Model
         return $total;
     }
 
-    public function branch(){
-        return $this->belongsTo(Branch::class)->withTrashed();
-    }
 
 
     protected static function boot()

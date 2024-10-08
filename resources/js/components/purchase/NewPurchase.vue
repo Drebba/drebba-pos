@@ -210,7 +210,7 @@
                                 <h3 class="company-name mb-1">{{appConfig('app_name')}}</h3>
                                 <p class="address mb-1">{{lang.address}}: {{appConfig('address')}}</p>
                                 <p class="vat mb-1">{{lang.vat_reg_number}} : {{appConfig('vat_reg_no')}}</p>
-                                <p class="outlet mb-0">{{lang.outlet}}: {{my_branch.title}} </p>
+                                <!-- <p class="outlet mb-0">{{lang.outlet}}: {{my_branch.title}} </p> -->
                             </div>
                         </div>
 
@@ -539,9 +539,10 @@
                 this.suppliers = response.data;
             });
 
-            axios.get('../vue/api/my-branch').then((response) => {
-                this.my_branch = response.data;
-            });
+            // axios.get('../vue/api/my-branch').then((response) => {
+                // this.my_branch = response.data;
+            // });
+
         }
     }
 </script>

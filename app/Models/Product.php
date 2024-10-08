@@ -23,7 +23,8 @@ class Product extends Model
         'price_type',
         'tax_id',
         'unit_id',
-        'short_description'
+        'short_description',
+        'business_id'
     ];
 
     protected $appends = ['current_stock_quantity', 'total_sell_qty'];

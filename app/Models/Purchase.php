@@ -22,7 +22,7 @@ class Purchase extends Model
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class)->withTrashed();
+        return $this->belongsTo(Purchase::class)->withTrashed();
     }
 
     public function purchaseProducts()

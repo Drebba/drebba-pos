@@ -3909,10 +3909,9 @@ __webpack_require__.r(__webpack_exports__);
     });
     axios.get('../vue/api/suppliers').then(function (response) {
       _this7.suppliers = response.data;
-    });
-    axios.get('../vue/api/my-branch').then(function (response) {
-      _this7.my_branch = response.data;
-    });
+    }); // axios.get('../vue/api/my-branch').then((response) => {
+    // this.my_branch = response.data;
+    // });
   }
 });
 
@@ -30800,15 +30799,6 @@ var render = function() {
                           _vm._s(_vm.lang.vat_reg_number) +
                             " : " +
                             _vm._s(_vm.appConfig("vat_reg_no"))
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "outlet mb-0" }, [
-                        _vm._v(
-                          _vm._s(_vm.lang.outlet) +
-                            ": " +
-                            _vm._s(_vm.my_branch.title) +
-                            " "
                         )
                       ])
                     ])

@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\SupplierRequest;
-use App\Models\Branch;
-use App\Models\PaymentToSupplier;
 use App\Models\Purchase;
 use App\Models\Supplier;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
 use Illuminate\Support\Str;
 use Toastr;
 use File;
+use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
@@ -28,7 +25,7 @@ class SupplierController extends Controller
         } // end permission checking
 
         return view('backend.supplier.index',[
-            'suppliers' => Supplier::orderBy('id', 'DESC')->get()
+            'suppliers' => Auth::user()->business->supplier()->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -59,7 +56,7 @@ class SupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-
+        $request['business_id']=Auth::user()->business_id;
         $supplier = new Supplier();
         $supplier->fill($request->all());
         if($request->hasFile('logo')){
@@ -82,17 +79,8 @@ class SupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        if (Auth::user()->can('access_to_all_branch')) {
-            $purchases = Purchase::where('supplier_id', $id)->paginate(50);
-        }else{
-            $purchases = Purchase::where('business_id', Auth::user()->business_id)->where('supplier_id', $id)->paginate(50);
-        }
-
-        $supplier = Supplier::findOrFail($id);
-
-
-
-
+        $purchases = Auth::user()->business->purchase()->where('supplier_id', $id)->paginate(50);
+        $supplier = Auth::user()->business->supplier()->where('id',$id)->firstOrFail();
         return view('backend.supplier.show',[
             'supplier' => $supplier,
             'purchases' => $purchases,
@@ -113,7 +101,7 @@ class SupplierController extends Controller
 
 
         return view('backend.supplier.edit',[
-            'supplier' => Supplier::findOrFail($id)
+            'supplier' => Auth::user()->business->supplier()->where('id',$id)->firstOrFail()
         ]);
     }
 
@@ -143,7 +131,7 @@ class SupplierController extends Controller
 
     public function changeStatus($id)
     {
-        $supplier = Supplier::findOrFail($id);
+        $supplier = Auth::user()->business->supplier()->where('id',$id)->firstOrFail();
         $supplier->status = $supplier->status == 0 ? 1 : 0;
         $supplier->save();
 
@@ -165,7 +153,8 @@ class SupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        Supplier::destroy($id);
+
+        Auth::user()->business->supplier()->where('id',$id)->delete();
         Toastr::error('Supplier has been deleted', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         return redirect()->back();
 

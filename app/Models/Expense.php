@@ -14,10 +14,7 @@ class Expense extends Model
 
     protected $dates = ['expense_date'];
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class)->withTrashed();
-    }
+
 
     public function expenseCategory()
     {

@@ -16,15 +16,6 @@ class Requisition extends Model
             ->with('product');
     }
 
-    public function requisitionTo()
-    {
-        return $this->belongsTo(Branch::class, 'requisition_to')->withTrashed();
-    }
-
-    public function requisitionFrom()
-    {
-        return $this->belongsTo(Branch::class, 'requisition_from')->withTrashed();
-    }
 
     public function user()
     {

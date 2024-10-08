@@ -28,10 +28,7 @@ class Employee extends Model
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class)->withTrashed();
-    }
+
 
     public function department()
     {

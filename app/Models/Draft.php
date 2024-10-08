@@ -18,10 +18,7 @@ class Draft extends Model
         return $this->hasMany(DraftProduct::class)->with('product');
     }
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class)->withTrashed();
-    }
+
 
     public function customer()
     {

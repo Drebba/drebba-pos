@@ -22,11 +22,6 @@ class Sell extends Model
         return $this->hasMany(SellProduct::class)->with('product');
     }
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class)->withTrashed();
-    }
-
     public function customer()
     {
         return $this->belongsTo(Customer::class)->withTrashed();
