@@ -91,12 +91,12 @@
                             @if($requisition->status == 2 )
                                 <tr>
                                     <td class="fw-medium">{{__('pages.transfer_date')}}</td>
-                                    <td>@dateformat($requisition->complete_date)</td>
+                                    <td>@formatdate($requisition->complete_date)</td>
                                 </tr>
                             @else
                                 <tr>
                                     <td class="fw-medium">{{__('pages.created_date')}}</td>
-                                    <td>@dateformat($requisition->requisition_date)</td>
+                                    <td>@formatdate($requisition->requisition_date)</td>
                                 </tr>
                             @endif
 

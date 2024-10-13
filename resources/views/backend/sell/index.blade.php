@@ -59,9 +59,6 @@
                         <tr class="bg-secondary text-white">
                             <th>{{__('pages.sl')}}</th>
                             <th>{{__('pages.invoice_id')}}</th>
-                            @can('access_to_all_branch')
-                                <th>{{__('pages.branch')}}</th>
-                            @endcan
                             <th>{{__('pages.customer')}}</th>
                             <th>{{__('pages.sell_date')}}</th>
                             <th>{{__('pages.sub_total')}}</th>
@@ -77,11 +74,8 @@
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$sell->invoice_id}}</td>
-                                @can('access_to_all_branch')
-                                    <td>{{$sell->branch->title}}</td>
-                                @endcan
                                 <td>{{$sell->customer->name}}</td>
-                                <td>@dateformat($sell->sell_date)</td>
+                                <td> @formatdate($sell->sell_date) </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->sub_total, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->discount, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->grand_total_price, 2)}} </td>

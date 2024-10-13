@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Pagination\Paginator;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,12 +36,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::include('backend.layouts.particles.card-footer-buttons-edit', 'edit');
 
         try {
-            $connection = DB::connection()->getPdo();
-            if ($connection){
-                $allOptions = [];
-                $allOptions['general_settings'] = Settings::all()->pluck('option_value', 'option_key')->toArray();
-                config($allOptions);
-            }
+
             Blade::directive('formatdate', function ($date) {
                 return "<?php echo Carbon\Carbon::parse($date)->format(get_option('app_date_format')); ?>";
             });

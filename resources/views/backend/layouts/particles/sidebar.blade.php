@@ -95,11 +95,11 @@
                     @can('manage_purchase_invoice')
                         <a class="aside-nav-link {{ active_if_full_match('purchase') }} {{ active_if_full_match('purchase/*/edit') }} {{ active_if_full_match('purchase/*') }}" href="{{route('purchase.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.purchase_invoices')}}</span></a>
                     @endcan
-                    @can('manage_requisition')
+                    {{-- @can('manage_requisition')
                         <a class="aside-nav-link {{ active_if_full_match('requisition/create') }}" href="{{route('requisition.create')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.create_requisition')}}</span></a>
                         <a class="aside-nav-link {{ active_if_full_match('pending-requisition') }}" href="{{route('pending-requisition')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.pending_requisition')}} ({{pendingRequisition()}})</span></a>
                         <a class="aside-nav-link {{ active_if_full_match('requisition') }} {{ active_if_full_match('requisition/*/edit') }} {{ active_if_full_match('requisition/*') }} {{ active_if_full_match('requisition-filter') }} " href="{{route('requisition.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.manage_requisition')}}</span></a>
-                    @endcan
+                    @endcan --}}
                 </ul>
             </div>
         </li>

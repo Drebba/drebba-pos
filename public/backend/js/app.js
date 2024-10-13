@@ -6592,25 +6592,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var ps = new PerfectScrollbar('.perfect-ps');
@@ -6622,12 +6603,14 @@ __webpack_require__.r(__webpack_exports__);
     all_categories: Array
   },
   data: function data() {
+    var _localStorage$getItem;
+
     return {
       lang: [],
       sell: [],
       products: [],
       product: {},
-      carts: [],
+      carts: (_localStorage$getItem = localStorage.getItem('carts')) !== null && _localStorage$getItem !== void 0 ? _localStorage$getItem : [],
       categories: this.all_categories,
       category: {},
       customers: [],
@@ -6698,6 +6681,8 @@ __webpack_require__.r(__webpack_exports__);
             _this2.product.quantity = 1;
 
             _this2.carts.unshift(_this2.product);
+
+            sessionStorage.setItem('carts');
           }
         });
       }
@@ -6763,12 +6748,37 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     printInvoice: function printInvoice() {
-      this.createPaymentDrawer = false;
-      this.invoicePrintBtn = false;
-      this.sell = [];
+      var _this4 = this;
+
+      axios.get('../export/sell/print-invoice/id=' + this.sell.id).then(function (response) {
+        var printableContent = response.data;
+        var iframe = document.createElement('iframe');
+        iframe.style.display = 'none'; // Keep the iframe hidden
+
+        document.body.appendChild(iframe); // Get the iframe document
+
+        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document; // Write the printable content to the iframe
+
+        iframeDoc.open();
+        iframeDoc.write(printableContent);
+        iframeDoc.close(); // Trigger the print dialog from the iframe
+
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print(); // Remove the iframe after printing or canceling
+
+        iframe.contentWindow.onafterprint = function () {
+          document.body.removeChild(iframe);
+        };
+      })["catch"](function (error) {
+        console.error('Error printing invoice:', error);
+      })["finally"](function () {
+        _this4.createPaymentDrawer = false;
+        _this4.invoicePrintBtn = false;
+        _this4.sell = []; // Reset sell data after printing
+      });
     },
     archiveToDraft: function archiveToDraft() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.customer != null) {
         if (this.carts.length != 0) {
@@ -6777,9 +6787,9 @@ __webpack_require__.r(__webpack_exports__);
             customer: JSON.parse(JSON.stringify(this.customer)),
             summary: this.summary
           }).then(function (response) {
-            _this4.drafts.unshift(response.data);
+            _this5.drafts.unshift(response.data);
 
-            _this4.clearAll();
+            _this5.clearAll();
           })["catch"](function (error) {
             console.error(error);
           });
@@ -6793,7 +6803,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     selectDraft: function selectDraft(index, draft_id) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.carts = [];
       this.drafts.forEach(function (element) {
@@ -6805,7 +6815,7 @@ __webpack_require__.r(__webpack_exports__);
             draft_product.price_type = draft_product.product.price_type;
             draft_product.tax = draft_product.product.tax;
 
-            _this5.carts.push(draft_product);
+            _this6.carts.push(draft_product);
           });
         }
       });
@@ -6824,21 +6834,21 @@ __webpack_require__.r(__webpack_exports__);
       this.createPaymentDrawer = false;
     },
     storeCustomer: function storeCustomer() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.customerValidation()) {
         axios.post('../vue/api/store-customer', {
           new_customer: JSON.parse(JSON.stringify(this.new_customer))
         }).then(function (response) {
-          _this6.customer = response.data;
+          _this7.customer = response.data;
 
-          _this6.customers.push(response.data);
+          _this7.customers.push(response.data);
 
-          _this6.new_customer.name = '';
-          _this6.new_customer.phone = '';
-          _this6.new_customer.email = '';
-          _this6.new_customer.address = '';
-          _this6.createCustomer = false;
+          _this7.new_customer.name = '';
+          _this7.new_customer.phone = '';
+          _this7.new_customer.email = '';
+          _this7.new_customer.address = '';
+          _this7.createCustomer = false;
         })["catch"](function (error) {
           console.error(error);
         });
@@ -6865,7 +6875,7 @@ __webpack_require__.r(__webpack_exports__);
       this.summary.payment_type = 1;
     },
     clearAll: function clearAll() {
-      var _this7 = this;
+      var _this8 = this;
 
       this.carts = [];
       this.summary.sub_total = 0;
@@ -6881,16 +6891,16 @@ __webpack_require__.r(__webpack_exports__);
       this.draft.draft_key = '';
       this.configs.forEach(function (element) {
         if (element.option_key == 'default_customer') {
-          _this7.customers.forEach(function (customer) {
+          _this8.customers.forEach(function (customer) {
             if (customer.id == element.option_value) {
-              _this7.customer = customer;
+              _this8.customer = customer;
             }
           });
         }
       });
     },
     customerValidation: function customerValidation() {
-      var _this8 = this;
+      var _this9 = this;
 
       var result = false;
 
@@ -6909,10 +6919,10 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.customers.forEach(function (customer) {
-        if (_this8.new_customer.phone != '') {
-          if (customer.phone == _this8.new_customer.phone) {
+        if (_this9.new_customer.phone != '') {
+          if (customer.phone == _this9.new_customer.phone) {
             toastr["error"]("Phone number should be Unique");
-            _this8.new_customer.phone = '';
+            _this9.new_customer.phone = '';
             result = false;
           } else {
             result = true;
@@ -6942,12 +6952,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     subTotalotalCartsValue: function subTotalotalCartsValue() {
-      var _this9 = this;
+      var _this10 = this;
 
       this.carts.forEach(function (element, key) {
         axios.get('../vue/api/product-available-stock-qty/' + element.id).then(function (response) {
           if (response.data == 0) {
-            _this9.carts.splice(key, 1);
+            _this10.carts.splice(key, 1);
           }
 
           ;
@@ -6986,28 +6996,28 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     filteredProduct: function filteredProduct() {
-      var _this10 = this;
+      var _this11 = this;
 
       if (this.filter.category_id != '') {
         return this.products.filter(function (product) {
-          return product.category_id == _this10.filter.category_id && (product.sku.toLowerCase().match(_this10.filter.search.toLowerCase()) || product.title.toLowerCase().match(_this10.filter.search.toLowerCase()));
+          return product.category_id == _this11.filter.category_id && (product.sku.toLowerCase().match(_this11.filter.search.toLowerCase()) || product.title.toLowerCase().match(_this11.filter.search.toLowerCase()));
         });
       }
 
       if (this.filter.search != '') {
         return this.products.filter(function (product) {
-          return product.title.toLowerCase().match(_this10.filter.search.toLowerCase()) || product.sku.toLowerCase().match(_this10.filter.search.toLowerCase());
+          return product.title.toLowerCase().match(_this11.filter.search.toLowerCase()) || product.sku.toLowerCase().match(_this11.filter.search.toLowerCase());
         });
       }
 
       return this.products;
     },
     filteredDratfs: function filteredDratfs() {
-      var _this11 = this;
+      var _this12 = this;
 
       if (this.filter.draft_search_key != '') {
         return this.drafts.filter(function (draft) {
-          return draft.inquiry_id.toLowerCase().match(_this11.filter.draft_search_key.toLowerCase()) || draft.customer.name.toLowerCase().match(_this11.filter.draft_search_key.toLowerCase()) || draft.customer.phone.toLowerCase().match(_this11.filter.draft_search_key.toLowerCase());
+          return draft.inquiry_id.toLowerCase().match(_this12.filter.draft_search_key.toLowerCase()) || draft.customer.name.toLowerCase().match(_this12.filter.draft_search_key.toLowerCase()) || draft.customer.phone.toLowerCase().match(_this12.filter.draft_search_key.toLowerCase());
         });
       }
 
@@ -7015,35 +7025,35 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    var _this12 = this;
+    var _this13 = this;
 
     axios.get('../vue/api/products').then(function (response) {
-      _this12.products = response.data;
+      _this13.products = response.data;
     });
     axios.get('../vue/api/get-local-lang').then(function (response) {
-      _this12.lang = response.data;
+      _this13.lang = response.data;
     });
     axios.get('../vue/api/get-app-configs').then(function (response) {
-      _this12.configs = response.data;
+      _this13.configs = response.data;
     });
     axios.get('../vue/api/customers').then(function (response) {
-      _this12.customers = response.data;
+      _this13.customers = response.data;
 
-      _this12.configs.forEach(function (element) {
+      _this13.configs.forEach(function (element) {
         if (element.option_key == 'default_customer') {
-          _this12.customers.forEach(function (customer) {
+          _this13.customers.forEach(function (customer) {
             if (customer.id == element.option_value) {
-              _this12.customer = customer;
+              _this13.customer = customer;
             }
           });
         }
       });
     });
     axios.get('../vue/api/my-branch').then(function (response) {
-      _this12.my_branch = response.data;
+      _this13.my_branch = response.data;
     });
     axios.get('../vue/api/drafts').then(function (response) {
-      _this12.drafts = response.data;
+      _this13.drafts = response.data;
     });
   }
 });
@@ -35641,7 +35651,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("div", { staticClass: "row g-3 sell-pos" }, [
-      _c("div", { staticClass: "col-md-7" }, [
+      _c("div", { staticClass: "col-md-6" }, [
         _c("div", { staticClass: "sell-card-group" }, [
           _c("div", { staticClass: "sell-card-header pb-2 mb-2" }, [
             _c("div", { staticClass: "wiz-box p-2" }, [
@@ -35707,7 +35717,12 @@ var render = function() {
                             "margin-top": "100px"
                           }
                         },
-                        [_vm._v(_vm._s(_vm.lang.empty_carts))]
+                        [
+                          _vm._v(
+                            _vm._s(_vm.lang.empty_carts) +
+                              "\n                            "
+                          )
+                        ]
                       )
                     : _vm._e(),
                   _vm._v(" "),
@@ -35734,29 +35749,15 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("th", { staticClass: "text-center" }, [
-                                _c("span", [_vm._v(_vm._s(_vm.lang.tax))])
+                                _vm._v(" " + _vm._s(_vm.lang.qty) + " ")
                               ]),
                               _vm._v(" "),
                               _c("th", { staticClass: "text-center" }, [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(_vm.lang.qty) +
-                                    "\n                                    "
-                                )
+                                _vm._v(" " + _vm._s(_vm.lang.total) + " ")
                               ]),
                               _vm._v(" "),
                               _c("th", { staticClass: "text-center" }, [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(_vm.lang.total) +
-                                    "\n                                    "
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("th", { staticClass: "text-center" }, [
-                                _vm._v(
-                                  "\n                                        Action\n                                    "
-                                )
+                                _vm._v(" Action ")
                               ])
                             ])
                           ]),
@@ -35870,91 +35871,6 @@ var render = function() {
                                 _vm._v(" "),
                                 _c(
                                   "td",
-                                  { staticClass: "text-center w-100px" },
-                                  [
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: (cart.tax_percentage =
-                                            cart.tax.value),
-                                          expression:
-                                            "cart.tax_percentage = cart.tax.value"
-                                        }
-                                      ],
-                                      attrs: { type: "hidden" },
-                                      domProps: {
-                                        value: (cart.tax_percentage =
-                                          cart.tax.value)
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            (cart.tax_percentage = cart.tax),
-                                            "value",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model.number",
-                                          value: (cart.tax_amount = (
-                                            (cart.sell_price * cart.tax.value) /
-                                            100
-                                          ).toFixed(2)),
-                                          expression:
-                                            "cart.tax_amount = (cart.sell_price * cart.tax.value/ 100).toFixed(2)",
-                                          modifiers: { number: true }
-                                        }
-                                      ],
-                                      staticClass:
-                                        "form-control form-control-sm text-center",
-                                      attrs: {
-                                        type: "number",
-                                        step: ".1",
-                                        min: ".1",
-                                        value: "10",
-                                        readonly: ""
-                                      },
-                                      domProps: {
-                                        value: (cart.tax_amount = (
-                                          (cart.sell_price * cart.tax.value) /
-                                          100
-                                        ).toFixed(2))
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            (cart.tax_amount =
-                                              (cart.sell_price *
-                                                cart.tax.value) /
-                                              100),
-                                            "toFixed(2)",
-                                            _vm._n($event.target.value)
-                                          )
-                                        },
-                                        blur: function($event) {
-                                          return _vm.$forceUpdate()
-                                        }
-                                      }
-                                    })
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
                                   { staticClass: "text-center w-125px" },
                                   [
                                     _c(
@@ -36057,28 +35973,28 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                            " +
+                                        " " +
                                           _vm._s(
                                             (cart.total_price =
                                               cart.quantity *
                                               (parseFloat(cart.sell_price) +
                                                 parseFloat(cart.tax_amount)))
                                           ) +
-                                          "\n                                        "
+                                          " "
                                       )
                                     ]
                                   ),
                                   _vm._v(" "),
                                   _c("small", { staticClass: "price" }, [
                                     _vm._v(
-                                      "\n                                            " +
+                                      " " +
                                         _vm._s(_vm.appConfig("app_currency")) +
                                         _vm._s(
                                           _vm._f("formatNumber")(
                                             cart.total_price
                                           )
                                         ) +
-                                        "\n                                        "
+                                        " "
                                     )
                                   ])
                                 ]),
@@ -36316,7 +36232,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-5" }, [
+      _c("div", { staticClass: "col-md-6" }, [
         _c("div", { staticClass: "sell-card-group" }, [
           _c("div", { staticClass: "sell-card-header" }, [
             _c("div", { staticClass: "wiz-box p-2" }, [
@@ -36417,7 +36333,7 @@ var render = function() {
                   },
                   _vm._l(_vm.filteredProduct, function(product, index) {
                     return product.current_stock_quantity > 0
-                      ? _c("div", { staticClass: "col-md-4 col-6" }, [
+                      ? _c("div", { staticClass: "col-md-3 col-6" }, [
                           _c(
                             "div",
                             {
@@ -36499,9 +36415,11 @@ var render = function() {
                                         { staticClass: "single-product-price" },
                                         [
                                           _vm._v(
-                                            _vm._s(
-                                              _vm.appConfig("app_currency")
-                                            ) + _vm._s(product.sell_price)
+                                            "\n                                                " +
+                                              _vm._s(
+                                                _vm.appConfig("app_currency")
+                                              ) +
+                                              _vm._s(product.sell_price)
                                           )
                                         ]
                                       )
@@ -36804,9 +36722,9 @@ var render = function() {
                                       _c("span", [
                                         _vm._v(
                                           _vm._s(_vm.lang.customer_name) +
-                                            ":\n                                                " +
+                                            ": " +
                                             _vm._s(_vm.customer.name) +
-                                            "\n                                            "
+                                            " "
                                         )
                                       ])
                                     ]),
@@ -36935,7 +36853,7 @@ var render = function() {
                                               ),
                                               _c("sub", [
                                                 _vm._v(
-                                                  "( " +
+                                                  "(\n                                                            " +
                                                     _vm._s(
                                                       cart.tax_percentage
                                                     ) +
@@ -36961,13 +36879,13 @@ var render = function() {
                                                 _vm._s(
                                                   _vm.appConfig("app_currency")
                                                 ) +
-                                                  "\n                                                    " +
+                                                  " " +
                                                   _vm._s(
                                                     _vm._f("formatNumber")(
                                                       cart.total_price
                                                     )
                                                   ) +
-                                                  "\n                                                "
+                                                  " "
                                               )
                                             ])
                                           ])
@@ -36982,18 +36900,18 @@ var render = function() {
                                             },
                                             [
                                               _vm._v(
-                                                "\n                                                    " +
+                                                " " +
                                                   _vm._s(
                                                     _vm.lang.sub_total_price
                                                   ) +
-                                                  ":\n                                                "
+                                                  ":\n                                                    "
                                               )
                                             ]
                                           ),
                                           _vm._v(" "),
                                           _c("td", [
                                             _vm._v(
-                                              "\n                                                    " +
+                                              " " +
                                                 _vm._s(
                                                   _vm.appConfig("app_currency")
                                                 ) +
@@ -37003,7 +36921,7 @@ var render = function() {
                                                     _vm.summary.sub_total
                                                   )
                                                 ) +
-                                                "\n                                                "
+                                                " "
                                             )
                                           ])
                                         ]),
@@ -37017,16 +36935,16 @@ var render = function() {
                                             },
                                             [
                                               _vm._v(
-                                                "\n                                                    (-) " +
+                                                " (-) " +
                                                   _vm._s(_vm.lang.discount) +
-                                                  ":\n                                                "
+                                                  ":\n                                                    "
                                               )
                                             ]
                                           ),
                                           _vm._v(" "),
                                           _c("td", [
                                             _vm._v(
-                                              "\n                                                    " +
+                                              " " +
                                                 _vm._s(
                                                   _vm.appConfig("app_currency")
                                                 ) +
@@ -37035,7 +36953,7 @@ var render = function() {
                                                     _vm.summary.discount
                                                   )
                                                 ) +
-                                                "\n                                                "
+                                                " "
                                             )
                                           ])
                                         ]),
@@ -37049,16 +36967,16 @@ var render = function() {
                                             },
                                             [
                                               _vm._v(
-                                                "\n                                                    " +
+                                                " " +
                                                   _vm._s(_vm.lang.net_payable) +
-                                                  "\n                                                "
+                                                  "\n                                                    "
                                               )
                                             ]
                                           ),
                                           _vm._v(" "),
                                           _c("td", [
                                             _vm._v(
-                                              "\n                                                    " +
+                                              " " +
                                                 _vm._s(
                                                   _vm.appConfig("app_currency")
                                                 ) +
@@ -37068,7 +36986,7 @@ var render = function() {
                                                       .grand_total_price
                                                   )
                                                 ) +
-                                                "\n                                                "
+                                                " "
                                             )
                                           ])
                                         ]),
@@ -37086,7 +37004,8 @@ var render = function() {
                                                     _vm._v(
                                                       _vm._s(
                                                         _vm.lang.cash_paid
-                                                      ) + ": "
+                                                      ) +
+                                                        ":\n                                                        "
                                                     )
                                                   ])
                                                 : _vm._e(),
@@ -37096,7 +37015,8 @@ var render = function() {
                                                     _vm._v(
                                                       _vm._s(
                                                         _vm.lang.card_paid
-                                                      ) + ": "
+                                                      ) +
+                                                        ":\n                                                        "
                                                     )
                                                   ])
                                                 : _vm._e()
@@ -37106,7 +37026,7 @@ var render = function() {
                                           _c("td", [
                                             _c("strong", [
                                               _vm._v(
-                                                "\n                                                        " +
+                                                " " +
                                                   _vm._s(
                                                     _vm.appConfig(
                                                       "app_currency"
@@ -37117,7 +37037,7 @@ var render = function() {
                                                       _vm.summary.paid_amount
                                                     )
                                                   ) +
-                                                  "\n                                                    "
+                                                  " "
                                               )
                                             ])
                                           ])
@@ -37133,18 +37053,18 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\n                                                    " +
+                                                    " " +
                                                       _vm._s(
                                                         _vm.lang.due_amount
                                                       ) +
-                                                      ":\n                                                "
+                                                      ":\n                                                    "
                                                   )
                                                 ]
                                               ),
                                               _vm._v(" "),
                                               _c("td", [
                                                 _vm._v(
-                                                  "\n                                                    " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.appConfig(
                                                         "app_currency"
@@ -37155,7 +37075,7 @@ var render = function() {
                                                         _vm.summary.due_amount
                                                       )
                                                     ) +
-                                                    "\n                                                "
+                                                    " "
                                                 )
                                               ])
                                             ])
@@ -37171,18 +37091,18 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\n                                                    " +
+                                                    " " +
                                                       _vm._s(
                                                         _vm.lang.change_amount
                                                       ) +
-                                                      ":\n                                                "
+                                                      ":\n                                                    "
                                                   )
                                                 ]
                                               ),
                                               _vm._v(" "),
                                               _c("td", [
                                                 _vm._v(
-                                                  "\n                                                    " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.appConfig(
                                                         "app_currency"
@@ -37194,7 +37114,7 @@ var render = function() {
                                                           .change_amount
                                                       )
                                                     ) +
-                                                    "\n                                                "
+                                                    " "
                                                 )
                                               ])
                                             ])
@@ -37379,7 +37299,7 @@ var render = function() {
                                                         _vm._s(
                                                           sell_produtc.tax_percentage
                                                         ) +
-                                                        "% )"
+                                                        "%\n                                                                )"
                                                     )
                                                   ])
                                                 ]),
@@ -37409,7 +37329,8 @@ var render = function() {
                                                     ) +
                                                       _vm._s(
                                                         sell_produtc.total_price
-                                                      )
+                                                      ) +
+                                                      "\n                                                        "
                                                   )
                                                 ])
                                               ])
@@ -37425,18 +37346,18 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                        " +
+                                                  "\n                                                            " +
                                                     _vm._s(
                                                       _vm.lang.sub_total_price
                                                     ) +
-                                                    ":\n                                                    "
+                                                    ": "
                                                 )
                                               ]
                                             ),
                                             _vm._v(" "),
                                             _c("td", [
                                               _vm._v(
-                                                "\n                                                        " +
+                                                " " +
                                                   _vm._s(
                                                     _vm.appConfig(
                                                       "app_currency"
@@ -37447,7 +37368,7 @@ var render = function() {
                                                       _vm.sell.sub_total
                                                     )
                                                   ) +
-                                                  "\n                                                    "
+                                                  " "
                                               )
                                             ])
                                           ]),
@@ -37461,16 +37382,16 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                        (-) " +
+                                                  " (-)\n                                                            " +
                                                     _vm._s(_vm.lang.discount) +
-                                                    ":\n                                                    "
+                                                    ": "
                                                 )
                                               ]
                                             ),
                                             _vm._v(" "),
                                             _c("td", [
                                               _vm._v(
-                                                "\n                                                        " +
+                                                " " +
                                                   _vm._s(
                                                     _vm.appConfig(
                                                       "app_currency"
@@ -37481,7 +37402,7 @@ var render = function() {
                                                       _vm.sell.discount
                                                     )
                                                   ) +
-                                                  "\n                                                    "
+                                                  " "
                                               )
                                             ])
                                           ]),
@@ -37495,18 +37416,18 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                        " +
+                                                  "\n                                                            " +
                                                     _vm._s(
                                                       _vm.lang.net_payable
                                                     ) +
-                                                    ":\n                                                    "
+                                                    ": "
                                                 )
                                               ]
                                             ),
                                             _vm._v(" "),
                                             _c("td", [
                                               _vm._v(
-                                                "\n                                                        " +
+                                                " " +
                                                   _vm._s(
                                                     _vm.appConfig(
                                                       "app_currency"
@@ -37517,7 +37438,7 @@ var render = function() {
                                                       _vm.sell.grand_total_price
                                                     )
                                                   ) +
-                                                  "\n                                                    "
+                                                  " "
                                               )
                                             ])
                                           ]),
@@ -37535,7 +37456,8 @@ var render = function() {
                                                       _vm._v(
                                                         _vm._s(
                                                           _vm.lang.cash_paid
-                                                        ) + ": "
+                                                        ) +
+                                                          ":\n                                                            "
                                                       )
                                                     ])
                                                   : _vm._e(),
@@ -37545,7 +37467,8 @@ var render = function() {
                                                       _vm._v(
                                                         _vm._s(
                                                           _vm.lang.card_paid
-                                                        ) + ": "
+                                                        ) +
+                                                          ":\n                                                            "
                                                       )
                                                     ])
                                                   : _vm._e()
@@ -37555,7 +37478,7 @@ var render = function() {
                                             _c("td", [
                                               _c("strong", [
                                                 _vm._v(
-                                                  "\n                                                            " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.appConfig(
                                                         "app_currency"
@@ -37566,7 +37489,7 @@ var render = function() {
                                                         _vm.sell.paid_amount
                                                       )
                                                     ) +
-                                                    "\n                                                        "
+                                                    " "
                                                 )
                                               ])
                                             ])
@@ -37581,18 +37504,18 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                        " +
+                                                  "\n                                                            " +
                                                     _vm._s(
                                                       _vm.lang.due_amount
                                                     ) +
-                                                    ":\n                                                    "
+                                                    ": "
                                                 )
                                               ]
                                             ),
                                             _vm._v(" "),
                                             _c("td", [
                                               _vm._v(
-                                                "\n                                                        " +
+                                                " " +
                                                   _vm._s(
                                                     _vm.appConfig(
                                                       "app_currency"
@@ -37603,7 +37526,7 @@ var render = function() {
                                                       _vm.sell.due_amount
                                                     )
                                                   ) +
-                                                  "\n                                                    "
+                                                  " "
                                               )
                                             ])
                                           ])
@@ -37639,7 +37562,8 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("td", { staticClass: "text-dark" }, [
                                     _vm._v(
-                                      _vm._s(_vm.appConfig("app_currency")) +
+                                      "\n                                                    " +
+                                        _vm._s(_vm.appConfig("app_currency")) +
                                         _vm._s(_vm.grandTotalotalCartsValue)
                                     )
                                   ])
@@ -37844,7 +37768,7 @@ var render = function() {
                           ])
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "d-flex mt-2" }, [
+                        _c("div", { staticClass: "mt-2" }, [
                           !this.isSellStoreProcessing
                             ? _c(
                                 "a",
@@ -37884,12 +37808,7 @@ var render = function() {
                           {
                             staticClass:
                               "btn btn-brand-warning btn-brand w-100",
-                            attrs: {
-                              href:
-                                "../export/sell/print-invoice/id=" +
-                                _vm.sell.id,
-                              target: "_blank"
-                            },
+                            attrs: { target: "_blank" },
                             on: { click: _vm.printInvoice }
                           },
                           [
@@ -37993,13 +37912,13 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                                    " +
+                            " " +
                               _vm._s(draft.inquiry_id) +
-                              ", " +
+                              ",\n                                    " +
                               _vm._s(draft.customer.name) +
                               " , " +
                               _vm._s(draft.customer.phone) +
-                              "\n                                "
+                              " "
                           )
                         ]
                       )

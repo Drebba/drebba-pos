@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Branch;
 use App\Models\Customer;
 use App\Models\Category;
 use App\Models\Product;
@@ -15,7 +14,7 @@ use PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Toastr;
 
 class SellController extends Controller
@@ -36,11 +35,7 @@ class SellController extends Controller
         } // end permission checking
 
 
-        $sells = Sell::orderBy('id', 'DESC');
-
-        if ($request->business_id){
-            $sells = $sells->where('business_id', $request->business_id);
-        }
+        $sells = Auth::user()->business->sell()->orderBy('id', 'DESC');
 
         if ($request->customer_id){
             $sells = $sells->where('customer_id', $request->customer_id);
@@ -57,7 +52,7 @@ class SellController extends Controller
             $sells = $sells->where('invoice_id', 'like', '%'.$request->invoice_id.'%');
         }
 
-        $sells = $sells->with(['customer', 'branch'])->paginate(50);
+        $sells = $sells->with(['customer'])->paginate(50);
 
         return view('backend.sell.index', [
             'sells' => $sells,
@@ -78,7 +73,7 @@ class SellController extends Controller
 
 
         return view('backend.sell.create',[
-            'categories' => Category::orderBY('id', 'DESC')->get(),
+            'categories' => Auth::user()->business->category()->orderBY('id', 'DESC')->get(),
         ]);
     }
 
@@ -103,6 +98,7 @@ class SellController extends Controller
 
         $sell = new Sell();
         $sell->customer_id = $request->customer['id'];
+        $sell->business_id = Auth::user()->business_id;
         $sell->fill($request->summary);
         $sell->paid_amount = $paid_amount;
         $sell->save();
@@ -296,10 +292,10 @@ class SellController extends Controller
     }
 
     public function printInvoice($sell_id){
-        $sell = Sell::findOrFail($sell_id);
-        $pdf = PDF::loadView('backend.pdf.sell.invoice', compact('sell'))->setPaper('a4');
-        $pdf->save('pdf/sell/' . $sell->invoice_id . '.pdf');
-        return redirect('pdf/sell/' . $sell->invoice_id .'.pdf');
+        $sell = Auth::user()->business->sell()->where('id',$sell_id)->firstOrFail();
+        return view('backend.pdf.sell.thermal-invoice',compact('sell'))->render();
+        // $pdf = PDF::loadView('backend.pdf.sell.rtl-invoice', compact('sell'))->setPaper('a4');
+        // return $pdf->download();
     }
 
     private function storeSellProducts($request, $sell)

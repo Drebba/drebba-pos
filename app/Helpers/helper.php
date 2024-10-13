@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\Requisition;
+use App\Models\Settings;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
 
 function active_if_full_match($path)
 {
@@ -115,12 +116,9 @@ function notifications()
 function get_option($option_key)
 {
     $system_settings = config('general_settings');
+   $system_settings= Settings::where('business_id',Auth::user()->business_id)->get()->pluck('option_value', 'option_key')->toArray();
 
-    if ($option_key && isset($system_settings[$option_key])) {
-        return $system_settings[$option_key];
-    } else {
-        return '';
-    }
+        return $system_settings[$option_key]??null;
 }
 
 

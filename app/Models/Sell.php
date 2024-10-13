@@ -27,6 +27,11 @@ class Sell extends Model
         return $this->belongsTo(Customer::class)->withTrashed();
     }
 
+    public function branch()
+    {
+        return $this->belongsTo(Customer::class)->withTrashed();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -44,13 +49,9 @@ class Sell extends Model
             $model->created_by =  auth()->user()->id;
             $model->sell_date =  Carbon::now();
             $model->business_id =  Auth::user()->business_id;
-            $model->invoice_id = get_option('sell_invoice_prefix').str_pad(Sell::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT);
+            $model->invoice_id = get_option('sell_invoice_prefix').str_pad(Auth::user()->business->sell()->withTrashed()->count()+1,get_option('invoice_length')??1,0,STR_PAD_LEFT);
         });
 
-        if (!Auth::user()->can('access_to_all_branch')) {
-            static::addGlobalScope('branch', function (Builder $builder) {
-                $builder->where('business_id', '=', Auth::user()->business_id);
-            });
-        }
+
     }
 }

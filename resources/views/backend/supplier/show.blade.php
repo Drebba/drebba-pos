@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr>
                                     <td>{{__('pages.created_at')}}:</td>
-                                    <td>@dateformat($supplier->created_at)</td>
+                                    <td>@formatdate($supplier->created_at)</td>
                                 </tr>
 
                                 <tr>
@@ -145,7 +145,7 @@
                                             {{$purchase->invoice_id}}
                                         </a>
                                     </td>
-                                    <td>@dateformat($purchase->purchase_date)</td>
+                                    <td>@formatdate($purchase->purchase_date)</td>
 
                                     <td> {{get_option('app_currency')}}{{number_format($purchase->total_amount, 2)}} </td>
                                     <td> {{get_option('app_currency')}}{{number_format($purchase->paid_amount, 2)}} </td>

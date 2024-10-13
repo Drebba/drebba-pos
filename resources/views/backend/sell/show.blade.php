@@ -66,14 +66,9 @@
                     </tr>
 
                     <tr>
-                        <td>{{__('pages.branch')}}</td>
-                        <td>{{$sell->branch->title}}</td>
-                    </tr>
-
-                    <tr>
                         <td>{{__('pages.sell_date')}}</td>
                         <td>
-                            @dateformat($sell->sell_date) {{\Carbon\Carbon::parse($sell->created_at)->format('h:i:A')}}
+                            @formatdate($sell->sell_date) {{\Carbon\Carbon::parse($sell->created_at)->format('h:i:A')}}
                         </td>
                     </tr>
 
