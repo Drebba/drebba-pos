@@ -2121,9 +2121,13 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (willDelete) {
         if (willDelete) {
           axios["delete"]('category/' + id).then(function (response) {
-            _this4.categories.splice(index, 1);
+            if (response.data[0] == 'success') {
+              _this4.categories.splice(index, 1);
 
-            toastr["error"]("Category has been deleted");
+              toastr["success"](response.data[1]);
+            } else {
+              toastr["error"](response.data[1]);
+            }
           })["catch"](function (error) {
             console.error(error);
           });
@@ -2722,9 +2726,13 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (willDelete) {
         if (willDelete) {
           axios["delete"]('expense-category/' + id).then(function (response) {
-            _this4.categories.splice(index, 1);
+            if (response.data[0] == 'success') {
+              _this4.categories.splice(index, 1);
 
-            toastr["error"]("Category Deleted");
+              toastr["success"](response.data[1]);
+            } else {
+              toastr["error"](response.data[1]);
+            }
           })["catch"](function (error) {
             console.error(error);
           });

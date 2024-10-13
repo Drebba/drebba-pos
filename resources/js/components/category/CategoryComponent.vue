@@ -155,8 +155,14 @@
                 }).then((willDelete) => {
                     if (willDelete) {
                         axios.delete('category/' + id).then((response) => {
-                            this.categories.splice(index, 1);
-                            toastr["error"]("Category has been deleted");
+                          if(response.data[0]=='success'){
+                                this.categories.splice(index, 1);
+                               toastr["success"](response.data[1]);
+
+                            }else{
+                                toastr["error"](response.data[1]);
+
+                            }
                         }).catch((error) =>{
                             console.error(error);
                         });

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\ExpenseRequest;
-use App\Models\Branch;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Toastr;
 
 class ExpenseController extends Controller
@@ -24,15 +23,12 @@ class ExpenseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $expenses = Expense::orderBY('id', 'DESC');
+        $expenses = Auth::user()->business->expense()->orderBY('id', 'DESC');
 
         if ($request->expense_id){
             $expenses = $expenses->where('expense_id', 'like', '%'.$request->expense_id.'%');
         }
 
-        if ($request->business_id){
-            $expenses = $expenses->where('business_id', $request->business_id);
-        }
 
         if ($request->expense_category_id){
             $expenses = $expenses->where('expense_category_id', $request->expense_category_id);
@@ -47,10 +43,9 @@ class ExpenseController extends Controller
 
 
         $expenses = $expenses->paginate(50);
-
         return view('backend.expense.index',[
             'expenses' => $expenses,
-            'expense_categories' => ExpenseCategory::all(),
+            'expense_categories' => Auth::user()->business->expenseCategory()->get(),
         ]);
     }
 
@@ -86,6 +81,7 @@ class ExpenseController extends Controller
 
         $expense = new Expense();
         $expense->fill($request->all());
+        $expense->business_id = Auth::user()->business_id;
         $expense->save();
 
         Toastr::success('Expense successfully saved', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
@@ -115,7 +111,7 @@ class ExpenseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $expenses = Expense::findOrFail($id);
+        $expenses =  Auth::user()->business->expense()->where('id',$id)->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($expenses->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -141,7 +137,7 @@ class ExpenseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $expenses = Expense::findOrFail($id);
+        $expenses =  Auth::user()->business->expense()->where('id',$id)->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($expenses->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -168,7 +164,7 @@ class ExpenseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        Expense::destroy($id);
+        Auth::user()->business->expense()->where('id',$id)->delete();
         Toastr::error('Expense successfully deleted', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         return redirect()->back();
     }

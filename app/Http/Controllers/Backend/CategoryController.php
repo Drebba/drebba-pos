@@ -6,6 +6,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
@@ -120,7 +121,9 @@ class CategoryController extends Controller
         if (!Auth::user()->can('manage_category')) {
             return redirect('home')->with(denied());
         } // end permission checking
-
+        if (Product::where('category_id',$id)->first()) {
+            return response()->json(['error', "Category can't be deleted"]);
+        }
 
         Auth::user()->business->category()->where('id',$id)->delete();
         return response()->json(['success', 'Category has been deleted successfully']);

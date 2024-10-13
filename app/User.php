@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Models\Branch;
 use App\Models\Business;
 use App\Models\Employee;
 use Illuminate\Database\Eloquent\SoftDeletes;

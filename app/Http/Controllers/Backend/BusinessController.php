@@ -6,6 +6,7 @@ use App\Http\Requests\BranchRequest;
 use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Business;
 use Auth;
 use Toastr;
 
@@ -54,7 +55,7 @@ class BusinessController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $branch = new Branch();
+        $branch = new Business();
         $branch->fill($request->all());
         $branch->save();
 

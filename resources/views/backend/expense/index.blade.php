@@ -35,9 +35,6 @@
                         <tr class="bg-secondary text-white">
                             <th>{{__('pages.sl')}}</th>
                             <th class="text-center">{{__('pages.expense_id')}}</th>
-                            @can('access_to_all_branch')
-                                <th class="text-center">{{__('pages.branch')}}</th>
-                            @endcan
                             <th class="text-center">{{__('pages.expense_date')}}</th>
                             <th class="text-center">{{__('pages.expense_category')}}</th>
 
@@ -50,10 +47,7 @@
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td class="text-center">{{$expense->expense_id}}</td>
-                                @can('access_to_all_branch')
-                                    <td class="text-center"> {{$expense->branch->title}}</td>
-                                @endcan
-                                <td class="text-center">{{$expense->expense_date->format(get_option('app_date_format'))}}</td>
+                                <td class="text-center">@formatdate($expense->expense_date)</td>
 
                                 <td class="text-center"> {{$expense->expenseCategory ? $expense->expenseCategory->name : '--'}} </td>
                                 <td class="text-center"> {{get_option('app_currency')}}{{number_format($expense->amount, 2)}} </td>
@@ -80,16 +74,13 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="text-start ps-0">{{__('pages.expense_date')}}:</td>
-                                                        <td class="text-end">{{$expense->expense_date->format(get_option('app_date_format'))}}</td>
+                                                        <td class="text-end">@formatdate($expense->expense_date)</td>
                                                     </tr>
                                                     <tr>
                                                         <td class="text-start ps-0">{{__('pages.category')}}:</td>
                                                         <td class="text-end">{{$expense->expenseCategory ? $expense->expenseCategory->name : '--'}}</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="text-start ps-0">{{__('pages.branch')}}:</td>
-                                                        <td class="text-end">{{$expense->branch->title}}</td>
-                                                    </tr>
+
                                                     <tr>
                                                         <td class="text-start ps-0">{{__('pages.note')}}:</td>
                                                         <td class="text-end">{{$expense->note}}</td>

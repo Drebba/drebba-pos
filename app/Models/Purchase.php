@@ -20,10 +20,6 @@ class Purchase extends Model
         return $this->belongsTo(Supplier::class)->withTrashed();
     }
 
-    public function branch()
-    {
-        return $this->belongsTo(Purchase::class)->withTrashed();
-    }
 
     public function purchaseProducts()
     {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Branch;
 use App\Models\Expense;
 use App\Models\PaymentFromCustomer;
 use App\Models\PaymentToSupplier;

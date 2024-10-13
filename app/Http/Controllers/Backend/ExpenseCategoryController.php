@@ -6,7 +6,8 @@ use App\Http\Requests\ExpenseCategoryRequest;
 use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use App\Models\Expense;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseCategoryController extends Controller
 {
@@ -23,7 +24,7 @@ class ExpenseCategoryController extends Controller
 
 
         return view('backend.expense-category.index',[
-            'categories' => ExpenseCategory::orderBY('id', 'DESC')->get()
+            'categories' => Auth::user()->business->expenseCategory()->orderBY('id', 'DESC')->get()
         ]);
     }
 
@@ -51,6 +52,7 @@ class ExpenseCategoryController extends Controller
 
         $category = new ExpenseCategory();
         $category->name = $request->category['name'];
+        $category->business_id = Auth::user()->business_id;
         $category->save();
         return response($category);
     }
@@ -90,7 +92,7 @@ class ExpenseCategoryController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $category = ExpenseCategory::findOrFail($id);
+        $category = Auth::user()->business->expenseCategory()->findOrFail($id);
         $category->name = $request->category['name'];
         $category->save();
         return response()->json(['success', 'Category has been updated']);
@@ -108,8 +110,10 @@ class ExpenseCategoryController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-
-        ExpenseCategory::destroy($id);
+        if (Expense::where('expense_category_id',$id)->first()) {
+            return response()->json(['error', "Category can't be deleted"]);
+        }
+        Auth::user()->business->expenseCategory()->where('id',$id)->delete();
         return response()->json(['success', 'Category has been deleted']);
     }
 }

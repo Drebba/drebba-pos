@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Branch;
 use App\Models\Employee;
 use App\User;
 use App\Http\Controllers\Controller;

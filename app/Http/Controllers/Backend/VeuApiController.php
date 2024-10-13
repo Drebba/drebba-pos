@@ -42,7 +42,7 @@ class VeuApiController extends Controller
     }
 
     public function myBranch(){
-       return response(auth()->user()->employee->branch);
+       return response(auth()->user()->employee);
     }
     public function products()
     {
