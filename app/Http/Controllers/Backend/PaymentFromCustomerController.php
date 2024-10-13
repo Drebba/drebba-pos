@@ -11,7 +11,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Toastr;
 
@@ -28,7 +28,7 @@ class PaymentFromCustomerController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-       $sells = Sell::where('business_id', Auth::user()->business_id)
+       $sells = Auth::user()->business->sell()
            ->where('due_amount', '>', 'paid_amount');
 
        if ($request->customer_id){
@@ -47,7 +47,7 @@ class PaymentFromCustomerController extends Controller
 
         return view('backend.payment.customer.index',[
             'due_sells' => $sells,
-            'customers' => Customer::all(),
+            'customers' => Auth::user()->business->customer,
         ]);
     }
 
@@ -64,7 +64,7 @@ class PaymentFromCustomerController extends Controller
         } // end permission checking
 
         return view('backend.payment.customer.create',[
-            'customers' => Customer::where('status', 1)->get(),
+            'customers' => Auth::user()->business->customer()->where('status', 1)->get(),
         ]);
     }
 
@@ -80,7 +80,7 @@ class PaymentFromCustomerController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $sell = Sell::findOrFail($request->sell_id);
+        $sell = Auth::user()->business->sell()->findOrFail($request->sell_id);
         if ($sell->due_amount >= $request->amount ){
             $sell->paid_amount = $sell->paid_amount + $request->amount;
             $sell->due_amount = $sell->due_amount - $request->amount;

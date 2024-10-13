@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{get_option('app_name')}} - Login</title>
+    <title>DREBBA POS - Login</title>
 
     @include('backend.layouts.assets.css')
     @yield('css')

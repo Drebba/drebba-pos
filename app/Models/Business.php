@@ -55,4 +55,8 @@ class Business extends Model
     public function expense(){
         return $this->hasMany(Expense::class);
     }
+
+    public function paymenttosupplier(){
+        return $this->hasMany(PaymentToSupplier::class);
+    }
 }

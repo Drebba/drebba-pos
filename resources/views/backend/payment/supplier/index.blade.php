@@ -35,9 +35,6 @@
                         <thead>
                         <tr class="bg-secondary text-white">
                             <th>{{__('pages.sl')}}</th>
-                            @can('access_to_all_branch')
-                                <th class="text-center">{{__('pages.branch')}}</th>
-                            @endcan
                             <th class="text-center">{{__('pages.supplier')}}</th>
                             <th class="text-center">{{__('pages.date')}}</th>
                             <th class="text-center">{{__('pages.amount')}}</th>
@@ -48,9 +45,6 @@
                         @foreach($payments as $key => $payment)
                             <tr>
                                 <td class="text-center">{{$key+1}}</td>
-                                @can('access_to_all_branch')
-                                    <td class="text-center"> {{$payment->branch->title}}</td>
-                                @endcan
                                 <td class="text-center">
                                     <a href="{{route('supplier.show', [$payment->supplier_id])}}" target="_blank">
                                         {{$payment->supplier ? $payment->supplier->company_name : '--'}}
@@ -70,12 +64,7 @@
                                             </div>
                                             <div class="offcanvas-body">
                                                 <table class="table table-borderless wiz-table">
-                                                    @can('access_to_all_branch')
-                                                        <tr>
-                                                            <td class="text-start ps-0">{{__('pages.branch')}}:</td>
-                                                            <td class="text-end">{{$payment->branch->title}}</td>
-                                                        </tr>
-                                                    @endcan
+
 
                                                     <tr>
                                                         <td class="text-start ps-0">{{__('pages.supplier')}}:</td>

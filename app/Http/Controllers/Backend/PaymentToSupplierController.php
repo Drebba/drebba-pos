@@ -10,7 +10,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Toastr;
 
@@ -28,7 +28,7 @@ class PaymentToSupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $payments = PaymentToSupplier::orderBY('id', 'DESC');
+        $payments = Auth::user()->business->paymenttosupplier()->orderBY('id', 'DESC');
 
 
         if ($request->business_id){
@@ -50,7 +50,7 @@ class PaymentToSupplierController extends Controller
 
         return view('backend.payment.supplier.index',[
             'payments' => $payments,
-            'suppliers' => Supplier::all(),
+            'suppliers' =>  Auth::user()->business->supplier,
         ]);
     }
 
@@ -66,7 +66,7 @@ class PaymentToSupplierController extends Controller
         } // end permission checking
 
         return view('backend.payment.supplier.create',[
-            'suppliers' => Supplier::where('status', 1)->get(),
+            'suppliers' => Auth::user()->business->supplier()->where('status', 1)->get(),
         ]);
     }
 
@@ -84,6 +84,7 @@ class PaymentToSupplierController extends Controller
 
         $payment = new PaymentToSupplier();
         $payment->fill($request->all());
+        $payment->business_id=Auth::user()->business_id;
         $payment->save();
 
         Toastr::success('Payment successfully saved', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
@@ -113,7 +114,7 @@ class PaymentToSupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-       $payment = PaymentToSupplier::findOrFail($id);
+       $payment = Auth::user()->business->paymenttosupplier()->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($payment->business_id != Auth::user()->business_id){
                 return redirect('home')->with(denied());
@@ -122,7 +123,7 @@ class PaymentToSupplierController extends Controller
 
         return view('backend.payment.supplier.edit',[
             'payment' => $payment,
-            'suppliers' => Supplier::all(),
+            'suppliers' => Auth::user()->business->supplier,
         ]);
     }
 
@@ -135,7 +136,7 @@ class PaymentToSupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $payment = PaymentToSupplier::findOrFail($id);
+        $payment = Auth::user()->business->paymenttosupplier()->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($payment->business_id != Auth::user()->business_id){
                 return redirect('home')->with(denied());
@@ -157,7 +158,7 @@ class PaymentToSupplierController extends Controller
      */
     public function destroy($id)
     {
-        $payment = PaymentToSupplier::findOrFail($id);
+        $payment = Auth::user()->business->paymenttosupplier()->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($payment->business_id != Auth::user()->business_id){
                 return redirect('home')->with(denied());
