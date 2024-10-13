@@ -122,7 +122,7 @@ class SellController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $sell = Sell::with('sellProducts')->findOrFail($id);
+        $sell = Auth::user()->business->sell()->with('sellProducts')->findOrFail($id);
 
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($sell->business_id != Auth::user()->business_id){
@@ -148,7 +148,7 @@ class SellController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $sell = Sell::findOrFail($id);
+        $sell =  Auth::user()->business->sell()->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($sell->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -180,7 +180,7 @@ class SellController extends Controller
             $paid_amount = $request->summary['paid_amount'];
         }
 
-        $sell = Sell::findOrFail($id);
+        $sell =  Auth::user()->business->sell()->findOrFail($id);
         $sell->customer_id = $request->customer['id'];
         $sell->sub_total = $request->summary['sub_total'];
         $sell->discount = $request->summary['discount'];
@@ -189,7 +189,7 @@ class SellController extends Controller
         $sell->paid_amount = $paid_amount;
         $sell->save();
 
-        SellProduct::where('sell_id', $id)->delete();
+        Auth::user()->business->sellProduct()->where('sell_id', $id)->delete();
         $this->updateSellProducts($request, $sell);
 
         $data['sell'] = Sell::where('id', $sell->id)->with('sellProducts')->with('customer')->first();
@@ -205,8 +205,9 @@ class SellController extends Controller
      */
     public function destroy($id)
     {
-        SellProduct::where('sell_id', $id)->delete();
-        Sell::destroy($id);
+        Auth::user()->business->sellProduct()->where('sell_id', $id)->delete();
+        Auth::user()->business->sell()->where('id', $id)->delete();
+
         Toastr::success('Sell has been successfully Deleted', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         return redirect()->back();
     }
@@ -217,32 +218,9 @@ class SellController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-       return $sell = Sell::where('id', $sell_id)->with('sellProducts')->with('customer')->first();
+       return $sell =  Auth::user()->business->sell()->where('id', $sell_id)->with('sellProducts')->with('customer')->first();
 
     }
-
-//    public function pdf($sell_id, $action_type){
-//        if (!Auth::user()->can('manage_sell_invoice')) {
-//            return redirect('home')->with(denied());
-//        } // end permission checking
-//
-//        $sell = Sell::findOrFail(decrypt($sell_id));
-//        if (!Auth::user()->can('access_to_all_branch')) {
-//            if ($sell->business_id != Auth::user()->business_id){
-//                return redirect()->back()->with(denied());
-//            }
-//        }
-//
-//
-//        $pdf = PDF::loadView('backend.pdf.sell.invoice', compact('sell'))->setPaper('a4');
-//
-//        if ($action_type == 1){
-//            return $pdf->download($sell->invoice_id . '.pdf');
-//        }else{
-//            $pdf->save('pdf/sell/' . $sell->invoice_id . '.pdf');
-//            return redirect('pdf/sell/' . $sell->invoice_id .'.pdf');
-//        }
-//    }
 
     public function pdf($sell_id, $action_type)
     {
@@ -250,14 +228,14 @@ class SellController extends Controller
             return redirect('home')->with('denied');
         }
 
-        $sell = Sell::findOrFail(decrypt($sell_id));
+        $sell =  Auth::user()->business->sell()->findOrFail(decrypt($sell_id));
 
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($sell->business_id != Auth::user()->business_id){
                 return redirect()->back()->with('denied');
             }
         }
-
+        return view('backend.pdf.sell.thermal-invoice',compact('sell'));
         // Initialize mPDF with UTF-8 encoding and A4 page size
         $mpdf = new Mpdf([
             'mode' => 'utf-8',

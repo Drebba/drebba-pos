@@ -44,4 +44,7 @@ class Business extends Model
     public function sell(){
         return $this->hasMany(Sell::class);
     }
+    public function sellProduct(){
+        return $this->hasMany(SellProduct::class);
+    }
 }

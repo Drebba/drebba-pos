@@ -164,7 +164,7 @@ class PurchaseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $purchase = Purchase::findOrFail($id);
+        $purchase =  Auth::user()->business->purchase()->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
