@@ -6,7 +6,7 @@ use App\Http\Requests\DepartmentRequest;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class DepartmentController extends Controller
 {
@@ -22,7 +22,7 @@ class DepartmentController extends Controller
         } // end permission checking
 
         return view('backend.department.index',[
-            'departments' => Department::orderBY('id', 'DESC')->get()
+            'departments' => Auth::user()->business->department()->orderBY('id', 'DESC')->get()
         ]);
     }
 
@@ -60,6 +60,7 @@ class DepartmentController extends Controller
 
         $department = new Department();
         $department->title = $request->department['title'];
+        $department->business_id = Auth::user()->business_id;
         $department->save();
         return response($department);
     }
@@ -100,7 +101,7 @@ class DepartmentController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $department = Department::findOrFail($id);
+        $department = Auth::user()->business->department()->findOrFail($id);
         $department->title = $request->department['title'];
         $department->save();
         return response()->json(['success', 'Department has been updated'],200);
@@ -118,11 +119,11 @@ class DepartmentController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $department = Department::findOrFail($id);
+        $department = Auth::user()->business->department()->findOrFail($id);
         if ($department->employee->count() > 0){
             return response()->json(['error', 'You can not delete this department. this department have already '.$department->employee->count().' Employee'], 421);
         }else{
-            Department::destroy($id);
+            Auth::user()->business->department()->where('id',$id)->delete();
             return response()->json(['success', 'Department Deleted'], 200);
         }
     }

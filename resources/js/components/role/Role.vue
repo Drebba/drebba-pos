@@ -156,9 +156,11 @@
                     if (willDelete) {
                         axios.delete('role/' + id).then((response) => {
                             this.roles.splice(index, 1);
-                            toastr["error"]("Role has been deleted");
+                            toastr["success"]("Role has been deleted");
                         }).catch((error) =>{
                             console.error(error);
+                            toastr["error"]("Role not  deleted");
+
                         });
                     }
                 });

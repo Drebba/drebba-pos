@@ -57,8 +57,8 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('employee', 'Backend\EmployeeController');
     Route::get('change-user-status/{user_id}', 'Backend\EmployeeController@changeStatus');
     Route::resource('role', 'Backend\RoleController');
-    Route::resource('notice', 'Backend\NoticeController');
-    Route::resource('todo', 'Backend\TodoController');
+    Route::get('permission', 'Backend\RoleController@permission')->name('userPermission');
+    Route::post('save-permission', 'Backend\RoleController@savePermission')->name('savePermission');
 
     Route::get('notification/{id}', 'Backend\NotificationController@getNotification')->name('notification');
 
@@ -149,21 +149,7 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('currency', 'Backend\SettingsController@currencySettings')->name('currency-settings');
         Route::post('update-currency', 'Backend\SettingsController@currencySettings')->name('update-currency');
 
-        Route::resource('todo', 'Backend\TodoController');
-        Route::resource('language', 'Backend\LanguageController');
-        Route::get('translate/{id}', 'Backend\LanguageController@editContent')->name('translate');
         Route::resource('app-currency', 'Backend\CurrencyController');
-        Route::post('update-translate', 'Backend\LanguageController@updateContent')->name('update-translate');
-
-
-        Route::prefix('user')->group(function (){
-            Route::get('permission', 'Backend\SettingsController@permission')->name('userPermission');
-            Route::post('save-permission', 'Backend\SettingsController@savePermission')->name('savePermission');
-        });
-
-
-
-
     });
 
     Route::prefix('vue/api')->group(function (){

@@ -169,54 +169,6 @@ class SettingsController extends Controller
 
 
 
-    public function permission()
-    {
-        if (!Auth::user()->can('manage_user')) {
-            return redirect('home')->with(denied());
-        } // end permission checking
-
-        $data['title'] = 'Set Permission';
-        $data['roles'] = DB::table('roles')->get();
-        $data['permissions'] = DB::table('permissions')->get();
-        $data['permissionRole'] = DB::table('role_has_permissions')
-            ->select(DB::raw('CONCAT(role_id,"-",permission_id) AS detail'))
-            ->pluck('detail')->toArray();
-
-        return view('backend.settings.user-permission', $data);
-    }
-
-    public function savePermission(Request $request)
-    {
-        if (!Auth::user()->can('manage_user')) {
-            return redirect('home')->with(denied());
-        } // end permission checking
-
-        DB::table('role_has_permissions')->truncate();
-        $permissions = $request->permission;
-
-        if ($permissions)
-            foreach ($permissions as $r_key => $permission) {
-                foreach ($permission as $p_key => $per) {
-                    $values[] = $p_key;
-                }
-
-                if (count($values))
-                    for ($i = 0; $i < count($values); $i++)
-                    {
-                        DB::table('role_has_permissions')->insert([
-                            'permission_id' => $values[$i],
-                            'role_id' => $r_key
-                        ]);
-                    }
-                unset($values);
-            }
-
-        Artisan::call('cache:clear');
-
-        Toastr::success('Permission successfully Saved', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
-        return redirect()->back();
-    }
-
 
     public function verifyLicense()
     {

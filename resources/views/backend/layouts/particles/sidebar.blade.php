@@ -157,14 +157,14 @@
     @endcan
 
 
-    @canany(['manage_department', 'manage_designation','manage_employee'])
+    @canany(['manage_department', 'manage_designation','manage_employee','manage_user'])
         <li class="aside-nav-item toggleable-group">
-            <a class="aside-nav-link toggler {{ active_if_match('department') }} {{ active_if_match('employee') }} {{ active_if_match('designation') }}" href="javascript:void(0)" data-toggle="collapse" data-target="#employee" aria-expanded="true" aria-controls="user">
+            <a class="aside-nav-link toggler {{ active_if_match('department') }} {{ active_if_match('employee') }} {{ active_if_match('designation') }} {{ active_if_match('role') }} {{ active_if_match('settings/user/permission') }}" href="javascript:void(0)" data-toggle="collapse" data-target="#employee" aria-expanded="true" aria-controls="user">
                 <span class="aside-nav-icon"><i class="fas fa-users"></i></span>
                 <span class="aside-nav-text">{{__('pages.manage_employees')}}</span>
                 <span class="aside-nav-dropdown-icon"></span>
             </a>
-            <div class="aside-dropdown toggleable-menu {{ active_if_match('department') }} {{ active_if_match('employee') }} {{ active_if_match('designation') }}" aria-labelledby="user" data-parent="#accordionSidebar">
+            <div class="aside-dropdown toggleable-menu {{ active_if_match('department') }} {{ active_if_match('employee') }} {{ active_if_match('designation') }} {{ active_if_match('role') }} {{ active_if_match('permission') }}" aria-labelledby="user" data-parent="#accordionSidebar">
                 <div class="aside-submenu">
                     @can('manage_department')
                         <a class="aside-nav-link {{ active_if_full_match('department') }}" href="{{route('department.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.departments')}} </span></a>
@@ -174,9 +174,18 @@
                         <a class="aside-nav-link {{ active_if_full_match('designation') }}" href="{{route('designation.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.designations')}}</span></a>
                     @endcan
 
+                    @can('manage_user')
+                    <a class="aside-nav-link {{ active_if_full_match('role') }}" href="{{route('role.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.roles')}}</span></a>
+
+                    <a class="aside-nav-link {{ active_if_full_match('settings/user/permission') }}" href="{{route('userPermission')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.permission')}}</span> </a>
+                    @endcan
+
                     @can('manage_employee')
                         <a class="aside-nav-link {{ active_if_full_match('employee') }} {{ active_if_full_match('employee/*/edit') }} {{ active_if_full_match('employee/*') }}" href="{{route('employee.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.employees')}}</span></a>
                     @endcan
+
+
+
                 </div>
             </div>
         </li>
@@ -265,60 +274,6 @@
         </li>
     @endcan
 
-{{--
-    @canany(['application_setting', 'manage_user'])
-        <div class="aside-menu-divider"></div>
-        <li class="aside-nav-heading"> {{__('pages.miscellaneous')}} </li>
-    @endcan
-
-    @can('manage_notice')
-        <li class="aside-nav-item toggleable-group">
-            <a class="aside-nav-link toggler {{ active_if_match('notice') }}" href="javascript:void(0)" data-toggle="collapse" data-target="#notice" aria-expanded="true" aria-controls="sells">
-                <span class="aside-nav-icon"><i class="fas fa-bell fa-fw"></i></span>
-                <span class="aside-nav-text">{{__('pages.notice')}} </span>
-                <span class="aside-nav-dropdown-icon"></span>
-            </a>
-            <div class="aside-dropdown toggleable-menu {{ active_if_match('notice') }}">
-                <div class="aside-submenu">
-                    <a class="aside-nav-link {{ active_if_full_match('notice/create') }}" href="{{route('notice.create')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.create')}} {{__('pages.notice')}}</span></a>
-
-                    <a class="aside-nav-link {{ active_if_full_match('notice') }}" href="{{route('notice.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span>  <span class="aside-nav-text">{{__('pages.manage')}} {{__('pages.notice')}}</span> </a>
-                </div>
-            </div>
-        </li>
-    @endcan
-
-    @can('manage_todo')
-        <li class="aside-nav-item">
-            <a class="aside-nav-link" href="{{route('todo.index')}}">
-                <span class="aside-nav-icon"><i class="fas fa-list-ul"></i></span> <span class="aside-nav-text">{{__('pages.todo')}}</span>
-            </a>
-        </li>
-    @endcan --}}
-
-
-    @canany(['application_setting', 'manage_user'])
-        <div class="aside-menu-divider"></div>
-        <li class="aside-nav-heading"> {{__('pages.administrative')}} </li>
-    @endcan
-
-
-    @can('manage_user')
-        <li class="aside-nav-item toggleable-group">
-            <a class="aside-nav-link toggler {{ active_if_match('role') }} {{ active_if_match('settings/user/permission') }}" href="javascript:void(0)" data-toggle="collapse" data-target="#role" aria-expanded="true" aria-controls="sells">
-                <span class="aside-nav-icon"><i class="fas fa-key"></i></span>
-                <span class="aside-nav-text">{{__('pages.role_and_permission')}} </span>
-                <span class="aside-nav-dropdown-icon"></span>
-            </a>
-            <div class="aside-dropdown toggleable-menu {{ active_if_match('role') }} {{ active_if_match('settings/user/permission') }}">
-                <div class="aside-submenu">
-                    <a class="aside-nav-link {{ active_if_full_match('role') }}" href="{{route('role.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.roles')}}</span></a>
-
-                    <a class="aside-nav-link {{ active_if_full_match('settings/user/permission') }}" href="{{route('userPermission')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.permission')}}</span> </a>
-                </div>
-            </div>
-        </li>
-    @endcan
 
     @can('application_setting')
         <li class="aside-nav-item">

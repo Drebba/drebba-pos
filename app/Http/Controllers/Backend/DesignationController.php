@@ -6,7 +6,7 @@ use App\Http\Requests\DesignationRequest;
 use App\Models\Designation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class DesignationController extends Controller
 {
@@ -22,7 +22,7 @@ class DesignationController extends Controller
         } // end permission checking
 
         return view('backend.designation.index',[
-            'designations' => Designation::orderBy('id', 'DESC')->get()
+            'designations' => Auth::user()->business->designation()->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -56,6 +56,7 @@ class DesignationController extends Controller
 
         $designation = new Designation();
         $designation->title = $request->designation['title'];
+        $designation->business_id = Auth::user()->business_id;
         $designation->save();
         return response($designation);
     }
@@ -113,11 +114,11 @@ class DesignationController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $designation = Designation::findOrFail($id);
+        $designation = Auth::user()->business->designation()->findOrFail($id);
         if ($designation->employee->count() > 0){
             return response()->json(['error', 'You can not delete this department'], 421);
         }else{
-            Designation::destroy($id);
+            Auth::user()->business->designation()->where('id',$id)->delete();
             return response()->json(['success', 'Designation Deleted'], 200);
         }
     }

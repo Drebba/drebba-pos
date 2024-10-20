@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class Business extends Model
 {
@@ -58,5 +59,22 @@ class Business extends Model
 
     public function paymenttosupplier(){
         return $this->hasMany(PaymentToSupplier::class);
+    }
+
+    public function paymentfromcustomer(){
+        return $this->hasMany(PaymentToSupplier::class);
+    }
+
+    public function department(){
+        return $this->hasMany(Department::class);
+    }
+
+
+    public function designation(){
+        return $this->hasMany(Designation::class);
+    }
+
+    public function role(){
+        return $this->hasMany(Role::class);
     }
 }
