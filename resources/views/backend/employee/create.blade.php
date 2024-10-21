@@ -123,7 +123,7 @@
                     <div class="form-section">
                         <h5 class="form-section-title">{{__('pages.employment_info')}}</h5>
                         <div class="row g-3">
-                            <div class="col-md-4 col-lg-3">
+                            {{-- <div class="col-md-4 col-lg-3">
                                 <div class="form-group">
                                     <label for="department_id" class="custom-label">{{__('pages.department')}} <span class="text-danger">*</span></label>
                                     <select name="department_id" id="department_id" class="form-control select2-basic">
@@ -150,10 +150,10 @@
                                         <div class="error">{{ $errors->first('designation_id') }}</div>
                                     @endif
                                 </div>
-                            </div>
+                            </div> --}}
 
 
-                            <div class="col-md-4 col-lg-3">
+                            <div class="col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label for="role" class="custom-label">{{__('pages.role')}} <span class="text-danger">*</span></label>
                                     <select name="role" id="role" class="form-select select2-basic">
@@ -168,14 +168,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4 col-lg-3">
+                            <div class="col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label for="id_number" class="custom-label"> {{__('pages.employee_id')}} </label>
                                     <input type="text" name="id_number" value="{{old('id_number')}}" class="form-control" placeholder="{{__('pages.employee_id')}}">
                                 </div>
                             </div>
 
-                            <div class="col-md-4 col-lg-3">
+                            <div class="col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label for="joining_date" class="custom-label"> {{__('pages.joining_date')}} <span class="text-danger">*</span> </label>
                                     <input type="text" name="joining_date" value="{{old('joining_date')}}"  data-date-format="yyyy-mm-dd" class="datepicker form-control" placeholder="{{__('pages.joining_date')}}">

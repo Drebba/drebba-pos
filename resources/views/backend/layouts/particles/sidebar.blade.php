@@ -166,13 +166,13 @@
             </a>
             <div class="aside-dropdown toggleable-menu {{ active_if_match('department') }} {{ active_if_match('employee') }} {{ active_if_match('designation') }} {{ active_if_match('role') }} {{ active_if_match('permission') }}" aria-labelledby="user" data-parent="#accordionSidebar">
                 <div class="aside-submenu">
-                    @can('manage_department')
+                    {{-- @can('manage_department')
                         <a class="aside-nav-link {{ active_if_full_match('department') }}" href="{{route('department.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.departments')}} </span></a>
-                    @endcan
-
+                    @endcan --}}
+{{--
                     @can('manage_designation')
                         <a class="aside-nav-link {{ active_if_full_match('designation') }}" href="{{route('designation.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.designations')}}</span></a>
-                    @endcan
+                    @endcan --}}
 
                     @can('manage_user')
                     <a class="aside-nav-link {{ active_if_full_match('role') }}" href="{{route('role.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.roles')}}</span></a>

@@ -34,9 +34,9 @@ class EmployeeRequest extends FormRequest
             'blood_group' => ['required','string'],
             'phone_number' => ['required'],
             'address' => ['required'],
-            'department_id' => ['required','numeric'],
-            'designation_id' => ['required','numeric'],
-            'business_id' => ['required','numeric'],
+            // 'department_id' => ['required','numeric'],
+            // 'designation_id' => ['required','numeric'],
+            // 'business_id' => ['required','numeric'],
             'role' => ['required'],
             'email' => ['required','string','max:255','unique:users'],
         ];

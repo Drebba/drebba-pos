@@ -17,13 +17,10 @@
                         <tr class="bg-secondary text-white">
                             <th>{{__('pages.sl')}}</th>
                             <th class="text-center">{{__('pages.name')}}</th>
-                            <th class="text-center">{{__('pages.branch')}}</th>
-                            <th class="text-center">{{__('pages.designation')}}</th>
+                            {{-- <th class="text-center">{{__('pages.branch')}}</th> --}}
+                            {{-- <th class="text-center">{{__('pages.designation')}}</th> --}}
                             <th class="text-center">{{__('pages.phone_number')}}</th>
                             <th class="text-center">{{__('pages.email')}}</th>
-                            @can('access_to_all_branch')
-                                <th class="text-center">{{__('pages.branch')}}</th>
-                            @endcan
                             <th class="text-center">{{__('pages.status')}}</th>
                             <th class="text-center">{{__('pages.action')}}</th>
                         </tr>
@@ -33,14 +30,10 @@
                             <tr>
                                 <td class="text-center">{{$key + 1}}</td>
                                 <td class="text-center">{{$employee->user->name}}</td>
-                                <td class="text-center">{{$employee->branch->title}}</td>
-                                <td class="text-center">{{$employee->designation->title}}</td>
+                                {{-- <td class="text-center">{{$employee->branch->title}}</td> --}}
+                                {{-- <td class="text-center">{{$employee->designation->title}}</td> --}}
                                 <td class="text-center">{{$employee->phone_number}}</td>
                                 <td class="text-center">{{$employee->user->email}}</td>
-                                @can('access_to_all_branch')
-                                    <td class="text-center">{{$employee->branch->title}}</td>
-                                @endcan
-
                                 <td class="text-center">
                                     @if($employee->user->active_status == 1)
                                         <a  href="javascript:void(0)" onclick="$(this).confirm('{{url('change-user-status/'.$employee->user->id)}}');" class="custom-badge badge-soft-success">{{__('pages.active')}}</a>

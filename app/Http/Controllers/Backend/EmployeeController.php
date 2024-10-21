@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\EmployeeRequest;
-use App\Models\Branch;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Employee;
@@ -11,7 +10,7 @@ use App\Traits\RedirectControlTrait;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
@@ -33,12 +32,7 @@ class EmployeeController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-//        foreach (User::all() as $key => $user){
-//            $user->business_id = $user->employee->business_id;
-//            $user->save();
-//        }
-
-        $employees =  Employee::orderBy('id', 'DESC')->get();
+        $employees =  Auth::user()->business->employee()->orderBy('id', 'DESC')->get();
 
         return view('backend.employee.index', [
             'employees' => $employees
@@ -57,9 +51,9 @@ class EmployeeController extends Controller
         } // end permission checking
 
         return view('backend.employee.create', [
-            'departments' => Department::orderBy('title', 'asc')->get(),
-            'designations' => Designation::orderBy('title', 'asc')->get(),
-            'roles' => Role::get(),
+            'departments' => Auth::user()->business->department()->orderBy('title', 'asc')->get(),
+            'designations' => Auth::user()->business->designation()->orderBy('title', 'asc')->get(),
+            'roles' => Auth::user()->business->role,
         ]);
     }
 
@@ -79,10 +73,12 @@ class EmployeeController extends Controller
         $user->fill($request->all());
         $user->password = Hash::make($request->get('password'));
         $user->assignRole($request->role);
+        $user->business_id = Auth::user()->business_id;
         $user->save();
 
         $employee = new Employee();
         $employee->fill($request->all());
+        $employee->business_id = Auth::user()->business_id;
         $employee->user_id = $user->id;
         if($request->hasFile('profile_picture')){
             $employee->profile_picture = $request->profile_picture->move('uploads/user/', Str::random(20) . '.' . $request->profile_picture->extension());;
@@ -100,7 +96,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        $employee = Employee::findOrFail($id);
+        $employee = Auth::user()->business->employee()->findOrFail($id);
         if (!Auth::user()->can('access_to_all_branch')){
             if ($employee->business_id  = Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -109,14 +105,14 @@ class EmployeeController extends Controller
 
         if (DB::table('model_has_roles')->where('model_id', $employee->user_id)->count() > 0) {
             $selected_role = DB::table('model_has_roles')->where('model_id', $employee->user_id)->first();
-            $role = Role::findOrFail($selected_role->role_id)->name;
+            $role = Auth::user()->business->role()->findOrFail($selected_role->role_id)->name;
         } else {
             $role = '--';
         }
 
         return view('backend.employee.show', [
             'role' => $role,
-            'employee' => Employee::findOrFail($id),
+            'employee' => Auth::user()->business->employee()->findOrFail($id),
         ]);
     }
 
@@ -132,7 +128,7 @@ class EmployeeController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-       $employee = Employee::findOrFail($id);
+       $employee = Auth::user()->business->employee()->findOrFail($id);
 
         if (!Auth::user()->can('access_to_all_branch')){
             if ($employee->business_id  = Auth::user()->business_id){
@@ -150,11 +146,11 @@ class EmployeeController extends Controller
 
 
         return view('backend.employee.edit', [
-            'departments' => Department::orderBy('title', 'asc')->get(),
-            'designations' => Designation::orderBy('title', 'asc')->get(),
-            'roles' => Role::get(),
+            'departments' => Auth::user()->business->department()->orderBy('title', 'asc')->get(),
+            'designations' => Auth::user()->business->designation()->orderBy('title', 'asc')->get(),
+            'roles' => Auth::user()->business->role,
             'selected_role_id' => $selected_role_id,
-            'employee' => Employee::findOrFail($id),
+            'employee' => Auth::user()->business->employee()->findOrFail($id),
         ]);
     }
 
@@ -172,7 +168,7 @@ class EmployeeController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $employee = Employee::findOrFail($id);
+        $employee = Auth::user()->business->employee()->findOrFail($id);
 
         if (!Auth::user()->can('access_to_all_branch')){
             if ($employee->business_id  = Auth::user()->business_id){
@@ -194,7 +190,7 @@ class EmployeeController extends Controller
         }
         $user->save();
 
-        DB::table('model_has_roles')->where('model_id', $user->id)->delete();
+        DB::table('model_has_roles')->where('model_id', $user->id)->where('business_id',Auth::user()->id)->delete();
         $user->assignRole($request->role);
 
         return $this->controlRedirection($request, 'employee', 'Employee');
@@ -206,7 +202,7 @@ class EmployeeController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $user = User::findOrFail($user_id);
+        $user = User::where('business_id',Auth::user()->business_id)->findOrFail($user_id);
         $user->active_status = $user->active_status == 1 ? 0 : 1;
         $user->save();
 
@@ -228,8 +224,7 @@ class EmployeeController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $employee = Employee::findOrFail($id);
-
+        $employee = Auth::user()->business->employee()->findOrFail($id);
         User::destroy($employee->id);
         Employee::destroy($id);
         Toastr::success('Employee Successfully deleted', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);

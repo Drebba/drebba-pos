@@ -77,4 +77,8 @@ class Business extends Model
     public function role(){
         return $this->hasMany(Role::class);
     }
+
+    public function employee(){
+        return $this->hasMany(Employee::class);
+    }
 }
