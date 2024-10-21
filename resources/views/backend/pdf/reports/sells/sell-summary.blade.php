@@ -12,7 +12,6 @@
             <div id="client"class="mt-10">
                 <h2 class="name">{{__('pages.sells_summary')}}</h2>
                 <div class="address">
-                    {{__('pages.filter_by')}}:- {{__('pages.branch')}}: {{$filter_by['branch_name']}},
                     {{__('pages.date_range')}}: {{$filter_by['start_date']}} to {{$filter_by['end_date']}},
                     {{__('pages.report_type')}}: {{$filter_by['duration_type']}}
                 </div>
@@ -34,9 +33,6 @@
                 <tr class="bg-secondary text-white">
                     <th>{{__('pages.sl')}}</th>
                     <th>{{__('pages.invoice_id')}}</th>
-                    @can('access_to_all_branch')
-                        <th>{{__('pages.branch')}}</th>
-                    @endcan
                     <th width="10%">{{__('pages.sell_date')}}</th>
                     <th>{{__('pages.sub_total')}}</th>
                     <th>{{__('pages.discount')}}</th>
@@ -59,10 +55,6 @@
                         <td>
                             <a href="{{route('sell.show', [$single_sell->id])}}">{{$single_sell->invoice_id}}</a>
                         </td>
-                        @can('access_to_all_branch')
-                            <td>{{$single_sell->branch->title}}</td>
-                        @endcan
-
                         <td>{{$single_sell->sell_date->format(get_option('app_date_format'))}}</td>
                         <td> {{get_option('app_currency')}} {{number_format($single_sell->sub_total, 2)}} </td>
                         <td> {{get_option('app_currency')}} {{number_format($single_sell->discount, 2)}} </td>
@@ -80,13 +72,8 @@
                     @endphp
                 @endforeach
 
-
                 <tr>
-                    @can('access_to_all_branch')
-                        <td colspan="4" class="text-right pr-3"><strong>{{__('pages.total')}}</strong></td>
-                    @else
-                        <td colspan="3" class="text-right pr-3"><strong>{{__('pages.total')}}</strong></td>
-                    @endcan
+                    <td colspan="3" class="text-right pr-3"><strong>{{__('pages.total')}}</strong></td>
                     <td><strong>{{get_option('app_currency')}} {{number_format($total_sub_total, 2)}}</strong></td>
                     <td><strong>{{get_option('app_currency')}} {{number_format($total_discount, 2)}}</strong></td>
                     <td><strong>{{get_option('app_currency')}} {{number_format($total_grand_total_price, 2)}}</strong></td>

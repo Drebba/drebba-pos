@@ -12,7 +12,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade as PDF;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class SellReportController extends Controller
@@ -28,13 +28,9 @@ class SellReportController extends Controller
         } // end permission checking
 
         $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(10)->toDateString();
-        $end_date = $request->end_date ? $request->end_date : Sell::latest()->pluck('sell_date')->first();
+        $end_date = $request->end_date ? $request->end_date : Carbon::now()->subDay(10)->toDateString();
 
-        $sells = Sell::orderByDesc('sell_date');
-
-        if ($request->business_id != ''){
-            $sells = Sell::where('business_id', $request->business_id);
-        }
+        $sells = Auth::user()->business->sell()->orderByDesc('sell_date');
 
         $sells = $sells->whereBetween('sell_date', [$start_date, $end_date])->get()
             ->groupBy(function($data) use ($request) {
@@ -193,13 +189,9 @@ class SellReportController extends Controller
         } // end permission checking
 
         $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();
-        $end_date = $request->end_date ? $request->end_date : SellProduct::latest()->pluck('sell_date')->first();
+        $end_date = $request->end_date ? $request->end_date : Carbon::now()->toDateString();
 
-         $sells = Sell::orderByDesc('id');
-
-         if ($request->business_id){
-            $sells  = $sells->where('business_id', $request->business_id);
-         }
+         $sells = Auth::user()->business->sell()->orderByDesc('id');
 
          $sells = $sells->whereBetween('sell_date', [$start_date, $end_date])->paginate(50);
 
@@ -275,7 +267,7 @@ class SellReportController extends Controller
 
             $sell_info = [];
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
-                $sells = Sell::where('sell_date', $date->format('Y-m-d'));
+                $sells = Auth::user()->business->sell()->where('sell_date', $date->format('Y-m-d'));
                 if ($request->business_id){
                     $sells = $sells->where('business_id', $request->business_id);
                 }
@@ -291,7 +283,7 @@ class SellReportController extends Controller
                 $month_name = $dateObj->format('F');
 
 
-                $sells = Sell::whereMonth('sell_date', $i)->whereYear('sell_date', $year);
+                $sells = Auth::user()->business->sell()->whereMonth('sell_date', $i)->whereYear('sell_date', $year);
                 if ($request->business_id){
                     $sells = $sells>where('business_id', $request->business_id);
                 }
@@ -306,7 +298,7 @@ class SellReportController extends Controller
             {
                 $date_info = Carbon::now()->subDay($i)->format('Y-m-d');
                 $sell_info[$key]['sell_date'] = $date_info;
-                $sell_info[$key]['total_sell_amount'] = Sell::where('sell_date', $date_info)->sum('grand_total_price');
+                $sell_info[$key]['total_sell_amount'] = Auth::user()->business->sell()->where('sell_date', $date_info)->sum('grand_total_price');
                 $key++;
             }
         }
@@ -330,9 +322,9 @@ class SellReportController extends Controller
 
     private function productWiseQuery($request){
         $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();
-        $end_date = $request->end_date ? $request->end_date : SellProduct::latest()->pluck('sell_date')->first();
+        $end_date = $request->end_date ? $request->end_date :  Carbon::now()->toDateString();
 
-        $sell_products  = SellProduct::with('product');
+        $sell_products  = Auth::user()->business->sellProduct()->with('product');
 
         if ($request->product_id){
             $sell_products  = $sell_products->where('product_id', $request->product_id);

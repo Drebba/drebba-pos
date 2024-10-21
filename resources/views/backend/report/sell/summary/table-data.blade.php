@@ -13,10 +13,6 @@
         <tr class="bg-secondary text-white">
             <th>{{__('pages.sl')}}</th>
             <th class="text-center">{{__('pages.invoice_id')}}</th>
-            @can('access_to_all_branch')
-                <th class="text-center">{{__('pages.branch')}}</th>
-            @endcan
-
             @if(Request::get('by_duration') != 'Y-m-d')
             <th class="text-center">{{__('pages.sell_date')}}</th>
             @endif
@@ -40,12 +36,8 @@
             <tr>
                 <td>{{$key + 1}}</td>
                 <td class="text-center">
-                    <a href="{{route('sell.show', [$single_sell->id])}}" target="_blank">{{$single_sell->invoice_id}}</a>
+                    <a href="{{route('sell.show', [$single_sell->id])}}" target="_blank" class="text-primary">{{$single_sell->invoice_id}}</a>
                 </td>
-                @can('access_to_all_branch')
-                    <td class="text-center">{{$single_sell->branch->title}}</td>
-                @endcan
-
                 @if(Request::get('by_duration') != 'Y-m-d')
                 <td class="text-center">@formatdate($single_sell->sell_date)</td>
                 @endif
@@ -68,11 +60,8 @@
 
 
         <tr>
-            @can('access_to_all_branch')
-                <td colspan="{{Request::get('by_duration') == 'Y-m-d' ? 3 : 4}}" class="text-right pr-3"><strong>Total</strong></td>
-            @else
-                <td colspan="{{Request::get('by_duration') == 'Y-m-d' ? 2 : 3}}" class="text-right pr-3"><strong>Total</strong></td>
-            @endcan
+
+             <td colspan="{{Request::get('by_duration') == 'Y-m-d' ? 2 : 3}}" class="text-right pr-3"><strong>Total</strong></td>
             <td><strong>{{get_option('app_currency')}}{{number_format($total_sub_total, 2)}}</strong></td>
             <td><strong>{{get_option('app_currency')}}{{number_format($total_discount, 2)}}</strong></td>
             <td><strong>{{get_option('app_currency')}}{{number_format($total_grand_total_price, 2)}}</strong></td>
