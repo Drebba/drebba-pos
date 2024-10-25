@@ -18,7 +18,7 @@ use Schema;
 use Illuminate\Database\Eloquent\Collection;
 use League\Csv\Writer;
 use SplTempFileObject;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseReportController extends Controller
 {
@@ -48,7 +48,7 @@ class PurchaseReportController extends Controller
         }
 
         return view('backend.report.purchase.summary.index',[
-            'suppliers' => Supplier::orderBy('id', 'DESC')->get(),
+            'suppliers' => Auth::user()->business->supplier()->orderBy('id', 'DESC')->get(),
             'purchases' => $purchases
         ]);
     }
@@ -210,18 +210,14 @@ class PurchaseReportController extends Controller
         } // end permission checking
 
 
-        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(30)->toDateString();;
-        $end_date = $request->end_date ? $request->end_date : Purchase::latest()->pluck('purchase_date')->first();
+        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(30)->toDateString();
+        $end_date = $request->end_date ? $request->end_date : Carbon::now()->toDateString();
 
 
-        $purchases = Purchase::whereBetween('purchase_date', [$start_date, $end_date]);
+        $purchases = Auth::user()->business->purchase()->whereBetween('purchase_date', [$start_date, $end_date]);
 
         if ($request->supplier_id){
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
-        }
-
-        if ($request->business_id){
-            $purchases = $purchases->where('business_id', $request->business_id);
         }
 
         $purchases = $purchases->get()
@@ -239,10 +235,7 @@ class PurchaseReportController extends Controller
 
             $purchase_info = [];
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
-                $purchase = Purchase::where('purchase_date', $date->format('Y-m-d'));
-                if ($request->business_id){
-                    $purchase = $purchase->where('business_id', $request->business_id);
-                }
+                $purchase = Auth::user()->business->purchase()->where('purchase_date', $date->format('Y-m-d'));
                 $purchase_info[$key]['purchase_date'] = $date->format('Y-m-d');
                 $purchase_info[$key]['total_purchase_amount'] = $purchase->sum('total_amount');
             }
@@ -284,57 +277,32 @@ class PurchaseReportController extends Controller
         return $purchase_info;
     }
 
-    private function lastDynamicDaysStatisticsQuery($days){
-
-        $purchase_info = [];
-
-        $key = 0;
-        for ($i=$days; $i >= 0 ; $i--)
-        {
-            $date_info = Carbon::now()->subDay($i)->format('Y-m-d');
-            $purchase_info[$key]['purchase_date'] = $date_info;
-            if (Auth::user()->can('access_to_all_branch')) {
-                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('purchase_date', $date_info)->sum('total_amount');
-            }else{
-                $purchase_info[$key]['total_purchase_amount'] = Purchase::where('business_id', Auth::user()->business_id)
-                    ->where('purchase_date', $date_info)
-                    ->sum('total_amount');
-            }
-            $key++;
-        }
-
-        return $purchase_info;
-    }
 
     private function productWiseFilterQuery(Request $request)
     {
         $product_id = $request->product_id ? [$request->product_id] : PurchaseProduct::select('product_id')->distinct()->get();
 
-        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();;
-        $end_date = $request->end_date ? $request->end_date : PurchaseProduct::latest()->pluck('purchase_date')->first();
+        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();
+        $end_date = $request->end_date ? $request->end_date :  Carbon::now()->toDateString();
 
 
-         $purchase_products = PurchaseProduct::whereBetween('purchase_date', [$start_date, $end_date]);
+         $purchase_products = Auth::user()->business->purchaseproduct()->whereBetween('purchase_date', [$start_date, $end_date]);
 
          if ($request->product_id){
              $purchase_products = $purchase_products->where('product_id', $product_id);
          }
 
-        if ($request->business_id){
-            $purchase_id_from_business_id = Purchase::where('business_id', $request->business_id)->pluck('id')->all();
-            $purchase_products = $purchase_products->whereIn('purchase_id', $purchase_id_from_business_id);
-        }
 
         return $purchase_products = $purchase_products->get()->groupBy('product_id');
     }
 
     private function purchasesFilterQuery($request)
     {
-        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(30)->toDateString();;
-        $end_date = $request->end_date ? $request->end_date : PurchaseProduct::latest()->pluck('purchase_date')->first();
+        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(30)->toDateString();
+        $end_date = $request->end_date ? $request->end_date : Carbon::now()->toDateString();;
 
 
-        $purchases = Purchase::whereBetween('purchase_date', [$start_date, $end_date]);
+        $purchases = Auth::user()->business->purchase()->whereBetween('purchase_date', [$start_date, $end_date]);
 
         if ($request->supplier_id){
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
@@ -354,15 +322,10 @@ class PurchaseReportController extends Controller
     }
 
     private function getFilterByDataTitle($request){
-        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();;
-        $end_date = $request->end_date ? $request->end_date : Purchase::latest()->pluck('purchase_date')->first();
+        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();
+        $end_date = $request->end_date ? $request->end_date : Carbon::now()->toDateString();
 
-        if ($request->business_id != ''){
-            $branch =  Branch::findOrFail($request->business_id);
-            $branch_name = $branch->title;
-        }else{
-            $branch_name = 'All';
-        }
+
 
         if ($request->supplier_id != ''){
             $supplier = Supplier::findOrFail($request->supplier_id);
@@ -391,7 +354,6 @@ class PurchaseReportController extends Controller
         $filter_by = [];
         $filter_by['start_date'] = Carbon::parse($start_date)->format(get_option('app_date_format'));;
         $filter_by['end_date'] = Carbon::parse($end_date)->format(get_option('app_date_format'));;
-        $filter_by['branch_name'] = $branch_name;
         $filter_by['supplier_name'] = $supplier_name;
         $filter_by['duration_type'] = $duration_type;
         $filter_by['product_name'] = $product_name;

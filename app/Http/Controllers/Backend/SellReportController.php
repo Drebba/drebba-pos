@@ -27,8 +27,8 @@ class SellReportController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(10)->toDateString();
-        $end_date = $request->end_date ? $request->end_date : Carbon::now()->subDay(10)->toDateString();
+        $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(15)->toDateString();
+        $end_date = $request->end_date ? $request->end_date : Carbon::now()->toDateString();
 
         $sells = Auth::user()->business->sell()->orderByDesc('sell_date');
 
@@ -98,52 +98,6 @@ class SellReportController extends Controller
             return $pdf->stream();
         }
     }
-
-    public function lastDynamicDaysSellsStatistics($days){
-        if (!Auth::user()->can('view_sells_report')) {
-            return redirect('home')->with(denied());
-        } // end permission checking
-
-
-        $sell_info = [];
-        $key = 0;
-        for ($i=$days; $i >= 0 ; $i--)
-        {
-            $number_of_day = $i + 1;
-            $date_info = Carbon::now()->subDay($number_of_day)->format('Y-m-d');
-            $sell_info[$key]['sell_date'] = $date_info;
-            $sell_info[$key]['total_sell_amount'] = Sell::where('sell_date', $date_info)->sum('grand_total_price');
-            $key++;
-        }
-
-        return view('backend.report.sell.statistics.dynamic-days',[
-            'days' => $days,
-            'sell_info' => $sell_info
-        ]);
-    }
-
-    public function lastDynamicDaysSellsStatisticsPDF($days, $action_type){
-
-        if (!Auth::user()->can('view_sells_report')) {
-            return redirect('home')->with(denied());
-        } // end permission checking
-
-
-       $sell_info = $this->lastDynamicDaysSellsStatisticsQuery($days);
-
-        $random_string = Str::random(10);
-        $pdf = PDF::loadView('backend.pdf.reports.sells.statistics', compact('sell_info'))->setPaper('a4');
-        $pdf->save('pdf/reports/sells/' . 'sells-statistics-' . Carbon::now()->format('Y-m-d') . '-'. $random_string . '.pdf');
-
-
-        if ($action_type == 'download'){
-            return $pdf->download('statistics-' . Carbon::now()->format('Y-m-d') . '-'. $random_string . '.pdf');
-        }else{
-            return redirect('pdf/reports/sells/' . 'sells-statistics-' . Carbon::now()->format('Y-m-d') . '-'. $random_string .'.pdf');
-        }
-
-    }
-
 
 
     /**
@@ -294,7 +248,8 @@ class SellReportController extends Controller
         }else{
             $sell_info = [];
             $key = 0;
-            for ($i=30; $i >= 0 ; $i--)
+            $days=$request->days ??30;
+            for ($i=$days; $i > 0 ; $i--)
             {
                 $date_info = Carbon::now()->subDay($i)->format('Y-m-d');
                 $sell_info[$key]['sell_date'] = $date_info;
@@ -306,18 +261,6 @@ class SellReportController extends Controller
         return $sell_info;
     }
 
-    private function lastDynamicDaysSellsStatisticsQuery($days){
-        $sell_info = [];
-        for ($i=0; $i < $days ; $i++)
-        {
-            $number_of_day = $i + 1;
-            $date_info = Carbon::now()->subDay($number_of_day)->format('Y-m-d');
-            $sell_info[$i]['sell_date'] = $date_info;
-            $sell_info[$i]['total_sell_amount'] = Sell::where('sell_date', $date_info)->sum('grand_total_price');
-        }
-
-        return $sell_info;
-    }
 
 
     private function productWiseQuery($request){

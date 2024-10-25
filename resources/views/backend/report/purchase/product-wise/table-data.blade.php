@@ -15,7 +15,7 @@
             <tr>
                 <td>{{$i}}</td>
                 <td>
-                    <a href="{{route('product.show', [$key])}}">
+                    <a href="{{route('product.show', [$key])}}" class="text-primary">
                         {{$purchase_product[0]->product->title}}
                     </a>
                 </td>

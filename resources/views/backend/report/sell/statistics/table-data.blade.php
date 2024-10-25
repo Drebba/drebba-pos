@@ -42,12 +42,9 @@
             </tr>
         @endfor
         <tr>
-            <td colspan="2"></td>
-            @can('access_to_all_branch')
+            <td></td>
+
                 <td class="text-center"><strong>{{__('pages.grand_total')}}</strong></td>
-            @else
-                <td class="text-center"><strong>{{__('pages.grand_total')}}</strong></td>
-            @endcan
 
             <td class="text-center"><strong>{{get_option('app_currency')}}{{number_format($grand_total_amount, 2)}}</strong></td>
         </tr>

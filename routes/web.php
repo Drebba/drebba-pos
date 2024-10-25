@@ -91,8 +91,6 @@ Route::middleware('auth', 'active')->group(function () {
             Route::get('statistics', 'Backend\SellReportController@sellsStatistics');
             Route::get('statistics-filter', 'Backend\SellReportController@sellsStatisticsFilter');
             Route::get('statistics-pdf', 'Backend\SellReportController@sellsStatisticsFilterPDF');
-            Route::get('statistics/last/{number_of_days}/days', 'Backend\SellReportController@lastDynamicDaysSellsStatistics');
-            Route::get('statistics/last/{number_of_days}/days-pdf/{action_type}', 'Backend\SellReportController@lastDynamicDaysSellsStatisticsPDF');
         });
 
         Route::prefix('purchase')->group(function () {

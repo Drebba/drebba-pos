@@ -50,9 +50,6 @@
                         <tr>
                             <th style="width: 60px">{{__('pages.sl')}}</th>
                             <th>{{__('pages.invoice_id')}}</th>
-                            @can('access_to_all_branch')
-                                <th>{{__('pages.branch')}}</th>
-                            @endcan
                             <th>{{__('pages.supplier')}}</th>
                             <th>{{__('pages.purchase_date')}}</th>
                             <th>{{__('pages.total_amount')}}</th>
@@ -67,11 +64,8 @@
                                 <td>
                                     <a href="{{route('purchase.show', [$purchase->id])}}" target="_blank">{{$purchase->invoice_id}}</a>
                                 </td>
-                                @can('access_to_all_branch')
-                                    <td>{{$purchase->branch->title}}</td>
-                                @endcan
-                                <td>{{$purchase->supplier->company_name}}</td>
-                                <td>{{$purchase->purchase_date->format(get_option('app_date_format'))}}</td>
+                                <td>{{$purchase->supplier->company_name??null}}</td>
+                                <td>@formatdate($purchase->purchase_date)</td>
                                 <td> {{get_option('app_currency')}}{{number_format($purchase->total_amount, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($purchase->paid_amount, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($purchase->due_amount, 2)}} </td>
