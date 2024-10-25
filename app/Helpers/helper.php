@@ -39,61 +39,9 @@ function monthlySells($business_id, $key)
     return \App\Models\Sell::where('business_id', $business_id)->whereYear('sell_date', $year)->whereMonth('sell_date', $month)->sum('grand_total_price');
 }
 
-function productAvailableTransactionStockQty($product)
-{
-    if (is_object($product) && property_exists($product, 'current_stock_quantity')) {
-        return $product->current_stock_quantity;
-    } else {
-        return 0;
-    }
-}
-
-function productReceivedFromOthersBranch($product_id)
-{
-    $business_id = Auth::user()->business_id;
-
-    $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $business_id)
-        ->where('status', 2)
-        ->select('id')
-        ->distinct()
-        ->get();
-
-   return $branch_requisitions_from_qty = \App\Models\RequisitionProduct::whereIn('requisition_id', $branch_requisitions_from)
-        ->where('product_id', $product_id)
-        ->select('id')
-        ->sum('quantity');
-
-}
-
-function productSendToOthersBranch($product_id){
-    $business_id = Auth::user()->business_id;
-
-    $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $business_id)
-        ->where('status', 2)
-        ->select('id')
-        ->distinct()
-        ->get();
-
-    return $branch_requisitions_to_qty = \App\Models\RequisitionProduct::whereIn('requisition_id', $branch_requisitions_to)
-        ->where('product_id', $product_id)
-        ->select('id')
-        ->sum('quantity');
-}
-
-function pendingRequisition()
-{
-    if (Auth::user()->can('access_to_all_branch')){
-        $requisitions = Requisition::orderBy('id', 'DESC')->where('status', 0)->count();
-    }else{
-        $requisitions = Requisition::where('status', 0)
-            ->where(function($query){
-                $query->where('requisition_from',  Auth::user()->business_id);
-                $query->orWhere('requisition_to', Auth::user()->business_id);
-            })
-            ->orderBy('id', 'DESC')
-            ->count();
-    }
-    return $requisitions;
+function currentStock($product){
+    return $product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity')-
+    $product->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
 }
 
 function notifications()

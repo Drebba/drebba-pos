@@ -27,69 +27,22 @@ class Product extends Model
         'business_id'
     ];
 
-    protected $appends = ['current_stock_quantity', 'total_sell_qty'];
+    protected $appends = ['current_stock_quantity', 'total_sell_qty','total_purchase_qty'];
 
     public function getCurrentStockQuantityAttribute()
     {
-
-        if ($this->productStockHistory){
-          return  $this->productStockHistory->stock_quantity;
-        }else{
-            return 0;
-        }
-
-
-//        $sell_qty = 0;
-//        $req_send_qty = 0;
-//
-//        $purchase_qty = 0;
-//        $req_received_qty = 0;
-//
-//        /**
-//         * Debit Quantity
-//         **/
-//
-//        $total_sell_products_qty = $this->productStockHistory;
-//
-//        if ($total_sell_products_qty){
-//            $sell_qty = $total_sell_products_qty->sell_qty;
-//            $req_send_qty = $total_sell_products_qty->req_send;
-//
-//            $purchase_qty = $total_sell_products_qty->purchase_qty;
-//            $req_received_qty = $total_sell_products_qty->req_received;
-//        }
-//
-//
-//        $debit = $purchase_qty + $req_received_qty;
-//        $credit = $sell_qty + $req_send_qty;
-//
-//        $total = $debit - $credit;
-//        return $total;
+      return  $this->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity')-
+        $this->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
     }
 
     public function getTotalSellQtyAttribute(){
-        $sell_qty = 0;
-
-        $total_sell_products_qty = ProductStockHistory::where('business_id', Auth::user()->business_id)
-            ->where('product_id', $this->id)
-            ->first();
-
-        if ($total_sell_products_qty){
-            $sell_qty = $total_sell_products_qty->sell_qty;
-        }
-
-        return $sell_qty;
+      return $this->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
     }
 
-    public function productStockHistory(){
-        return $this->hasOne(ProductStockHistory::class, 'product_id', 'id')->orderByDesc('id');
-    }
+    public function getTotalPurchaseQtyAttribute(){
+        return $this->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
+      }
 
-    public function productStockHistories(){
-        return $this->hasMany(ProductStockHistory::class)
-//            ->orderByDesc('id')
-            ->withoutGlobalScopes();
-    }
 
     public function purchaseProducts()
     {
@@ -114,13 +67,6 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class)->withTrashed();
     }
-
-    public function requisitions()
-    {
-        return $this->hasMany(Requisition::class);
-    }
-
-
 
     protected static function boot()
     {

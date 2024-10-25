@@ -96,7 +96,7 @@
                                 <div class="me-3">
                                     <h6 class="summary-card-title">{{__('pages.sell_quantity')}}</h6>
                                     <h3 class="summary-card-value">
-                                        {{$product->productStockHistory->sell_qty ?? 0}}
+                                        {{$product->total_sell_qty ?? 0}}
                                         <small>{{$product->unit ? $product->unit->title : ''}}</small>
                                     </h3>
                                 </div>
@@ -111,7 +111,7 @@
                                 <div class="me-3">
                                     <h6 class="summary-card-title">{{__('pages.purchase_quantity')}}</h6>
                                     <h3 class="summary-card-value">
-                                        {{$product->productStockHistory->purchase_qty ?? 0}}
+                                        {{$product->total_purchase_qty ?? 0}}
                                         <small>{{$product->unit ? $product->unit->title : ''}}</small>
                                     </h3>
                                 </div>
@@ -195,11 +195,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($product->productStockHistories as $key => $prod)
+                                    @foreach($product->purchaseProducts as $key => $prod)
                                         <tr class="@if($prod->stock_quantity < 1 ) bg-danger text-white @elseif($prod->stock_quantity < 20) bg-warning text-white @else  @endif">
                                             <th>{{$key + 1}}</th>
                                             <td class="text-center">@formatdate($prod->created_at)</td>
-                                            <td class="text-center">{{$prod->stock_quantity}}</td>
+                                            <td class="text-center">{{$prod->quantity}}</td>
                                         </tr>
                                     @endforeach
 
@@ -207,7 +207,7 @@
                                         <td class="border-end-0"></td>
                                         <td class="text-center border-start-0"><b>{{__('pages.total')}}:</b></td>
                                         <td class="text-center">
-                                            <b>{{$product->purchaseProducts->sum('quantity') - $product->sellProducts->sum('quantity')}}</b>
+                                            <b>{{$product->purchaseProducts->sum('quantity') }}</b>
                                         </td>
                                     </tr>
                                     </tbody>

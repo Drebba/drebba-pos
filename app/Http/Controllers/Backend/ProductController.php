@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
-use App\Traits\ProductStcokDataTrait;
 use App\Traits\RedirectControlTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,7 +17,7 @@ use PDF;
 
 class ProductController extends Controller
 {
-    use RedirectControlTrait, ProductStcokDataTrait;
+    use RedirectControlTrait;
 
     /**
      * Display a listing of the resource.
@@ -46,7 +45,7 @@ class ProductController extends Controller
             });
         }
 
-        $products = $products->with('unit', 'productStockHistory')->paginate(24);
+        $products = $products->with('unit')->paginate(24);
 
         $categories = Category::select('id', 'title')->get();
 
@@ -121,10 +120,9 @@ class ProductController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $product = Auth::user()->business->product()->with('unit','productStockHistory', 'productStockHistories', 'sellProducts')->findOrFail($id);
+        $product = Auth::user()->business->product()->with('unit', 'sellProducts')->findOrFail($id);
         $last_30_days_sell = $this->last30DaysSell($product);
 
-        $this->meargeStockQty($product);
 
         return view('backend.product.show', [
             'product' => $product,

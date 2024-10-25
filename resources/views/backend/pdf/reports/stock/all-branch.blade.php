@@ -58,15 +58,10 @@
                 </td>
 
                 <td>
-                    @can('access_to_all_branch')
                         @php
                             $current_stock_qty = $product->purchaseProducts->sum('quantity') - $product->sellProducts->sum('quantity');
                         @endphp
-                    @else
-                        @php
-                            $current_stock_qty =  productAvailableTransactionStockQty($product->id)
-                        @endphp
-                    @endcan
+
 
                     {{$current_stock_qty}} {{$product->unit ? $product->unit->title : ''}}
                 </td>

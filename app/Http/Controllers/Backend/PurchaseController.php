@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\PaymentToSupplier;
 use App\Models\Product;
-use App\Models\ProductStockHistory;
 use App\Models\Purchase;
 use App\Models\PurchaseProduct;
-use App\Traits\ProductStcokDataTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -17,7 +15,6 @@ use Barryvdh\DomPDF\Facade as PDF;
 
 class PurchaseController extends Controller
 {
-    use ProductStcokDataTrait;
 
     /**
      * Display a listing of the resource.
@@ -261,22 +258,6 @@ class PurchaseController extends Controller
             $purchase_product->fill($cart_product);
             $purchase_product->total_price = $cart_product['purchase_price'] * $cart_product['quantity'];
             $purchase_product->save();
-
-
-            // Update Product Stock History
-            $product_stock_history = ProductStockHistory::where('business_id', $purchase->business_id)
-                ->where('product_id', $purchase_product->product_id)
-                ->first();
-
-            if (!$product_stock_history){
-                $product_stock_history = new ProductStockHistory();
-                $product_stock_history->business_id = $purchase->business_id;
-                $product_stock_history->product_id = $purchase_product->product_id;
-                $product_stock_history->save();
-            }
-
-            $product_stock_history->purchase_qty += $cart_product['quantity'];
-            $product_stock_history->save();
         }
     }
 
@@ -292,10 +273,6 @@ class PurchaseController extends Controller
             $purchase_product->total_price = $cart_product['purchase_price'] * $cart_product['quantity'];
             $purchase_product->save();
 
-
-            // Update Product Stock History
-            $product = Product::findOrFail($cart_product['id']);
-            $this->meargePurchaseQty($product);
         }
     }
 }

@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Customer;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductStockHistory;
 use App\Models\Sell;
 use App\Models\SellProduct;
-use App\Traits\ProductStcokDataTrait;
 use Mpdf\Mpdf;
 use PDF;
 use Carbon\Carbon;
@@ -20,7 +18,6 @@ use Toastr;
 class SellController extends Controller
 {
 
-    use ProductStcokDataTrait;
 
 
     /**
@@ -294,20 +291,6 @@ class SellController extends Controller
             $product->sell_price = $cart_product['sell_price'];
             $product->save();
 
-            // Update Product Stock History
-            $product_stock_history = ProductStockHistory::where('business_id', $sell->business_id)
-                ->where('product_id', $product->id)
-                ->first();
-
-            if (!$product_stock_history){
-                $product_stock_history = new ProductStockHistory();
-                $product_stock_history->business_id = $sell->business_id;
-                $product_stock_history->product_id = $product->id;
-                $product_stock_history->save();
-            }
-
-            $product_stock_history->sell_qty += $sell_product->quantity;
-            $product_stock_history->save();
         }
     }
 
@@ -329,7 +312,6 @@ class SellController extends Controller
             $product->sell_price = $cart_product['sell_price'];
             $product->save();
 
-            $this->meargeSellQty($product);
         }
     }
 }

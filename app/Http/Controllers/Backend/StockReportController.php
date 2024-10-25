@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade as PDF;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class StockReportController extends Controller
@@ -20,7 +20,7 @@ class StockReportController extends Controller
         } // end permission checking
 
 
-        $products = Product::all();
+        $products = Auth::user()->business->product;
         return view('backend.report.stock.index',[
             'products' => $products
         ]);
@@ -50,10 +50,6 @@ class StockReportController extends Controller
                 $product_requisitions[$key]['current_stock'] = ($product_requisitions[$key]['purchase_qty'] + $product_requisitions[$key]['branch_requisitions_from_qty']) - ($product_requisitions[$key]['sell_qty'] + $product_requisitions[$key]['branch_requisitions_to_qty']);
                 $product_requisitions[$key]['unit'] = $product->unit->title ?? '';
 
-//                $product_requisitions[$key]['total_purchase_value'] = $product->purchaseProducts->where('business_id', $request->business_id)->sum('total_price');
-//                $product_requisitions[$key]['branch_requisitions_to_qty'] =$this->branchRequisitionToQty($request, $product);
-//                $product_requisitions[$key]['branch_requisitions_from_qty'] = $this->branchRequisitionFromQty($request, $product);
-//                $product_requisitions[$key]['sell_qty'] = $product->sellProducts->where('business_id', $request->business_id)->sum('quantity');
             }
 
 
@@ -105,15 +101,10 @@ class StockReportController extends Controller
             $products = Product::all();
             foreach ($products as $key => $product) {
 
-                if (Auth::user()->can('access_to_all_branch')) {
                    $purchaseQuantity = $product->purchaseProducts->sum('quantity');
                     $sellQuantity = $product->sellProducts->sum('quantity');
                     $current_stock_qty = $product->purchaseProducts->sum('quantity') - $product->sellProducts->sum('quantity');
-                } else {
-                    $purchaseQuantity = $product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
-                    $sellQuantity = $product->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity');
-                    $current_stock_qty =  productAvailableTransactionStockQty($product->id);
-                }
+
 
                 $product_tax = $product->sell_price * $product->tax->value / 100;
                 $current_stock_amount = $current_stock_qty * $product->sell_price;
@@ -135,26 +126,4 @@ class StockReportController extends Controller
         }
     }
 
-    private function branchRequisitionFromQty($request, $product){
-        $branch_requisitions_from = \App\Models\Requisition::where('requisition_from', $request->business_id)
-            ->where('status', 2)
-            ->pluck('id')
-            ->all();
-
-        return $branch_requisitions_from_qty = \App\Models\RequisitionProduct::whereIn('requisition_id', $branch_requisitions_from)
-            ->where('product_id', $product->id)
-            ->sum('quantity');
-    }
-
-    private function branchRequisitionToQty($request, $product){
-        $branch_requisitions_to = \App\Models\Requisition::where('requisition_to', $request->business_id)
-            ->where('status', 2)
-            ->pluck('id')
-            ->all();
-
-      return  $branch_requisitions_to_qty = \App\Models\RequisitionProduct::whereIn('requisition_id', $branch_requisitions_to)
-            ->where('product_id', $product->id)
-            ->select('id')
-            ->sum('quantity');
-    }
 }

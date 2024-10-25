@@ -56,34 +56,23 @@
                     @endphp
 
                     @foreach($products as $key => $product)
-                        @can('access_to_all_branch')
+
                             @php
-                                $current_stock_qty = $product->purchaseProducts->sum('quantity') - $product->sellProducts->sum('quantity');
+                                $current_stock_qty =  $product->current_stock_quantity;
                             @endphp
-                        @else
-                            @php
-                                $current_stock_qty =  productAvailableTransactionStockQty($product->id)
-                            @endphp
-                        @endcan
 
 
                         <tr class="@if($current_stock_qty < 1 ) bg-danger text-white @elseif($current_stock_qty < 20) bg-warning text-white @else  @endif">
                             <td>{{$key+1}}</td>
                             <td>{{$product->title}} | {{$product->sku}}</td>
                             <td>
-                                @can('access_to_all_branch')
-                                    {{$product->purchaseProducts->sum('quantity')}} {{$product->unit->title ?? ''}}
-                                @else
-                                    {{$product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('quantity')}} {{$product->unit->title ?? ''}}
-                                @endcan
+
+                                    {{$product->total_purchase_qty}} {{$product->unit->title ?? ''}}
                             </td>
 
                             <td>
-                                @can('access_to_all_branch')
-                                    {{$product->sellProducts->sum('quantity')}} {{$product->unit->title ?? ''}}
-                                @else
-                                    {{$product->sellProducts->where('business_id', Auth::user()->business_id)->sum('quantity')}} {{$product->unit->title ?? ''}}
-                                @endcan
+
+                                    {{$product->total_sell_qty}} {{$product->unit->title ?? ''}}
                             </td>
 
                             <td>
@@ -91,15 +80,10 @@
                             </td>
 
                             <td>
-                                @can('access_to_all_branch')
-                                    @php
-                                        $total_purchase =  $product->purchaseProducts->sum('total_price');
-                                    @endphp
-                                @else
+
                                     @php
                                         $total_purchase = $product->purchaseProducts->where('business_id', Auth::user()->business_id)->sum('total_price');
                                     @endphp
-                                @endcan
 
                                 {{get_option('app_currency')}}{{number_format($total_purchase, 2)}}
                             </td>
