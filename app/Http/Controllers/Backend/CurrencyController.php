@@ -7,6 +7,7 @@ use App\Models\Settings;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class CurrencyController extends Controller
 {
@@ -40,10 +41,12 @@ class CurrencyController extends Controller
     {
         $currency = new Currency();
         $currency->fill($request->all());
+        $currency->business_id=Auth::user()->business_id;
         $currency->save();
 
-        $option = Settings::firstOrCreate(['option_key' => 'app_currency']);
+        $option = Auth::where('business_id',Auth::user()->business_id)->firstOrCreate(['option_key' => 'app_currency']);
         $option->option_value = $currency->currency;
+        $option->business_id=Auth::user()->business_id;
         $option->save();
 
         Toastr::success('Currency successfully created', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);

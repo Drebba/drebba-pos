@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\classes\EnvatoPurchaseCodeVerifier;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Employee;
-use App\Models\Language;
 use App\Models\Settings;
 use App\User;
 use Illuminate\Http\Request;
@@ -15,8 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-//use Illuminate\Validation\Rule;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use Toastr;
 use File;
@@ -99,7 +96,7 @@ class SettingsController extends Controller
     public function generalSetting()
     {
         return view('backend.settings.general',[
-            'customers' => Customer::all(),
+            'customers' => Auth::user()->business->customer,
         ]);
     }
 
@@ -122,7 +119,7 @@ class SettingsController extends Controller
 
         foreach ($inputs as $key => $value) {
 
-            $option = Settings::firstOrCreate(['option_key' => $key]);
+            $option = Settings::where('business_id',Auth::user()->business_id)->firstOrCreate(['option_key' => $key]);
             if($request->hasFile('app_logo') && $key == 'app_logo'){
                 $option->option_value = $request->app_logo->move('uploads/settings/', Str::random(20) . '.' . $request->app_logo->extension());
                 $option->save();
@@ -134,6 +131,7 @@ class SettingsController extends Controller
                 $option->save();
             }else {
                 $option->option_value = $value;
+                $option->business_id=Auth::user()->business_id;
                 $option->save();
             }
 
@@ -153,7 +151,7 @@ class SettingsController extends Controller
 
 
         return view('backend.settings.currency', [
-            'currencies' => Currency::all()
+            'currencies' => Currency::where('business_id',Auth::user()->business_id)->get()
         ]);
     }
 
@@ -168,14 +166,6 @@ class SettingsController extends Controller
     }
 
 
-
-
-    public function verifyLicense()
-    {
-        $data['title'] = 'Activate your application';
-
-        return view( 'backend.settings.license', $data);
-    }
 
 
 

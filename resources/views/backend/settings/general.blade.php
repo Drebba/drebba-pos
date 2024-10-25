@@ -397,7 +397,7 @@
                                 <option value="Asia/Calcutta">(GMT+5:30) Asia/Calcutta (India Standard Time)</option>
                                 <option value="Asia/Colombo">(GMT+5:30) Asia/Colombo (India Standard Time)</option>
                                 <option value="Asia/Kolkata">(GMT+5:30) Asia/Kolkata (India Standard Time)</option>
-                                <option value="Asia/Katmandu">(GMT+5:45) Asia/Katmandu (Nepal Time)</option>
+                                <option value="Asia/Katmandu" selected>(GMT+5:45) Asia/Katmandu (Nepal Time)</option>
                                 <option value="Antarctica/Mawson">(GMT+6:00) Antarctica/Mawson (Mawson Time)</option>
                                 <option value="Antarctica/Vostok">(GMT+6:00) Antarctica/Vostok (Vostok Time)</option>
                                 <option value="Asia/Almaty">(GMT+6:00) Asia/Almaty (Alma-Ata Time)</option>
