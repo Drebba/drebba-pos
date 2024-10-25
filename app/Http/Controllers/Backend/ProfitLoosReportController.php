@@ -12,47 +12,25 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class ProfitLoosReportController extends Controller
 {
-    public function index(){
-        $profit_info = [];
-        $key = 0;
-        for ($i=29; $i >= 0 ; $i--) {
-            $date = Carbon::now()->subDay($i)->format('Y-m-d');
-
-            $sell =  Sell::where('sell_date', $date)->sum('paid_amount');
-            $payment_from_customer = PaymentFromCustomer::where('payment_date', $date)->sum('amount');
-
-            $expense =  Expense::where('expense_date', $date)->sum('amount');
-            $supplier_payment = PaymentToSupplier::where('payment_date', $date)->sum('amount');
 
 
-            $profit_info[$key]['date'] = $date;
-            $profit_info[$key]['income'] = $sell + $payment_from_customer;
-            $profit_info[$key]['expense'] = $expense + $supplier_payment;
-            $profit_info[$key]['profit_loss'] = ($sell + $payment_from_customer) - ($expense + $supplier_payment);
-            $key++;
-        }
+    public function index(Request $request){
+        $business_id = Auth::user()->business_id;
 
-        return view('backend.report.profit.index',[
-            'profit_info' => $profit_info,
-        ]);
-    }
-
-    public function filter(Request $request){
-        $business_id = $request->business_id ? [$request->business_id] : Sell::distinct('business_id')->pluck('business_id')->all();
-
-        if ($request->search_type == 'month'){
-            $start_date = Carbon::parse($request->month)->startOfMonth($request->month)->format('Y-m-d');
-            $end_date = Carbon::parse($request->month)->endOfMonth($request->month)->format('Y-m-d');
+        if ($request->search_type != 'year'){
+            $start_date = Carbon::parse($request->month??today())->startOfMonth($request->month)->format('Y-m-d');
+            $end_date = Carbon::parse($request->month??today())->endOfMonth($request->month)->format('Y-m-d');
 
             $profit_info = [];
             foreach (CarbonPeriod::create($start_date, $end_date) as $key => $date) {
                 $profit_info[$key]['date'] = Carbon::parse($date)->format(get_option('app_date_format'));
                 $profit_info[$key]['income'] = $this->incomeByDate($date, $business_id);
                 $profit_info[$key]['expense'] = $this->expenseByDate($date, $business_id);
+
                 $profit_info[$key]['profit_loss'] = $this->incomeByDate($date, $business_id) - $this->expenseByDate($date, $business_id);
             }
         }else{
@@ -70,21 +48,21 @@ class ProfitLoosReportController extends Controller
         }
 
 
-        return view('backend.report.profit.filter-result',[
+        return view('backend.report.profit.index',[
             'profit_info' => $profit_info,
         ]);
     }
 
     private function expenseByDate($date, $business_id){
-        $expense =  Expense::whereIn('business_id', $business_id)->where('expense_date', $date)->sum('amount');
-        $supplier_payment = PaymentToSupplier::whereIn('business_id', $business_id)->where('payment_date', $date)->sum('amount');
+        $expense =  Auth::user()->business->expense()->where('expense_date', $date)->sum('amount');
+        $supplier_payment =  Auth::user()->business->paymenttosupplier()->where('payment_date', $date)->sum('amount');
 
         return  $expense + $supplier_payment;
     }
 
     private function incomeByDate($date, $business_id){
-        $sell =  Sell::whereIn('business_id', $business_id)->where('sell_date', $date)->sum('paid_amount');
-        $payment_from_customer = PaymentFromCustomer::whereIn('business_id', $business_id)->where('payment_date', $date)->sum('amount');
+        $sell =  Auth::user()->business->sell()->where('sell_date', $date)->sum('paid_amount');
+        $payment_from_customer = Auth::user()->business->paymentfromcustomer()->where('payment_date', $date)->sum('amount');
 
         return  $sell + $payment_from_customer;
     }

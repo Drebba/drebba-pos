@@ -102,8 +102,6 @@ Route::middleware('auth', 'active')->group(function () {
             Route::get('statistics', 'Backend\PurchaseReportController@statistics');
             Route::get('statistics-filter', 'Backend\PurchaseReportController@statisticsFilter');
             Route::get('statistics-pdf', 'Backend\PurchaseReportController@statisticsFilterPDF');
-            Route::get('statistics/last/{number_of_days}/days', 'Backend\PurchaseReportController@lastDynamicDaysStatistics');
-            Route::get('statistics/last/{number_of_days}/days-pdf/{action_type}', 'Backend\PurchaseReportController@lastDynamicDaysStatisticsPDF');
         });
 
         Route::get('stock-report', 'Backend\StockReportController@index');
@@ -114,7 +112,6 @@ Route::middleware('auth', 'active')->group(function () {
 
 
         Route::get('profit-loss', 'Backend\ProfitLoosReportController@index')->name('profitLoss');
-        Route::get('profit/loss/filter', 'Backend\ProfitLoosReportController@filter');
     });
 
     Route::prefix('export')->group(function () {
