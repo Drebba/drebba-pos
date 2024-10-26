@@ -2,7 +2,7 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <div class="row g-3 sell-pos">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="sell-card-group">
                     <div class="sell-card-header pb-2 mb-2">
                         <div class="wiz-box p-2">
@@ -130,7 +130,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="sell-card-group">
                     <div class="sell-card-header">
                         <div class="wiz-box p-2">
@@ -563,6 +563,7 @@ export default {
             lang: [],
             sell: [],
             products: [],
+            all_tables:[],
             product: {},
             carts: localStorage.getItem('carts') ?? [],
             categories: this.all_categories,

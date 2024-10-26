@@ -6618,6 +6618,7 @@ __webpack_require__.r(__webpack_exports__);
       lang: [],
       sell: [],
       products: [],
+      all_tables: [],
       product: {},
       carts: (_localStorage$getItem = localStorage.getItem('carts')) !== null && _localStorage$getItem !== void 0 ? _localStorage$getItem : [],
       categories: this.all_categories,
@@ -35858,7 +35859,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _c("div", { staticClass: "row g-3 sell-pos" }, [
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-5" }, [
         _c("div", { staticClass: "sell-card-group" }, [
           _c("div", { staticClass: "sell-card-header pb-2 mb-2" }, [
             _c("div", { staticClass: "wiz-box p-2" }, [
@@ -36439,7 +36440,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
+      _c("div", { staticClass: "col-md-7" }, [
         _c("div", { staticClass: "sell-card-group" }, [
           _c("div", { staticClass: "sell-card-header" }, [
             _c("div", { staticClass: "wiz-box p-2" }, [

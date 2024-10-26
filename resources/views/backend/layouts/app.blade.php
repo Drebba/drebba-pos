@@ -27,6 +27,8 @@
 
 
 <div class="panel-wrapper">
+    @if (!Request::is('sell/create'))
+
     <aside class="wrapping-aside">
         <div class="wrapping-content">
             <div class="wrapping-content-header d-flex justify-content-between">
@@ -40,7 +42,9 @@
             </div>
         </div>
     </aside>
-    <main class="wrapping-body">
+    @endif
+
+    <main class="wrapping-body  {{Request::is('sell/create')?'w-100':''}}">
         <div class="main-navbar">
             @include('backend.layouts.particles.header')
         </div>
