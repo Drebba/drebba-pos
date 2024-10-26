@@ -46,6 +46,8 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('sell', 'Backend\SellController');
 
     Route::resource('category', 'Backend\CategoryController');
+    Route::resource('table', 'Backend\TableController');
+
     Route::resource('unit', 'Backend\UnitController');
     Route::resource('user', 'Backend\UserController');
     Route::resource('businesses', 'Backend\BusinessController');

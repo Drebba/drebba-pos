@@ -7069,6 +7069,204 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table/TableComponent.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/table/TableComponent.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    all_tables: Array
+  },
+  data: function data() {
+    return {
+      lang: [],
+      errors: [],
+      tables: this.all_tables,
+      selectedTable: {},
+      newTable: {
+        name: ''
+      },
+      createTable: false,
+      editTableDrawer: false
+    };
+  },
+  methods: {
+    showCreateTableDrawer: function showCreateTableDrawer() {
+      this.errors = [];
+      this.createTable = true;
+    },
+    storeTable: function storeTable() {
+      var _this = this;
+
+      axios.post('table', {
+        table: JSON.parse(JSON.stringify(this.newTable))
+      }).then(function (response) {
+        _this.newTable.name = '';
+        _this.createTable = false;
+
+        _this.tables.unshift(response.data);
+
+        toastr["success"]("Table successfully added");
+      })["catch"](function (error) {
+        _this.errors = error.response.data.errors;
+      });
+    },
+    editTable: function editTable(id) {
+      var _this2 = this;
+
+      this.tables.forEach(function (element) {
+        if (element.id === id) {
+          _this2.selectedTable = element;
+        }
+      });
+      this.errors = [];
+      this.editTableDrawer = true;
+    },
+    updateTable: function updateTable() {
+      var _this3 = this;
+
+      axios.patch('table/' + this.selectedTable.id, {
+        table: JSON.parse(JSON.stringify(this.selectedTable))
+      }).then(function () {
+        _this3.editTableDrawer = false;
+        _this3.selectedTable = {};
+        toastr["success"]("Table successfully updated");
+      })["catch"](function (error) {
+        _this3.errors = error.response.data.errors;
+      });
+    },
+    deleteTable: function deleteTable(id, index) {
+      var _this4 = this;
+
+      swal({
+        title: "Are you sure?",
+        text: "To delete this Table",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(function (willDelete) {
+        if (willDelete) {
+          axios["delete"]('table/' + id).then(function (response) {
+            if (response.data[0] === 'success') {
+              _this4.tables.splice(index, 1);
+
+              toastr["success"](response.data[1]);
+            } else {
+              toastr["error"](response.data[1]);
+            }
+          })["catch"](function (error) {
+            console.error(error);
+          });
+        }
+      });
+    }
+  },
+  beforeMount: function beforeMount() {
+    var _this5 = this;
+
+    axios.get('vue/api/get-local-lang').then(function (response) {
+      _this5.lang = response.data;
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tax/Tax.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tax/Tax.vue?vue&type=script&lang=js& ***!
@@ -37990,6 +38188,326 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table/TableComponent.vue?vue&type=template&id=3fafca1b&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/table/TableComponent.vue?vue&type=template&id=3fafca1b& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container-fluid" }, [
+    _c("div", { staticClass: "row g-3" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "wiz-card" }, [
+          _c("div", { staticClass: "wiz-card-header" }, [
+            _c("h6", { staticClass: "page-title" }, [_vm._v("Tables")]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-brand btn-brand-secondary btn-sm",
+                  attrs: { href: "javascript:void(0)" },
+                  on: { click: _vm.showCreateTableDrawer }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-plus me-1" }),
+                  _vm._v(" Create Table")
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "wiz-card-body" }, [
+            _c("div", { staticClass: "table-responsive" }, [
+              _c(
+                "table",
+                {
+                  staticClass:
+                    "table table-bordered wiz-table mw-col-width-skip-first"
+                },
+                [
+                  _c("thead", [
+                    _c("tr", { staticClass: "bg-secondary text-white" }, [
+                      _c("th", { attrs: { width: "5%" } }, [_vm._v("sl")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Table name")]),
+                      _vm._v(" "),
+                      _c(
+                        "th",
+                        { staticClass: "text-center", attrs: { width: "10%" } },
+                        [_vm._v(_vm._s(_vm.lang.action))]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.tables, function(tableItem, index) {
+                      return _c("tr", { key: tableItem.id }, [
+                        _c("td", [_vm._v(_vm._s(index + 1))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(tableItem.name))]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "text-center" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "btn-group btn-group-sm",
+                              attrs: {
+                                role: "group",
+                                "aria-label": "Basic example"
+                              }
+                            },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "mx-2 text-brand-primary",
+                                  attrs: { href: "javascript:void(0)" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.editTable(tableItem.id)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "bi bi-pencil" })]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "mx-2 text-brand-danger",
+                                  attrs: { href: "javascript:void(0);" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.deleteTable(
+                                        tableItem.id,
+                                        index
+                                      )
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "bi bi-trash" })]
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              )
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "drawer shadow right responsive-drawer",
+        class: { show: _vm.createTable }
+      },
+      [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("h6", { staticClass: "card-title" }, [_vm._v("Add Table")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                on: {
+                  click: function($event) {
+                    _vm.createTable = false
+                  }
+                }
+              },
+              [_c("i", { staticClass: "bi bi-x-lg" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", [
+              _c("div", { staticClass: "form-group mb-4" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newTable.name,
+                      expression: "newTable.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    autofocus: "",
+                    placeholder: "Enter table name"
+                  },
+                  domProps: { value: _vm.newTable.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.newTable, "name", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors["table.name"]
+                  ? _c("span", { staticClass: "error" }, [
+                      _vm._v(_vm._s(_vm.errors["table.name"][0]))
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group text-end" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-brand-primary btn-brand",
+                    attrs: { type: "submit" },
+                    on: {
+                      click: function($event) {
+                        return _vm.storeTable()
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.lang.save))]
+                )
+              ])
+            ])
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "drawer shadow right responsive-drawer",
+        class: { show: _vm.editTableDrawer }
+      },
+      [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _c("h6", { staticClass: "card-title" }, [_vm._v("Edit Table")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                on: {
+                  click: function($event) {
+                    _vm.editTableDrawer = false
+                  }
+                }
+              },
+              [_c("i", { staticClass: "bi bi-x-lg" })]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", [
+              _c("div", { staticClass: "form-group mb-4" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.selectedTable.name,
+                      expression: "selectedTable.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    autofocus: "",
+                    placeholder: "Enter table name"
+                  },
+                  domProps: { value: _vm.selectedTable.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.selectedTable, "name", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors["table.name"]
+                  ? _c("span", { staticClass: "error" }, [
+                      _vm._v(_vm._s(_vm.errors["table.name"][0]))
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group text-end" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-brand btn-brand-primary",
+                    attrs: { type: "submit" },
+                    on: {
+                      click: function($event) {
+                        return _vm.updateTable()
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.lang.save))]
+                )
+              ])
+            ])
+          ])
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "custom-label" }, [
+      _vm._v("Table name "),
+      _c("span", { staticClass: "text-danger" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { staticClass: "custom-label" }, [
+      _vm._v("Table name "),
+      _c("span", { staticClass: "text-danger" }, [_vm._v("*")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tax/Tax.vue?vue&type=template&id=15c82d2c&":
 /*!**********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tax/Tax.vue?vue&type=template&id=15c82d2c& ***!
@@ -51640,6 +52158,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter("formatNumber", function (valu
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('category', __webpack_require__(/*! ./components/category/CategoryComponent.vue */ "./resources/js/components/category/CategoryComponent.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('tables', __webpack_require__(/*! ./components/table/TableComponent.vue */ "./resources/js/components/table/TableComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('unit', __webpack_require__(/*! ./components/unit/UnitComponent.vue */ "./resources/js/components/unit/UnitComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('new-purchase', __webpack_require__(/*! ./components/purchase/NewPurchase.vue */ "./resources/js/components/purchase/NewPurchase.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('edit-purchase', __webpack_require__(/*! ./components/purchase/EditPurchase.vue */ "./resources/js/components/purchase/EditPurchase.vue")["default"]);
@@ -52547,6 +53066,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewSell_vue_vue_type_template_id_a5704700___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewSell_vue_vue_type_template_id_a5704700___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/table/TableComponent.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/table/TableComponent.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TableComponent_vue_vue_type_template_id_3fafca1b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TableComponent.vue?vue&type=template&id=3fafca1b& */ "./resources/js/components/table/TableComponent.vue?vue&type=template&id=3fafca1b&");
+/* harmony import */ var _TableComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TableComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/table/TableComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TableComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TableComponent_vue_vue_type_template_id_3fafca1b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TableComponent_vue_vue_type_template_id_3fafca1b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/table/TableComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/table/TableComponent.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/table/TableComponent.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./TableComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table/TableComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/table/TableComponent.vue?vue&type=template&id=3fafca1b&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/table/TableComponent.vue?vue&type=template&id=3fafca1b& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_template_id_3fafca1b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./TableComponent.vue?vue&type=template&id=3fafca1b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/table/TableComponent.vue?vue&type=template&id=3fafca1b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_template_id_3fafca1b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_template_id_3fafca1b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

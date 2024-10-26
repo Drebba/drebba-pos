@@ -31,6 +31,8 @@ Vue.filter("formatNumber", function (value) {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.component('category', require('./components/category/CategoryComponent.vue').default);
+Vue.component('tables', require('./components/table/TableComponent.vue').default);
+
 Vue.component('unit', require('./components/unit/UnitComponent.vue').default);
 
 

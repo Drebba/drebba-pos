@@ -2,4 +2,6 @@
     <a href="{{route('general-settings')}}" class="btn btn-brand btn-outline-brand-primary {{ active_if_full_match('settings/general') }}"><i class="fas fa-store-alt me-2"></i> {{__('pages.general_settings')}}</a>
     <a href="{{route('currency-settings')}}" class="btn btn-brand btn-outline-brand-primary {{ active_if_full_match('settings/currency') }}"><i class="bi bi-currency-exchange me-2"></i>{{__('pages.currency')}}  </a>
     <a href="{{route('prefix-settings')}}" class="btn btn-brand btn-outline-brand-primary {{ active_if_full_match('settings/prefix') }}"><i class="fab fa-autoprefixer me-2"></i> {{__('pages.prefix')}} </a>
+    <a href="{{url('table')}}" class="btn btn-brand btn-outline-brand-primary {{ active_if_full_match('table/*') }}"><i class="fas fa-table me-2"></i> Tables </a>
+
 </div>
