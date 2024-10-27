@@ -27,7 +27,10 @@ class Sell extends Model
         return $this->belongsTo(Customer::class)->withTrashed();
     }
 
-
+    public function table()
+    {
+        return $this->belongsTo(Table::class, 'table_id','id');
+    }
 
     public function user()
     {

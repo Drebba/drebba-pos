@@ -113,14 +113,12 @@
                                     </table>
                                 </div>
                                 <div class="d-flex gap-1 justify-content-end pe-2">
-                                    <div><a href="javascript:void(0)" class="btn btn-brand btn-brand-primary btn-sm"
+                                    <div><a href="javascript:void(0)" class="btn btn-brand btn-brand-success btn-sm"
                                             @click="createPayment()">{{ lang.payment }}</a></div>
-                                    <div><a href="javascript:void(0)" v-on:click="archiveDrafts = true"
-                                            class="btn btn-brand btn-brand-secondary btn-sm"><i
-                                                class="fas fa-boxes"></i> {{ drafts.length }} </a></div>
-                                    <div><a href="javascript:void(0)" @click="archiveToDraft()"
-                                            class="btn btn-brand btn-brand-warning btn-sm px-3"><i
-                                                class="fas fa-grip-lines-vertical"></i> </a></div>
+                                    <div><a href="javascript:void(0)"
+                                            class="btn btn-brand btn-brand-secondary btn-sm" @click="storeSell(true)">KOT </a></div>
+                                            <div><a href="javascript:void(0)"
+                                                class="btn btn-brand btn-primary btn-sm">ESTIMATE BILL </a></div>
                                     <div><a href="javascript:void(0);" @click="clearAll()"
                                             class="btn btn-brand btn-brand-danger btn-sm"><i
                                                 class="bi bi-trash"></i></a></div>
@@ -131,7 +129,26 @@
                 </div>
             </div>
             <div class="col-md-7">
-                <div class="sell-card-group">
+
+                <div class="table-card" v-if="showTable">
+                    <div class="row">
+                        <div class="col-md-3 cursor-pointer" v-for="table in all_tables" :key="table.id" @click="changeTable(table)">
+                            <div :class="'card rounded-0 ' + (table.status ? 'bg-danger' : 'bg-success')">
+                                <div class="card-body d-flex justify-content-center align-items-center text-white" style="height:80px">
+                                   <div>
+                                    {{ table.name }}
+                                       <div v-if="table.status" class="text-center">
+                                        {{ appConfig('app_currency') }} {{ table.total_amount }}
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sell-card-group" v-if="!showTable">
+                    <div class="text-right text-end"><button  class="btn btn-primary rounded-0" @click="checkKOT"> ⬅ {{selectedTable.name}}</button></div>
                     <div class="sell-card-header">
                         <div class="wiz-box p-2">
                             <div class="input-with-icon">
@@ -145,7 +162,7 @@
                                 <a href="javascript:void(0)" class="filter-category-btn"
                                     :class="{ active: filter.category_id == '' }"
                                     v-on:click="filter.category_id = ''">{{ lang.all }}</a>
-                                <a href="javascript:void(0)" class="filter-category-btn" v-for="category in categories"
+                                <a :key="category.id" href="javascript:void(0)" class="filter-category-btn" v-for="category in categories"
                                     :class="{ active: filter.category_id == category.id }"
                                     @click="productFilterByCategory(category.id)">{{ category.title }}</a>
                             </div>
@@ -154,8 +171,8 @@
                     <div class="sell-card-body sell-card-product-scroll">
                         <div class="p-2">
                             <div class="row g-3 justify-content-center all-products">
-                                <div class="col-md-3 col-6" v-for="(product, index) in filteredProduct"
-                                    v-if="product.current_stock_quantity > 0">
+                                <div class="col-md-2 col-6" v-for="(product, index) in filteredProduct"
+                                    v-if="product.current_stock_quantity > 0"  :key="product.id">
                                     <div class="single-product" :class="{ selected: isAlreadyInCart(product.id) }"
                                         @click="addToCart(product.id)">
                                         <div class="ratio ratio-16x9">
@@ -246,7 +263,6 @@
                         <h3 class="company-name fw-medium">{{ appConfig('app_name') }}</h3>
                         <p class="address mb-1">{{ lang.address }}: {{ appConfig('address') }}</p>
                         <p class="vat mb-1">{{ lang.vat_reg_number }} : {{ appConfig('vat_reg_no') }}</p>
-                        <p class="outlet mb-0">{{ lang.outlet }}: {{ my_branch.title }} </p>
                     </div>
                     <div class="p-4">
                         <div class="row g-4 gx-lg-5">
@@ -515,44 +531,21 @@
                 </div>
             </div>
         </div>
-        <div class="drawer shadow right responsive-drawer" :class="{ show: archiveDrafts }">
-            <div class="card shadow">
-                <div class="card-header">
-                    <h6 class="card-title">{{ lang.draft }}</h6>
-                    <button class="close" v-on:click="archiveDrafts = false"><i class="bi bi-x-lg"></i></button>
-                </div>
-                <div class="card-body">
-                    <div class="form-group mb-3">
-                        <input type="text" v-model="filter.draft_search_key" autofocus class="form-control"
-                            :placeholder="lang.draft_search_key">
-                    </div>
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                            <div class="row mb-2" v-for="(draft, index)  in filteredDratfs">
-                                <div class="col-md-11">
-                                    <a href="javascript:void(0)"
-                                        class="list-group-item list-group-item-action rounded-0"
-                                        @click="selectDraft(index, draft.id)"> {{ draft.inquiry_id }},
-                                        {{ draft.customer.name }} , {{ draft.customer.phone }} </a>
-                                </div>
-                                <div class="col-md-1" @click="deleteDraft(index, draft.id)">
-                                    <a href="jabascript:void(0)"><i class="bi bi-trash text-danger"></i> </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
     <!-- /.container-fluid -->
 </template>
 <script>
 export default {
     mounted() {
-        const ps = new PerfectScrollbar('.perfect-ps');
-        const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
-        const psForCart = new PerfectScrollbar('.sell-cart-scroll');
+        // const ps = new PerfectScrollbar('.perfect-ps');
+        // const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
+        // const psForCart = new PerfectScrollbar('.sell-cart-scroll');
+        window.addEventListener("beforeunload", this.handleBeforeUnload);
+    },
+    beforeUnmount() {
+        // Clean up the event listener when component is destroyed
+        window.removeEventListener("beforeunload", this.handleBeforeUnload);
     },
     name: "NewSell",
     props: {
@@ -565,14 +558,12 @@ export default {
             products: [],
             all_tables:[],
             product: {},
-            carts: localStorage.getItem('carts') ?? [],
+            carts: [],
             categories: this.all_categories,
             category: {},
             customers: [],
             customer: null,
             configs: [],
-            my_branch: [],
-            drafts: [],
             new_customer: {
                 'name': '',
                 'phone': '',
@@ -589,28 +580,48 @@ export default {
                 'payment_type': 1,
                 'card_information': '',
             },
-            draft: {
-                'draft_key': 0,
-                'draft_id': 0,
-            },
+
             filter: {
                 search: '',
-                draft_search_key: '',
                 category_id: '',
             },
             createCustomer: false,
             createPaymentDrawer: false,
             cardInformationArea: false,
-            archiveDrafts: false,
             isSellStoreProcessing: false,
+            showTable:true,
+            selectedTable:{},
+            kot:true,
         }
     },
 
     methods: {
+        handleBeforeUnload(event) {
+            // Check if there are unsaved changes
+            if (!this.kot) {
+                event.preventDefault();
+                event.returnValue = ''; // This triggers the default browser warning
+            }
+        },
         productFilterByCategory: function (category_id) {
             this.filter.category_id = category_id;
         },
+        changeTable:function(table){
+         this.showTable=false;
+         this.selectedTable=table;
+         this.kot=true;
+        },
+        checkKOT:function(){
 
+            if(!this.kot){
+                toastr["error"]("print KOT");
+                return false;
+            }
+            axios.get('../vue/api/tables').then((response) => {
+            this.all_tables = response.data;
+        });
+            this.showTable=true;
+        },
         onEnterClick: function () {
             this.products.forEach((product) => {
                 if (product.sku.toLowerCase() == this.filter.search.toLowerCase()) {
@@ -633,10 +644,10 @@ export default {
                         this.product = product;
                         this.product.quantity = 1;
                         this.carts.unshift(this.product);
-                        sessionStorage.setItem('carts')
                     }
                 });
             }
+            this.kot=false;
         },
 
         isAlreadyInCart: function (product_id) {
@@ -657,30 +668,43 @@ export default {
             if (this.sellStoreValidation()) {
                 if (this.carts.length != 0) {
                     this.createPaymentDrawer = true;
-                    if (this.archiveDrafts == true) {
-                        this.archiveDrafts = false;
-                    }
+
                 } else {
                     toastr["error"]("!Empty Cart");
                 }
             }
         },
 
-        storeSell: function () {
+        storeSell: function (isKot=true) {
+
+            // if kot is already store for this table then just print kot
+            if(this.selectedTable.kot){
+                this.printInvoice(true,this.selectedTable.current_sell_id);
+                return;
+            }
+
             if (this.sellStoreValidation()) {
                 if (this.carts.length != 0) {
                     if (this.summary.paid_amount >= 0) {
                         this.isSellStoreProcessing = true;
-
-                        axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary }).then((response) => {
+                        // store sells and make it kot if its is kot based click
+                        axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary,table:this.selectedTable.id,isKot:isKot }).then((response) => {
                             this.sell = response.data.sell;
                             this.sell.custome_sell_date = response.data.sell_date;
-                            if (this.draft.draft_id != '') {
-                                this.deleteDraft(this.draft.draft_key, this.draft.draft_id);
-                            }
                             this.clearAll();
-                            this.invoicePrintBtn = true;
-                            this.isSellStoreProcessing = false;
+
+                            // if the input is not for kot then just print the invoice
+                            if (!isKot) {
+                                this.invoicePrintBtn = true;
+                                this.isSellStoreProcessing = false;
+                                this.printInvoice(false,this.sell.id);
+                            }else{
+                                this.printInvoice(true,this.sell.id);
+
+                            }
+
+                            // change the status of kot so that table list can be shown
+                          this.kot=true;
 
                         }).catch((error) => {
                             console.error(error);
@@ -695,8 +719,8 @@ export default {
             }
         },
 
-        printInvoice: function () {
-            axios.get('../export/sell/print-invoice/id=' + this.sell.id)
+        printInvoice: function (kot=false,sell_id) {
+            axios.get('../export/sell/print-invoice/id=' + sell_id+'?kot='+kot)
                 .then((response) => {
                     const printableContent = response.data;
                     const iframe = document.createElement('iframe');
@@ -730,56 +754,8 @@ export default {
                 });
         },
 
-
-        archiveToDraft: function () {
-            if (this.customer != null) {
-                if (this.carts.length != 0) {
-                    axios.post('../vue/api/store-draft', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary }).then((response) => {
-                        this.drafts.unshift(response.data)
-                        this.clearAll();
-                    }).catch((error) => {
-                        console.error(error);
-                    });
-                } else {
-                    toastr["error"]("!Empty Cart");
-                    return false;
-                }
-            } else {
-                toastr["error"]("Please select a Customer");
-                return false;
-            }
-
-        },
-
-        selectDraft: function (index, draft_id) {
-            this.carts = [];
-            this.drafts.forEach((element) => {
-                if (element.id == draft_id) {
-                    element.draft_products.forEach((draft_product) => {
-                        console.log(draft_product.product.price_type)
-                        draft_product.title = draft_product.product.title;
-                        draft_product.id = draft_product.product.id;
-                        draft_product.price_type = draft_product.product.price_type;
-                        draft_product.tax = draft_product.product.tax;
-                        this.carts.push(draft_product);
-                    });
-                }
-            });
-
-            this.draft.draft_key = index;
-            this.draft.draft_id = draft_id;
-        },
-
-        deleteDraft: function (key, draft_id) {
-            this.drafts.splice(key, 1);
-            axios.get('../vue/api/delete-drafts/' + draft_id).then((response) => {
-                console.log(response.data)
-            });
-        },
-
         newCustomer: function () {
             this.createCustomer = true;
-            this.archiveDrafts = false;
             this.createPaymentDrawer = false
         },
 
@@ -832,8 +808,6 @@ export default {
             this.summary.payment_type = 1;
             this.summary.card_information = '';
             this.filter.search = '';
-            this.draft.draft_id = '';
-            this.draft.draft_key = '';
 
             this.configs.forEach((element) => {
                 if (element.option_key == 'default_customer') {
@@ -944,6 +918,12 @@ export default {
             }
         },
 
+        fetchTable:function(){
+            axios.get('../vue/api/tables').then((response) => {
+            this.all_tables = response.data;
+        });
+        },
+
         filteredProduct: function () {
             if (this.filter.category_id != '') {
                 return this.products.filter((product) => {
@@ -963,19 +943,12 @@ export default {
             return this.products;
         },
 
-        filteredDratfs: function () {
-            if (this.filter.draft_search_key != '') {
-                return this.drafts.filter((draft) => {
-                    return draft.inquiry_id.toLowerCase().match(this.filter.draft_search_key.toLowerCase())
-                        || draft.customer.name.toLowerCase().match(this.filter.draft_search_key.toLowerCase())
-                        || draft.customer.phone.toLowerCase().match(this.filter.draft_search_key.toLowerCase())
-                });
-            }
-            return this.drafts;
-        },
     },
 
     beforeMount() {
+        axios.get('../vue/api/tables').then((response) => {
+            this.all_tables = response.data;
+        });
         axios.get('../vue/api/products').then((response) => {
             this.products = response.data;
         });
@@ -1001,13 +974,6 @@ export default {
             });
         });
 
-        axios.get('../vue/api/my-branch').then((response) => {
-            this.my_branch = response.data;
-        });
-
-        axios.get('../vue/api/drafts').then((response) => {
-            this.drafts = response.data;
-        });
     }
 }
 </script>

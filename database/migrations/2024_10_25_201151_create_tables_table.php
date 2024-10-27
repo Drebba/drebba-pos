@@ -19,7 +19,7 @@ class CreateTablesTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('image')->nullable();
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->comment('1:Occupied,0:Available');
             $table->timestamps();
         });
     }

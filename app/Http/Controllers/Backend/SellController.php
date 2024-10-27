@@ -12,6 +12,7 @@ use PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Table;
 use Illuminate\Support\Facades\Auth;
 use Toastr;
 
@@ -98,7 +99,15 @@ class SellController extends Controller
         $sell->business_id = Auth::user()->business_id;
         $sell->fill($request->summary);
         $sell->paid_amount = $paid_amount;
+        $sell->status=0;
+        $sell->table_id=$request->table;
         $sell->save();
+
+        $table=Table::find($request->table);
+        $table->status=1;
+        $table->current_sell_id=$sell->id;
+        $table->total_amount=$paid_amount;
+        $table->save();
 
         $this->storeSellProducts($request, $sell);
 
@@ -266,9 +275,10 @@ class SellController extends Controller
         }
     }
 
-    public function printInvoice($sell_id){
+    public function printInvoice(Request $request,$sell_id){
+        $kot=$request->kot??false;
         $sell = Auth::user()->business->sell()->where('id',$sell_id)->firstOrFail();
-        return view('backend.pdf.sell.thermal-invoice',compact('sell'))->render();
+        return view('backend.pdf.sell.thermal-invoice',compact('sell','kot'))->render();
         // $pdf = PDF::loadView('backend.pdf.sell.rtl-invoice', compact('sell'))->setPaper('a4');
         // return $pdf->download();
     }

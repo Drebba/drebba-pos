@@ -20,7 +20,11 @@
     <link rel="stylesheet" type="text/css" href="{{asset('admin/css/helper.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('admin/css/main.css')}}">
     @stack('css')
-
+      <style>
+        .cursor-pointer{
+            cursor: pointer;
+        }
+      </style>
 </head>
 
 <body id="page-top">

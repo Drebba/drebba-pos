@@ -152,7 +152,7 @@ Route::middleware('auth', 'active')->group(function () {
     Route::prefix('vue/api')->group(function (){
         Route::get('get-local-lang','Backend\VeuApiController@getAppLang');
         Route::get('get-app-configs','Backend\VeuApiController@getAppConfigs');
-        Route::get('my-branch','Backend\VeuApiController@myBranch');
+        Route::get('tables','Backend\VeuApiController@tables');
         Route::get('products','Backend\VeuApiController@products');
         Route::get('products-with-paginate','Backend\VeuApiController@productsWithPaginate');
         Route::get('product-available-stock-qty/{product_id}','Backend\VeuApiController@productAvailableStockQty');

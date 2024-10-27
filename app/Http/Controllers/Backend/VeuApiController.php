@@ -41,8 +41,8 @@ class VeuApiController extends Controller
        return response($strings['pages']);
     }
 
-    public function myBranch(){
-       return response(auth()->user()->employee);
+    public function tables(){
+       return response(auth()->user()->business->table);
     }
     public function products()
     {

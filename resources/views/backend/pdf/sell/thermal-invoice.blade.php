@@ -153,9 +153,11 @@
     <div id="invoice-POS">
 
         <!--End InvoiceTop-->
-
+        @if (!$kot)
         <div id="mid">
             <div class="info">
+
+
                 <div class="text-center">
                     <img src="{{asset(get_option('app_logo'))}}" alt="" style="margin: auto!important;width:60px">
 
@@ -170,53 +172,87 @@
 
                     Date : {{ date('d M Y') }}
                 </p>
+
                 <p class="text-center my-0 py-0 py-1">
                     <span class="invoice_no">E-Bill : </span> <span class="bill ">{{ $sell->invoice_id }}</span>
+                    <br>
+                    <span class="invoice_no">Table : </span> <span class="bill ">{{ $sell->table->name }}</span>
                 </p>
 
             </div>
         </div>
+        @else
+        <p class="text-center my-0 py-0 py-1">
+            <span class="invoice_no">E-Bill : </span> <span class="bill ">{{ $sell->invoice_id }}</span>
+            <br>
+            <span class="invoice_no">Table : </span> <span class="bill ">{{ $sell->table->name }}</span>
+        </p>
+        @endif
+
         <!--End Invoice Mid-->
         <div id="bot">
             <div class="table-responsive">
-                <table class="table w-100" width="100%" cellspacing="0">
+                <table class="table w-100" width="100%">
                     <thead>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
                     <tr class="w-100 text-white">
                         <th class="tabletitle">{{__('pages.sl')}}</th>
                         <th class="tabletitle">Name</th>
+                        @if (!$kot)
                         <th class="tabletitle">Price</th>
+                        @endif
                         <th class="tabletitle">Qty</th>
+                        @if (!$kot)
                         <th class="tabletitle">SubTotal</th>
+                        @endif
                     </tr>
                     </thead>
                     <tbody>
+
                     @foreach($sell->sellProducts as $key => $sell_product)
                         <tr>
                             <td width="3%" class="itemtext">{{$key+1}}</td>
                             <td class="itemtext">
                                 {{$sell_product->product->title}}
                             </td>
+                           @if (!$kot)
                             <td class="itemtext"> {{get_option('app_currency')}} {{number_format($sell_product->sell_price, 2)}} </td>
-
+                            @endif
                             <td class="itemtext"> {{$sell_product->quantity}}  {{$sell_product->product->unit ? $sell_product->product->unit->title : ''}} </td>
+                            @if (!$kot)
                             <td class="itemtext"> {{get_option('app_currency')}} {{number_format($sell_product->total_price, 2)}} </td>
+                            @endif
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="4" class="text-right pr-3">
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    @if (!$kot)
+                    <tr style="border-top: 1px solid rgb(212, 211, 211);">
+                        <th colspan="4" class="text-right pr-3">
                             {{__('pages.sub_total')}}:
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             {{get_option('app_currency')}} {{number_format($sell->sub_total,2)}}
-                        </td>
+                        </th>
                     </tr>
 
                     @if ($sell->discount)
 
                     <tr>
-                        <td colspan="4" class="text-right pr-3">
+                        <th colspan="4" class="text-right pr-3">
                             {{__('pages.discount')}}:
-                        </td>
+                        </th>
                         <td>
                             {{get_option('app_currency')}} {{number_format($sell->discount,2)}}
                         </td>
@@ -224,24 +260,25 @@
                     @endif
 
                     <tr>
-                        <td colspan="4" class="text-right pr-3">
+                        <th colspan="4" class="text-right pr-3">
                             {{__('pages.grand_total')}}:
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             {{get_option('app_currency')}} {{number_format($sell->grand_total_price,2)}}
-                        </td>
+                        </th>
                     </tr>
-                    </tbody>
+                    @endif
+                </tfoot>
                 </table>
             </div>
             <!--End Table-->
-
+            @if (!$kot)
             <div id="legalcopy">
                 <p class="legal text-center my-0 py-0"><strong>Thank you for visiting us!
                     </strong>
                 </p>
             </div>
-
+          @endif
         </div>
         <!--End InvoiceBot-->
     </div>
