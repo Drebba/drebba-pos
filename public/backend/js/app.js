@@ -6589,6 +6589,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     // const ps = new PerfectScrollbar('.perfect-ps');
@@ -6641,6 +6642,7 @@ __webpack_require__.r(__webpack_exports__);
       createPaymentDrawer: false,
       cardInformationArea: false,
       isSellStoreProcessing: false,
+      tableWiseBilling: true,
       showTable: true,
       selectedTable: {},
       kot: true
@@ -6658,9 +6660,14 @@ __webpack_require__.r(__webpack_exports__);
       this.filter.category_id = category_id;
     },
     changeTable: function changeTable(table) {
+      this.carts = [];
       this.showTable = false;
       this.selectedTable = table;
       this.kot = true;
+
+      if (table.status) {
+        this.getSellDetail();
+      }
     },
     checkKOT: function checkKOT() {
       var _this = this;
@@ -6668,6 +6675,8 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.kot) {
         toastr["error"]("print KOT");
         return false;
+      } else {
+        this.carts = [];
       }
 
       axios.get('../vue/api/tables').then(function (response) {
@@ -6708,6 +6717,23 @@ __webpack_require__.r(__webpack_exports__);
 
       this.kot = false;
     },
+    getSellDetail: function getSellDetail() {
+      var _this4 = this;
+
+      axios.get('../../vue/api/sell-details/' + this.selectedTable.current_sell_id).then(function (response) {
+        _this4.sell_details = response.data;
+        _this4.customer = _this4.sell_details.customer;
+
+        _this4.sell_details.sell_products.forEach(function (sell_product) {
+          sell_product.title = sell_product.product.title;
+          sell_product.id = sell_product.product.id;
+          sell_product.price_type = sell_product.product.price_type;
+          sell_product.tax = sell_product.product.tax;
+
+          _this4.carts.push(sell_product);
+        });
+      });
+    },
     isAlreadyInCart: function isAlreadyInCart(product_id) {
       var result = false;
       this.carts.forEach(function (element) {
@@ -6729,21 +6755,99 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    storeSell: function storeSell() {
-      var _this4 = this;
+    updateSell: function updateSell(sell_id) {
+      var onlyKot = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-      var isKot = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      if (this.summary.paid_amount >= 0) {
+        axios.patch('../../sell/' + sell_id, {
+          carts: JSON.parse(JSON.stringify(this.carts)),
+          customer: JSON.parse(JSON.stringify(this.customer)),
+          summary: this.summary,
+          table: this.selectedTable.id,
+          kot: onlyKot
+        }).then(function (response) {// this.updated_sell = response.data.sell;
+          // this.sell = this.updated_sell;
+        })["catch"](function (error) {
+          console.error(error);
+        });
+      } else {
+        toastr["error"]("!Paid amount cannot should be negative");
+      }
+    },
+    storeKot: function storeKot() {
+      var _this5 = this;
 
-      // if kot is already store for this table then just print kot
-      if (this.selectedTable.kot) {
-        this.printInvoice(true, this.selectedTable.current_sell_id);
+      // check if kot is already done for the table and also check if tablewise billing is enable or not
+      //Note Reprint KOT option is only available for table enable module
+      if (this.tableWiseBilling && this.selectedTable.status) {
+        this.updateSell(this.selectedTable.current_sell_id, true);
+        setTimeout(function () {
+          _this5.printInvoice(true, _this5.selectedTable.current_sell_id); //print kot
+
+        }, 100);
+        this.kot = true;
         return;
       }
 
       if (this.sellStoreValidation()) {
         if (this.carts.length != 0) {
           if (this.summary.paid_amount >= 0) {
-            this.isSellStoreProcessing = true; // store sells and make it kot if its is kot based click
+            this.isSellStoreProcessing = true; // store sells and make it kot if its is kot btn click
+
+            axios.post('../vue/api/store-sell', {
+              carts: JSON.parse(JSON.stringify(this.carts)),
+              customer: JSON.parse(JSON.stringify(this.customer)),
+              summary: this.summary,
+              table: this.selectedTable.id,
+              isKot: true
+            }).then(function (response) {
+              _this5.sell = response.data.sell;
+              _this5.sell.custome_sell_date = response.data.sell_date;
+
+              _this5.clearAll();
+
+              _this5.printInvoice(true, _this5.sell.id); //print kot
+              // change the status of kot so that table list can be shown
+
+
+              _this5.kot = true; // module availabe for only table module enable user
+
+              if (_this5.tableWiseBilling) {
+                _this5.checkKOT();
+              }
+            })["catch"](function (error) {
+              console.error(error);
+              _this5.isSellStoreProcessing = false;
+            });
+          } else {
+            toastr["error"]("!Paid amount cannot should be negative");
+          }
+        } else {
+          toastr["error"]("!Empty Cart");
+        }
+      }
+    },
+    storeSell: function storeSell() {
+      var _this6 = this;
+
+      var isKot = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var payment = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      // if kot is already store for this table then just print kot
+      if (!payment && this.selectedTable.status) {} //if kot is done for the table and porceed to pay
+      else if (payment && this.selectedTable.status) {
+          this.invoicePrintBtn = true;
+          this.isSellStoreProcessing = false;
+          this.updateSell(this.selectedTable.current_sell_id);
+          this.clearAll();
+          this.printInvoice(false, this.selectedTable.current_sell_id);
+          return;
+        }
+
+      if (this.sellStoreValidation()) {
+        if (this.carts.length != 0) {
+          if (this.summary.paid_amount >= 0) {
+            this.isSellStoreProcessing = true; // store sells and make it kot if its is kot btn click
 
             axios.post('../vue/api/store-sell', {
               carts: JSON.parse(JSON.stringify(this.carts)),
@@ -6752,26 +6856,26 @@ __webpack_require__.r(__webpack_exports__);
               table: this.selectedTable.id,
               isKot: isKot
             }).then(function (response) {
-              _this4.sell = response.data.sell;
-              _this4.sell.custome_sell_date = response.data.sell_date;
+              _this6.sell = response.data.sell;
+              _this6.sell.custome_sell_date = response.data.sell_date;
 
-              _this4.clearAll(); // if the input is not for kot then just print the invoice
+              _this6.clearAll(); // if the input is not for kot then just print the invoice
 
 
               if (!isKot) {
-                _this4.invoicePrintBtn = true;
-                _this4.isSellStoreProcessing = false;
+                _this6.invoicePrintBtn = true;
+                _this6.isSellStoreProcessing = false;
 
-                _this4.printInvoice(false, _this4.sell.id);
+                _this6.printInvoice(false, _this6.sell.id);
               } else {
-                _this4.printInvoice(true, _this4.sell.id);
+                _this6.printInvoice(true, _this6.sell.id);
               } // change the status of kot so that table list can be shown
 
 
-              _this4.kot = true;
+              _this6.kot = true;
             })["catch"](function (error) {
               console.error(error);
-              _this4.isSellStoreProcessing = false;
+              _this6.isSellStoreProcessing = false;
             });
           } else {
             toastr["error"]("!Paid amount cannot should be negative");
@@ -6782,7 +6886,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     printInvoice: function printInvoice() {
-      var _this5 = this;
+      var _this7 = this;
 
       var kot = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var sell_id = arguments.length > 1 ? arguments[1] : undefined;
@@ -6808,9 +6912,9 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.error('Error printing invoice:', error);
       })["finally"](function () {
-        _this5.createPaymentDrawer = false;
-        _this5.invoicePrintBtn = false;
-        _this5.sell = []; // Reset sell data after printing
+        _this7.createPaymentDrawer = false;
+        _this7.invoicePrintBtn = false;
+        _this7.sell = []; // Reset sell data after printing
       });
     },
     newCustomer: function newCustomer() {
@@ -6818,21 +6922,21 @@ __webpack_require__.r(__webpack_exports__);
       this.createPaymentDrawer = false;
     },
     storeCustomer: function storeCustomer() {
-      var _this6 = this;
+      var _this8 = this;
 
       if (this.customerValidation()) {
         axios.post('../vue/api/store-customer', {
           new_customer: JSON.parse(JSON.stringify(this.new_customer))
         }).then(function (response) {
-          _this6.customer = response.data;
+          _this8.customer = response.data;
 
-          _this6.customers.push(response.data);
+          _this8.customers.push(response.data);
 
-          _this6.new_customer.name = '';
-          _this6.new_customer.phone = '';
-          _this6.new_customer.email = '';
-          _this6.new_customer.address = '';
-          _this6.createCustomer = false;
+          _this8.new_customer.name = '';
+          _this8.new_customer.phone = '';
+          _this8.new_customer.email = '';
+          _this8.new_customer.address = '';
+          _this8.createCustomer = false;
         })["catch"](function (error) {
           console.error(error);
         });
@@ -6859,7 +6963,7 @@ __webpack_require__.r(__webpack_exports__);
       this.summary.payment_type = 1;
     },
     clearAll: function clearAll() {
-      var _this7 = this;
+      var _this9 = this;
 
       this.carts = [];
       this.summary.sub_total = 0;
@@ -6873,16 +6977,16 @@ __webpack_require__.r(__webpack_exports__);
       this.filter.search = '';
       this.configs.forEach(function (element) {
         if (element.option_key == 'default_customer') {
-          _this7.customers.forEach(function (customer) {
+          _this9.customers.forEach(function (customer) {
             if (customer.id == element.option_value) {
-              _this7.customer = customer;
+              _this9.customer = customer;
             }
           });
         }
       });
     },
     customerValidation: function customerValidation() {
-      var _this8 = this;
+      var _this10 = this;
 
       var result = false;
 
@@ -6901,10 +7005,10 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.customers.forEach(function (customer) {
-        if (_this8.new_customer.phone != '') {
-          if (customer.phone == _this8.new_customer.phone) {
+        if (_this10.new_customer.phone != '') {
+          if (customer.phone == _this10.new_customer.phone) {
             toastr["error"]("Phone number should be Unique");
-            _this8.new_customer.phone = '';
+            _this10.new_customer.phone = '';
             result = false;
           } else {
             result = true;
@@ -6934,12 +7038,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     subTotalotalCartsValue: function subTotalotalCartsValue() {
-      var _this9 = this;
+      var _this11 = this;
 
       this.carts.forEach(function (element, key) {
         axios.get('../vue/api/product-available-stock-qty/' + element.id).then(function (response) {
           if (response.data == 0) {
-            _this9.carts.splice(key, 1);
+            _this11.carts.splice(key, 1);
           }
 
           ;
@@ -6977,25 +7081,18 @@ __webpack_require__.r(__webpack_exports__);
         return parseFloat(current_due.toFixed(2));
       }
     },
-    fetchTable: function fetchTable() {
-      var _this10 = this;
-
-      axios.get('../vue/api/tables').then(function (response) {
-        _this10.all_tables = response.data;
-      });
-    },
     filteredProduct: function filteredProduct() {
-      var _this11 = this;
+      var _this12 = this;
 
       if (this.filter.category_id != '') {
         return this.products.filter(function (product) {
-          return product.category_id == _this11.filter.category_id && (product.sku.toLowerCase().match(_this11.filter.search.toLowerCase()) || product.title.toLowerCase().match(_this11.filter.search.toLowerCase()));
+          return product.category_id == _this12.filter.category_id && (product.sku.toLowerCase().match(_this12.filter.search.toLowerCase()) || product.title.toLowerCase().match(_this12.filter.search.toLowerCase()));
         });
       }
 
       if (this.filter.search != '') {
         return this.products.filter(function (product) {
-          return product.title.toLowerCase().match(_this11.filter.search.toLowerCase()) || product.sku.toLowerCase().match(_this11.filter.search.toLowerCase());
+          return product.title.toLowerCase().match(_this12.filter.search.toLowerCase()) || product.sku.toLowerCase().match(_this12.filter.search.toLowerCase());
         });
       }
 
@@ -7003,28 +7100,34 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    var _this12 = this;
+    var _this13 = this;
 
-    axios.get('../vue/api/tables').then(function (response) {
-      _this12.all_tables = response.data;
-    });
     axios.get('../vue/api/products').then(function (response) {
-      _this12.products = response.data;
+      _this13.products = response.data;
     });
     axios.get('../vue/api/get-local-lang').then(function (response) {
-      _this12.lang = response.data;
+      _this13.lang = response.data;
     });
     axios.get('../vue/api/get-app-configs').then(function (response) {
-      _this12.configs = response.data;
+      _this13.configs = response.data;
     });
     axios.get('../vue/api/customers').then(function (response) {
-      _this12.customers = response.data;
+      _this13.customers = response.data;
 
-      _this12.configs.forEach(function (element) {
+      _this13.configs.forEach(function (element) {
         if (element.option_key == 'default_customer') {
-          _this12.customers.forEach(function (customer) {
+          // fetch table only when if table module is enable
+          axios.get('../vue/api/tables').then(function (response) {
+            _this13.all_tables = response.data;
+          });
+          _this13.tableWiseBilling = true;
+          _this13.showTable = true;
+        }
+
+        if (element.option_key == 'default_customer') {
+          _this13.customers.forEach(function (customer) {
             if (customer.id == element.option_value) {
-              _this12.customer = customer;
+              _this13.customer = customer;
             }
           });
         }
@@ -36354,15 +36457,13 @@ var render = function() {
                           attrs: { href: "javascript:void(0)" },
                           on: {
                             click: function($event) {
-                              return _vm.storeSell(true)
+                              return _vm.storeKot()
                             }
                           }
                         },
                         [_vm._v("KOT ")]
                       )
                     ]),
-                    _vm._v(" "),
-                    _vm._m(0),
                     _vm._v(" "),
                     _c("div", [
                       _c(
@@ -36388,7 +36489,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-7" }, [
-        _vm.showTable
+        _vm.tableWiseBilling && _vm.showTable
           ? _c("div", { staticClass: "table-card" }, [
               _c(
                 "div",
@@ -36423,21 +36524,17 @@ var render = function() {
                             },
                             [
                               _c("div", [
-                                _vm._v(
-                                  "\n                                " +
-                                    _vm._s(table.name) +
-                                    "\n                                   "
-                                ),
+                                _vm._v(" " + _vm._s(table.name) + " "),
                                 table.status
                                   ? _c("div", { staticClass: "text-center" }, [
                                       _vm._v(
-                                        "\n                                    " +
+                                        " " +
                                           _vm._s(
                                             _vm.appConfig("app_currency")
                                           ) +
                                           " " +
                                           _vm._s(table.total_amount) +
-                                          "\n                                   "
+                                          " "
                                       )
                                     ])
                                   : _vm._e()
@@ -36456,21 +36553,28 @@ var render = function() {
         _vm._v(" "),
         !_vm.showTable
           ? _c("div", { staticClass: "sell-card-group" }, [
-              _c("div", { staticClass: "text-right text-end" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary rounded-0",
-                    on: { click: _vm.checkKOT }
-                  },
-                  [_vm._v(" ⬅ " + _vm._s(_vm.selectedTable.name))]
-                )
-              ]),
+              _vm.tableWiseBilling
+                ? _c("div", { staticClass: "text-right text-end" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary rounded-0",
+                        on: { click: _vm.checkKOT }
+                      },
+                      [
+                        _vm._v(
+                          " ⬅\n                        " +
+                            _vm._s(_vm.selectedTable.name)
+                        )
+                      ]
+                    )
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c("div", { staticClass: "sell-card-header" }, [
                 _c("div", { staticClass: "wiz-box p-2" }, [
                   _c("div", { staticClass: "input-with-icon" }, [
-                    _vm._m(1),
+                    _vm._m(0),
                     _vm._v(" "),
                     _c("input", {
                       directives: [
@@ -36682,7 +36786,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.appConfig(
                                                         "app_currency"
@@ -37136,7 +37240,8 @@ var render = function() {
                                                     cart.unit
                                                       ? cart.unit.title
                                                       : ""
-                                                  )
+                                                  ) +
+                                                  "\n                                                    "
                                               )
                                             ]),
                                             _vm._v(" "),
@@ -37170,7 +37275,7 @@ var render = function() {
                                                   _vm._s(
                                                     _vm.lang.sub_total_price
                                                   ) +
-                                                  ":\n                                                    "
+                                                  ": "
                                               )
                                             ]
                                           ),
@@ -37270,8 +37375,7 @@ var render = function() {
                                                     _vm._v(
                                                       _vm._s(
                                                         _vm.lang.cash_paid
-                                                      ) +
-                                                        ":\n                                                        "
+                                                      ) + ": "
                                                     )
                                                   ])
                                                 : _vm._e(),
@@ -37281,8 +37385,7 @@ var render = function() {
                                                     _vm._v(
                                                       _vm._s(
                                                         _vm.lang.card_paid
-                                                      ) +
-                                                        ":\n                                                        "
+                                                      ) + ": "
                                                     )
                                                   ])
                                                 : _vm._e()
@@ -37565,7 +37668,7 @@ var render = function() {
                                                         _vm._s(
                                                           sell_produtc.tax_percentage
                                                         ) +
-                                                        "%\n                                                                )"
+                                                        "% )"
                                                     )
                                                   ])
                                                 ]),
@@ -37596,7 +37699,7 @@ var render = function() {
                                                       _vm._s(
                                                         sell_produtc.total_price
                                                       ) +
-                                                      "\n                                                        "
+                                                      " "
                                                   )
                                                 ])
                                               ])
@@ -37612,7 +37715,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                            " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.lang.sub_total_price
                                                     ) +
@@ -37648,7 +37751,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  " (-)\n                                                            " +
+                                                  " (-) " +
                                                     _vm._s(_vm.lang.discount) +
                                                     ": "
                                                 )
@@ -37682,7 +37785,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                            " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.lang.net_payable
                                                     ) +
@@ -37770,7 +37873,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                                            " +
+                                                  " " +
                                                     _vm._s(
                                                       _vm.lang.due_amount
                                                     ) +
@@ -37828,7 +37931,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("td", { staticClass: "text-dark" }, [
                                     _vm._v(
-                                      "\n                                                    " +
+                                      " " +
                                         _vm._s(_vm.appConfig("app_currency")) +
                                         _vm._s(_vm.grandTotalotalCartsValue)
                                     )
@@ -38044,7 +38147,7 @@ var render = function() {
                                   attrs: { href: "javascript:void(0)" },
                                   on: {
                                     click: function($event) {
-                                      return _vm.storeSell()
+                                      return _vm.storeSell(false, true)
                                     }
                                   }
                                 },
@@ -38060,7 +38163,7 @@ var render = function() {
                                     "btn btn-brand btn-brand-primary w-100",
                                   attrs: { href: "javascript:void(0)" }
                                 },
-                                [_vm._m(2)]
+                                [_vm._m(1)]
                               )
                             : _vm._e()
                         ])
@@ -38099,21 +38202,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-brand btn-primary btn-sm",
-          attrs: { href: "javascript:void(0)" }
-        },
-        [_vm._v("ESTIMATE BILL ")]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

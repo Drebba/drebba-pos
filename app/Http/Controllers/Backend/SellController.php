@@ -103,11 +103,14 @@ class SellController extends Controller
         $sell->table_id=$request->table;
         $sell->save();
 
+
         $table=Table::find($request->table);
+        if ($table) {
         $table->status=1;
         $table->current_sell_id=$sell->id;
         $table->total_amount=$paid_amount;
         $table->save();
+        }
 
         $this->storeSellProducts($request, $sell);
 
@@ -190,13 +193,25 @@ class SellController extends Controller
         $sell->customer_id = $request->customer['id'];
         $sell->sub_total = $request->summary['sub_total'];
         $sell->discount = $request->summary['discount'];
-        $sell->grand_total_price = $request->summary['grand_total'];
+        $sell->grand_total_price = $request->summary['grand_total_price'];
         $sell->due_amount = $request->summary['due_amount'];
         $sell->paid_amount = $paid_amount;
         $sell->save();
 
         Auth::user()->business->sellProduct()->where('sell_id', $id)->delete();
         $this->updateSellProducts($request, $sell);
+        $table=Table::find($request->table);
+
+        // if kot then just print
+        if (!$request->kot&&$table) {
+        $table->status=0;
+        $table->current_sell_id=null;
+        $table->total_amount=null;
+        $table->save();
+        }else if($request->kot&&$table){
+            $table->total_amount=$request->summary['sub_total'];
+            $table->save();
+        }
 
         $data['sell'] = Sell::where('id', $sell->id)->with('sellProducts')->with('customer')->first();
         $data['sell_date'] = Carbon::parse($sell->created_at)->format(get_option('app_date_format'). ', h:ia');
