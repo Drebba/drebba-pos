@@ -6834,7 +6834,7 @@ __webpack_require__.r(__webpack_exports__);
       var payment = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
       // if kot is already store for this table then just print kot
-      if (!payment && this.selectedTable.status) {} //if kot is done for the table and porceed to pay
+      if (this.tableWiseBilling && this.selectedTable.status) {} //if kot is done for the table and porceed to pay
       else if (payment && this.selectedTable.status) {
           this.invoicePrintBtn = true;
           this.isSellStoreProcessing = false;

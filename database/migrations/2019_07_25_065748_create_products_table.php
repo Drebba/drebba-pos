@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->string('title');
             $table->string('sku')->unique();
             $table->integer('category_id');
-            $table->integer('business_id');
             $table->integer('tax_id');
             $table->integer('unit_id')->nullable();
             $table->integer('price_type')->default(1);

@@ -755,7 +755,7 @@ export default {
 
         storeSell: function (isKot = true, payment = false) {
             // if kot is already store for this table then just print kot
-            if (!payment && this.selectedTable.status) {
+            if (this.tableWiseBilling && this.selectedTable.status) {
 
             }
             //if kot is done for the table and porceed to pay
