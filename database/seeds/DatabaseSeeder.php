@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        if(Settings::count() == 0){
-            $this->call(AppSettings::class);
-        }
+        // if(Settings::count() == 0){
+        //     $this->call(AppSettings::class);
+        // }
 
         if (Role::count() == 0){
             $this->call(RoleSeeder::class);
@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
             $this->call(PermissionSeeder::class);
         }
 
-        if(User::count() > 0 && Employee::count() == 0 && Branch::count() == 0){
-            $this->call(EmployeeSeeder::class);
-        }
+
+
+
     }
 }
