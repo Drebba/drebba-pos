@@ -1,12 +1,4 @@
-<!-- Custom fonts for this template-->
-{{--<link href="{{asset('/backend/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">--}}
-{{--<!-- Custom styles for this template-->--}}
-{{--<link rel="stylesheet" href="{{asset('/backend/vendor/datepicker/datepicker3.css')}}" type="text/css">--}}
-{{--<link rel="stylesheet" href="{{asset('/backend/vendor/select2/select2.css')}}"  type="text/css">--}}
 
-{{--<link href="{{asset('backend/css/app.css')}}" rel="stylesheet">--}}
-{{--<link rel="stylesheet" href="{{asset('/backend/css/toastr.min.css')}}"  type="text/css">--}}
-{{--<link href="{{asset('/backend/css/mbposcustom.css')}}" rel="stylesheet">--}}
 <link href="{{asset('icon/fontawesome-6/css/all.css')}}" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="{{asset('/backend/css/toastr.min.css')}}"  type="text/css">
 <link href="{{asset('admin/plugin/bootstrap5/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">

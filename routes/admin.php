@@ -12,7 +12,7 @@
 */
 
 use App\Http\Controllers\Admin\AuthController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\BusinessController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:admin')->group(function(){
@@ -22,4 +22,7 @@ Route::post('/login',[AuthController::class,'loginStore']);
 
 Route::middleware('auth:admin')->group(function(){
 Route::get('/dashboard',[AuthController::class,'dashboard']);
+Route::resource('/business',BusinessController::class);
+Route::get('/business/{id}/login',[BusinessController::class,'show'])->name('business.login');
+
 });

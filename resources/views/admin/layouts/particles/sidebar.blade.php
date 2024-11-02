@@ -11,11 +11,11 @@
 <ul class="aside-nav-menu">
 
     <li class="aside-nav-item">
-        <a class="aside-nav-link {{ active_if_full_match('customer') }} {{ active_if_full_match('customer/create') }} {{ active_if_full_match('customer/*/edit') }} {{ active_if_full_match('customer/*') }}" href="{{route('customer.index')}}"><span class="aside-nav-icon"><i class="fas fa-house"></i></span> <span class="aside-nav-text">Construction Site</span></a>
+        <a class="aside-nav-link {{ active_if_full_match('business') }} {{ active_if_full_match('business/create') }} {{ active_if_full_match('business/*/edit') }} {{ active_if_full_match('business/*') }}" href="{{route('admin.business.index')}}"><span class="aside-nav-icon"><i class="fas fa-house"></i></span> <span class="aside-nav-text">Business</span></a>
 
     </li>
 
-    @canany(['manage_category', 'manage_tax', 'manage_product', 'manage_unit'])
+    {{-- @canany(['manage_category', 'manage_tax', 'manage_product', 'manage_unit'])
         <li class="aside-nav-heading"> {{__('pages.sells_marketing')}} </li>
         <li class="aside-nav-item toggleable-group">
             <a class="aside-nav-link toggler {{ active_if_match('product') }} {{ active_if_match('tax') }} {{ active_if_match('category') }} {{ active_if_match('unit') }}" href="javascript:void(0)">
@@ -43,7 +43,7 @@
                 </ul>
             </div>
         </li>
-    @endcanany
+    @endcanany --}}
 
 </ul>
 

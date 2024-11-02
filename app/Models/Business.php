@@ -2,13 +2,47 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class Business extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+        self::created(function($model){
+            //create owner from same email and phone
+        $password=uniqid();
+        $user=new User();
+        $user->name=$model->name;
+        $user->email=$model->email;
+        $user->password=Hash::make($password);
+        $user->role='owner';
+        $user->business_id=$model->id;
+        $user->save();
+
+        //create employee
+        $employee=new Employee();
+        $employee->business_id=$model->id;
+        $employee->user_id=$user->id;
+        $employee->save();
+
+        // attach owner id to busniess
+        $model->owner_id=$user->id;
+        $model->save();
+        });
+
+
+        //TODO: send email password
+
+    }
 
     public function category(){
         return $this->hasMany(Category::class);
@@ -83,5 +117,17 @@ class Business extends Model
     }
     public function table(){
         return $this->hasMany(Table::class);
+    }
+
+    const BRT='Biratnagar';
+    const KTM='Kathmandu';
+
+
+
+    public static function getCity(){
+        return [
+            self::BRT,
+            self::KTM
+        ];
     }
 }

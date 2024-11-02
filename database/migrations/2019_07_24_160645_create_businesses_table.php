@@ -20,6 +20,7 @@ class CreateBusinessesTable extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('contact_person');
+            $table->string('city');
             $table->string('address');
             $table->boolean('status')->default(1)->comment('1=Active,2=InActive');
             $table->text('short_description')->nullable();
