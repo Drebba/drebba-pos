@@ -1,5 +1,5 @@
 @extends('backend.layouts.app')
-@section('title') {{__('pages.product')}} @endsection
+@section('title') Menu Management @endsection
 @section('content')
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -7,7 +7,7 @@
         <div class="wiz-box p-4 mb-4">
             <div class="row g-3">
                 <div class="col-sm-8 col-lg-9 col-xl-7">
-                    <form action="{{route('product.index')}}">
+                    <form action="{{route('menu.index')}}">
                         <div class="row g-3">
                             <div class="col-lg-6">
                                 <div class="input-with-icon">
@@ -36,7 +36,7 @@
                     </form>
                 </div>
                 <div class="col-sm-4 col-lg-3 col-xl-5 text-sm-end">
-                    <a href="{{route('product.create')}}" class="btn btn-brand-secondary btn-brand w-100 w-md-auto"><i class="fa fa-plus me-1"></i> {{__('pages.create_product')}}</a>
+                    <a href="{{route('menu.create')}}" class="btn btn-brand-secondary btn-brand w-100 w-md-auto"><i class="fa fa-plus me-1"></i> Add Menu</a>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
 
                         <div class="product-card">
                             <div class="product-card-header">
-                                <a href="{{route('product.show', [$product->id])}}" class="product-card-image-group">
+                                <a href="{{route('menu.show', [$product->id])}}" class="product-card-image-group">
                                     <img src="{{asset($product->thumbnail ? $product->thumbnail : 'backend/img/blank-thumbnail.jpg')}}">
                                 </a>
                             </div>
@@ -58,7 +58,7 @@
                                 <div class="d-flex flex-column gap-1">
                                     <div class="text-center">{{__('pages.sku')}}: {{$product->sku}}</div>
                                     <div class="d-flex justify-content-center">
-                                        <span class="text-brand-muted me-2"> {{__('pages.purchase')}} :</span>
+                                        {{-- <span class="text-brand-muted me-2"> {{__('pages.purchase')}} :</span> --}}
                                         <span>{{get_option('app_currency')}}{{$product->purchase_price}}</span>
                                     </div>
                                     <div class="d-flex justify-content-center">
@@ -68,16 +68,16 @@
 
                                     <div class="d-flex justify-content-center">
                                         <span class="text-brand-muted me-2">{{__('pages.stock_quantity')}}:</span>
-                                        <span>{{cuurentStock($product)}}  {{$product->unit->title ?? ''}}</span>
+                                        <span>{{$product->current_stock_quantity}}  {{$product->unit->title ?? ''}}</span>
                                     </div>
                                 </div>
 
                                 <ul class="list-inline text-center mt-3">
-                                    <li class="list-inline-item"><a href="{{route('product.edit', [$product->id])}}"><i class="bi bi-pencil-square"></i></a></li>
-                                    <li class="list-inline-item"><a href="{{route('product.show', [$product->id])}}" class="text-brand-muted"><i class="bi bi-eye"></i></a></li>
+                                    <li class="list-inline-item"><a href="{{route('menu.edit', [$product->id])}}"><i class="bi bi-pencil-square"></i></a></li>
+                                    <li class="list-inline-item"><a href="{{route('menu.show', [$product->id])}}" class="text-brand-muted"><i class="bi bi-eye"></i></a></li>
                                     <li class="list-inline-item">
                                         <a href="javascript:void(0);" onclick="$(this).confirmDelete($('#delete-{{$key}}'))" class="text-danger"><i class="bi bi-trash3"></i></a>
-                                        <form action="{{ route('product.destroy',$product->id) }}" method="post" id="delete-{{$key}}"> @csrf @method('delete') </form>
+                                        <form action="{{ route('menu.destroy',$product->id) }}" method="post" id="delete-{{$key}}"> @csrf @method('delete') </form>
                                     </li>
 
                                 </ul>

@@ -24,6 +24,7 @@ class CategoryController extends Controller
 
         return view('backend.category.index',[
             'categories' =>Auth::user()->business->category()
+            ->where('type',0)
             ->orderBy('id', 'DESC')->get()
         ]);
     }
@@ -40,7 +41,7 @@ class CategoryController extends Controller
         } // end permission checking
 
         return view('backend.category.create',[
-            'categories' =>Auth::user()->business->category()->orderBy('id', 'DESC')->get()
+            'categories' =>Auth::user()->business->category()->where('type',0)->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -59,6 +60,7 @@ class CategoryController extends Controller
         $category = new Category();
         $category->title = $request->category['title'];
         $category->business_id = Auth::user()->business_id;
+        $category->type = 0;
         $category->save();
         return response($category);
     }

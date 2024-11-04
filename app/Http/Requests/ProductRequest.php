@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
         $rules = [
             'title' => 'required|max:255',
             'category_id' => 'required|numeric',
-            'purchase_price' => 'required|numeric|min:0',
+            'purchase_price' => 'nullable|numeric|min:0',
             'sell_price' => 'required|numeric|min:0',
             'tax_id' => 'required|numeric',
             'price_type' => 'required|numeric',

@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use Toastr;
 use PDF;
 
-class ProductController extends Controller
+class MenuController extends Controller
 {
     use RedirectControlTrait;
 
@@ -30,7 +30,7 @@ class ProductController extends Controller
         } // end permission checking
 
 
-        $products = Auth::user()->business->product()->where('type',0)->orderBy('id', 'DESC');
+        $products = Auth::user()->business->product()->where('type',1)->orderBy('id', 'DESC');
 
         if ($request->category_id != ''){
             $products = $products->where('category_id', $request->category_id);
@@ -46,9 +46,9 @@ class ProductController extends Controller
 
         $products = $products->with('unit')->paginate(24);
 
-        $categories = Category::select('id', 'title')->get();
+        $categories = Category::where('type',1)->select('id', 'title')->get();
 
-        return view ('backend.product.index', [
+        return view ('backend.menu.index', [
             'products' => $products,
             'categories' => $categories,
         ]);
@@ -66,10 +66,10 @@ class ProductController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        return view('backend.product.create', [
-            'categories' => Auth::user()->business->category()->where('status', '1')->get(),
+        return view('backend.menu.create', [
+            'categories' => Auth::user()->business->category()->where('type',1)->where('status', '1')->get(),
             'taxes' => Auth::user()->business->tax()->orderBy('title', 'asc')->get(),
-            'units' => Auth::user()->business->unit()->orderBy('title', 'asc')->get(),
+            'units' => Auth::user()->business->unit()->where('type',1)->orderBy('title', 'asc')->get(),
             'new_sku' => str_pad(Product::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT),
         ]);
     }
@@ -99,12 +99,14 @@ class ProductController extends Controller
         $product = new Product();
         $request['business_id']=Auth::user()->business_id;
         $product->fill($request->all());
+        $product->purchase_price=$request->purchase_price??1;
         if($request->hasFile('thumbnail')){
             $product->thumbnail = $request->thumbnail->move('uploads/product/', Str::random(40) . '.' . $request->thumbnail->extension());
         }
+        $product->type=1;
         $product->save();
 
-        return $this->controlRedirection($request, 'product', 'Product');
+        return $this->controlRedirection($request, 'menu', 'Product');
     }
 
     /**
@@ -123,7 +125,7 @@ class ProductController extends Controller
         $last_30_days_sell = $this->last30DaysSell($product);
 
 
-        return view('backend.product.show', [
+        return view('backend.menu.show', [
             'product' => $product,
             'last_30_days_sell' => $last_30_days_sell
         ]);
@@ -141,11 +143,11 @@ class ProductController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
         $data['product'] = Auth::user()->business->product()->where('id',$id)->first();
-        $data['categories'] = Auth::user()->business->category()->where('status', '1')->orderBy('title', 'asc')->get();
+        $data['categories'] = Auth::user()->business->category()->where('type',1)->where('status', '1')->orderBy('title', 'asc')->get();
         $data['taxes'] = Auth::user()->business->tax()->orderBy('title', 'asc')->get();
-        $data['units'] = Auth::user()->business->unit()->orderBy('title', 'asc')->get();
+        $data['units'] = Auth::user()->business->unit()->where('type',1)->orderBy('title', 'asc')->get();
 
-        return view('backend.product.edit', $data);
+        return view('backend.menu.edit', $data);
     }
 
     /**
@@ -167,7 +169,7 @@ class ProductController extends Controller
             $product->thumbnail = $request->thumbnail->move('uploads/product/', Str::random(40) . '.' . $request->thumbnail->extension());
         }
         if ($product->save()){
-            return $this->controlRedirection($request, 'product', 'Product');
+            return $this->controlRedirection($request, 'menu', 'Product');
         }
     }
 

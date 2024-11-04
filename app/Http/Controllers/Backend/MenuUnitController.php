@@ -9,7 +9,7 @@ use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class UnitController extends Controller
+class MenuUnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,8 +22,8 @@ class UnitController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        return view('backend.unit.index',[
-            'units' =>Auth::user()->business->unit()->where('type',0)->get()
+        return view('backend.menuunit.index',[
+            'units' =>Auth::user()->business->unit()->where('type',1)->get()
         ]);
     }
 
@@ -38,8 +38,8 @@ class UnitController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        return view('backend.unit.create',[
-            'units' => Auth::user()->business->unit()->where('type',0)->orderBy('id', 'DESC')->get()
+        return view('backend.menuunit.create',[
+            'units' => Auth::user()->business->unit()->where('type',1)->orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -58,7 +58,7 @@ class UnitController extends Controller
         $unit = new Unit();
         $unit->title = $request->unit['title'];
         $unit->business_id=Auth::user()->business_id;
-        $unit->type=0;
+        $unit->type=1;
         $unit->save();
         return response($unit);
     }
@@ -86,7 +86,7 @@ class UnitController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        return view('backend.unit.edit',[
+        return view('backend.menuunit.edit',[
             'unit' => Auth::user()->business->unit()->firstOrFail($id)
         ]);
     }

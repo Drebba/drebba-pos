@@ -10,35 +10,41 @@
 
 <ul class="aside-nav-menu">
 
-    {{-- @canany(['do:anything'])
-    <li class="aside-nav-heading"> {{__('pages.Business')}} </li>
-    <li class="aside-nav-item toggleable-group">
-        <a class="aside-nav-link toggler {{ active_if_match('businesses') }} " href="javascript:void(0)">
-            <span class="aside-nav-icon aside-tooltip" data-bs-placement="top" title="{{__('pages.manage_business')}}"><i class="fas fa-boxes"></i></span>
-            <span class="aside-nav-text">Business</span>
-            <span class="aside-nav-dropdown-icon"></span>
-        </a>
-        <div class="aside-dropdown toggleable-menu {{ active_if_match('businesses') }}">
-            <ul class="aside-submenu">
-                @can('do:anything')
-                    <a class="aside-nav-link {{ active_if_full_match('category') }}" href="{{route('businesses.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">Business</span></a>
-                @endcan
 
-            </ul>
-        </div>
-    </li>
-    @endcan --}}
-
-
-    @canany(['manage_category', 'manage_tax', 'manage_product', 'manage_unit'])
-        <li class="aside-nav-heading"> {{__('pages.sells_marketing')}} </li>
+    @canany(['manage_menu_category', 'manage_menu', 'manage_menu_unit'])
+        <li class="aside-nav-heading"> Menu Management </li>
         <li class="aside-nav-item toggleable-group">
-            <a class="aside-nav-link toggler {{ active_if_match('product') }} {{ active_if_match('tax') }} {{ active_if_match('category') }} {{ active_if_match('unit') }}" href="javascript:void(0)">
-                <span class="aside-nav-icon aside-tooltip" data-bs-placement="top" title="{{__('pages.manage_product')}}"><i class="fas fa-boxes"></i></span>
-                <span class="aside-nav-text">{{__('pages.manage_product')}}</span>
+            <a class="aside-nav-link toggler {{ active_if_match('menu') }} {{ active_if_match('menu-category') }} {{ active_if_match('menu-unit') }}" href="javascript:void(0)">
+                <span class="aside-nav-icon aside-tooltip" data-bs-placement="top" title="Manage Menu"><i class="fas fa-table"></i></span>
+                <span class="aside-nav-text">Manage Menu</span>
                 <span class="aside-nav-dropdown-icon"></span>
             </a>
-            <div class="aside-dropdown toggleable-menu {{ active_if_match('product') }} {{ active_if_match('tax') }} {{ active_if_match('category') }} {{ active_if_match('unit') }}">
+            <div class="aside-dropdown toggleable-menu {{ active_if_match('menu') }} {{ active_if_match('menu-category') }} {{ active_if_match('menu-unit') }}">
+                <ul class="aside-submenu">
+                    @can('manage_menu_category')
+                        <a class="aside-nav-link {{ active_if_full_match('menu-category') }}" href="{{route('menu-category.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.categories')}}</span></a>
+                    @endcan
+
+                    @can('manage_menu_unit')
+                        <a class="aside-nav-link {{ active_if_full_match('menu-unit') }}" href="{{route('menu-unit.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.units')}}</span></a>
+                    @endcan
+
+                    @can('manage_menu')
+                            <a class="aside-nav-link {{ active_if_full_match('menu') }} {{ active_if_full_match('menu/*/edit') }} {{ active_if_full_match('menu/*') }} {{ active_if_full_match('menu/create') }} " href="{{route('menu.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">Menu</span></a>
+                    @endcan
+                </ul>
+            </div>
+        </li>
+    @endcanany
+
+    @canany(['manage_category', 'manage_product', 'manage_unit'])
+        <li class="aside-nav-item toggleable-group">
+            <a class="aside-nav-link toggler {{ active_if_match('product') }} {{ active_if_match('category') }} {{ active_if_match('unit') }}" href="javascript:void(0)">
+                <span class="aside-nav-icon aside-tooltip" data-bs-placement="top" title="{{__('pages.manage_product')}}"><i class="fas fa-boxes"></i></span>
+                <span class="aside-nav-text">Manage Ingredients</span>
+                <span class="aside-nav-dropdown-icon"></span>
+            </a>
+            <div class="aside-dropdown toggleable-menu {{ active_if_match('product') }} {{ active_if_match('category') }} {{ active_if_match('unit') }}">
                 <ul class="aside-submenu">
                     @can('manage_category')
                         <a class="aside-nav-link {{ active_if_full_match('category') }}" href="{{route('category.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.categories')}}</span></a>
@@ -48,12 +54,9 @@
                         <a class="aside-nav-link {{ active_if_full_match('unit') }}" href="{{route('unit.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.units')}}</span></a>
                     @endcan
 
-                    @can('manage_tax')
-                        <a class="aside-nav-link {{ active_if_full_match('tax') }}" href="{{route('tax.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.taxes')}}</span></a>
-                    @endcan
 
                     @can('manage_product')
-                            <a class="aside-nav-link {{ active_if_full_match('product') }} {{ active_if_full_match('product/*/edit') }} {{ active_if_full_match('product/*') }} {{ active_if_full_match('product/create') }} " href="{{route('product.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.products')}}</span></a>
+                            <a class="aside-nav-link {{ active_if_full_match('product') }} {{ active_if_full_match('product/*/edit') }} {{ active_if_full_match('product/*') }} {{ active_if_full_match('product/create') }} " href="{{route('product.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">Ingredient</span></a>
                     @endcan
                 </ul>
             </div>
@@ -61,6 +64,7 @@
     @endcanany
 
     @canany(['manage_sell_invoice'])
+    <li class="aside-nav-heading"> {{__('pages.sells_marketing')}} </li>
         <li class="aside-nav-item toggleable-group">
             <a class="aside-nav-link toggler {{ active_if_match('sell') }}" href="javascript:void(0)">
                 <span class="aside-nav-icon"><i class="fas fa-list"></i></span>

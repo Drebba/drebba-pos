@@ -37,8 +37,8 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('payment-from-customer', 'Backend\PaymentFromCustomerController');
 
 
-    Route::get('product-barcode/{id}', 'Backend\ProductController@downloadBarcode')->name('downloadProductBarcode');
     Route::resource('product', 'Backend\ProductController');
+    Route::resource('menu', 'Backend\MenuController');
     Route::get('product-filter', 'Backend\ProductController@filter')->name('product-filter');
     Route::get('change-product-status/{id}', 'Backend\ProductController@changeStatus')->name('change-product-status');
     Route::resource('tax', 'Backend\TaxController');
@@ -46,9 +46,13 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('sell', 'Backend\SellController');
 
     Route::resource('category', 'Backend\CategoryController');
+    Route::resource('menu-category', 'Backend\MenuCategoryController');
+
     Route::resource('table', 'Backend\TableController');
 
     Route::resource('unit', 'Backend\UnitController');
+    Route::resource('menu-unit', 'Backend\MenuUnitController');
+
     Route::resource('user', 'Backend\UserController');
     Route::resource('businesses', 'Backend\BusinessController');
     Route::resource('supplier', 'Backend\SupplierController');
