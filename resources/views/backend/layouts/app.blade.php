@@ -32,7 +32,6 @@
 
 <div class="panel-wrapper">
     @if (!Request::is('sell/create'))
-
     <aside class="wrapping-aside">
         <div class="wrapping-content">
             <div class="wrapping-content-header d-flex justify-content-between">

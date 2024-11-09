@@ -215,7 +215,6 @@ class PurchaseReportController extends Controller
 
 
         $purchases = Auth::user()->business->purchase()->whereBetween('purchase_date', [$start_date, $end_date]);
-
         if ($request->supplier_id){
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
         }

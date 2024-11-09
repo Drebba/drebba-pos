@@ -1026,7 +1026,7 @@ export default {
 
     beforeMount() {
 
-        axios.get('../vue/api/products').then((response) => {
+        axios.get('../vue/api/products?type=sell').then((response) => {
             this.products = response.data;
         });
 

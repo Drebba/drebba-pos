@@ -29,10 +29,6 @@
                                 <td>{{$purchase->invoice_id}}</td>
                             </tr>
 
-                            <tr>
-                                <td>{{__('pages.branch')}}</td>
-                                <td>{{$purchase->branch->title}}</td>
-                            </tr>
 
                             <tr>
                                 <td>{{__('pages.total_amount')}}</td>

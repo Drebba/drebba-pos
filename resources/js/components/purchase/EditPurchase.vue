@@ -583,7 +583,7 @@
         },
 
         beforeMount() {
-             axios.get('../../vue/api/products').then((response) => {
+             axios.get('../../vue/api/products?type=purchase').then((response) => {
                 this.products = response.data;
             });
 

@@ -44,9 +44,15 @@ class VeuApiController extends Controller
     public function tables(){
        return response(auth()->user()->business->table);
     }
-    public function products()
+    public function products(Request $request)
     {
-        $products = Auth::user()->business->product()->where('type',0)->where('status', 1)
+        $products = Auth::user()->business->product()
+        ->when($request->type=='sell',function($query){
+            $query->where('type',1);
+        })
+        ->when($request->type=='purchase',function($query){
+            $query->where('type',0);
+        })->where('status', 1)
             ->with('tax')
             ->with('unit')
             ->get();

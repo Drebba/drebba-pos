@@ -3543,7 +3543,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     var _this8 = this;
 
-    axios.get('../../vue/api/products').then(function (response) {
+    axios.get('../../vue/api/products?type=purchase').then(function (response) {
       _this8.products = response.data;
     });
     axios.get('../../vue/api/get-local-lang').then(function (response) {
@@ -4103,7 +4103,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     var _this7 = this;
 
-    axios.get('../vue/api/products').then(function (response) {
+    axios.get('../vue/api/products?type=purchase').then(function (response) {
       _this7.products = response.data;
     });
     axios.get('../vue/api/get-local-lang').then(function (response) {
@@ -6210,7 +6210,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     var _this8 = this;
 
-    axios.get('../../vue/api/products').then(function (response) {
+    axios.get('../../vue/api/products?type=sell').then(function (response) {
       _this8.products = response.data;
     });
     axios.get('../../vue/api/sell-details/' + this.sell.id).then(function (response) {
@@ -7302,7 +7302,7 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     var _this13 = this;
 
-    axios.get('../vue/api/products').then(function (response) {
+    axios.get('../vue/api/products?type=sell').then(function (response) {
       _this13.products = response.data;
     });
     axios.get('../vue/api/get-local-lang').then(function (response) {

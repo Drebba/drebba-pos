@@ -132,7 +132,7 @@ class PurchaseController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $purchase =Auth::user()->business->purchase()->where('id',$id)->firstOrFail();
+        $purchase =Auth::user()->business->purchase()->where('id',$purchase_id)->firstOrFail();
         if (!Auth::user()->can('access_to_all_branch')) {
             if ($purchase->business_id != Auth::user()->business_id){
                 return redirect()->back()->with(denied());
@@ -141,12 +141,9 @@ class PurchaseController extends Controller
 
         $pdf = PDF::loadView('backend.pdf.purchase.invoice', compact('purchase'))->setPaper('a4');
 
-        if ($action_type == 'pdf'){
-            return $pdf->download($purchase->invoice_id . '.pdf');
-        }else{
-            $pdf->save('pdf/purchase/' . $purchase->invoice_id . '.pdf');
-            return redirect('/pdf/purchase/' . $purchase->invoice_id .'.pdf');
-        }
+            return $pdf->stream($purchase->invoice_id . '.pdf');
+
+
     }
 
     /**
