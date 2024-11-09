@@ -165,6 +165,7 @@ class MenuController extends Controller
 
         $product = Product::findOrFail($id);
         $product->fill($request->all());
+        $product->purchase_price=$request->purchase_price??$product->purchase_price;
         if($request->hasFile('thumbnail')){
             $product->thumbnail = $request->thumbnail->move('uploads/product/', Str::random(40) . '.' . $request->thumbnail->extension());
         }

@@ -46,7 +46,7 @@ class VeuApiController extends Controller
     }
     public function products()
     {
-        $products = Auth::user()->business->product()->where('status', 1)
+        $products = Auth::user()->business->product()->where('type',0)->where('status', 1)
             ->with('tax')
             ->with('unit')
             ->get();
@@ -123,7 +123,7 @@ class VeuApiController extends Controller
 
     public function categories()
     {
-        $categories = Auth::user()->business->category()->where('status', 1)->orderBy('id', 'DESC')->get();
+        $categories = Auth::user()->business->category()->where('type',0)->where('status', 1)->orderBy('id', 'DESC')->get();
         return response($categories);
     }
 

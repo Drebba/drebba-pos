@@ -68,7 +68,7 @@
 
                                     <div class="d-flex justify-content-center">
                                         <span class="text-brand-muted me-2">{{__('pages.stock_quantity')}}:</span>
-                                        <span>{{cuurentStock($product)}}  {{$product->unit->title ?? ''}}</span>
+                                        <span>{{$product->current_stock_quantity}}  {{$product->unit->title ?? ''}}</span>
                                     </div>
                                 </div>
 

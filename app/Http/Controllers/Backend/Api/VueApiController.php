@@ -11,19 +11,15 @@ class VueApiController extends Controller
 {
     public function products()
     {
-        $products = Auth::user()->business->product()->where('status', 1)->with('productVariantPrices')->get();
+        $products = Auth::user()->business->product()->where('type',0)->where('status', 1)->with('productVariantPrices')->get();
         return response($products);
     }
 
     public function productCategories()
     {
-        $product_categories = Auth::user()->business->category()->where('status', 1)->get();
+        $product_categories = Auth::user()->business->category()->where('type',0)->where('status', 1)->get();
         return response($product_categories);
     }
 
-    public function productBrands()
-    {
-        $product_brands = ProductBrand::where('status', 1)->get();
-        return response($product_brands);
-    }
+
 }
