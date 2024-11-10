@@ -154,6 +154,8 @@ Route::middleware('auth', 'active')->group(function () {
     });
 
     Route::prefix('vue/api')->group(function (){
+        Route::get('order-type','Backend\VeuApiController@orderTypes');
+        Route::get('transactions','Backend\VeuApiController@transactions');
         Route::get('get-local-lang','Backend\VeuApiController@getAppLang');
         Route::get('get-app-configs','Backend\VeuApiController@getAppConfigs');
         Route::get('tables','Backend\VeuApiController@tables');

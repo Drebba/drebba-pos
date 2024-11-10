@@ -24,6 +24,9 @@
         .cursor-pointer{
             cursor: pointer;
         }
+        .bg-secondary{
+            background-color: #0C213A!important;
+        }
       </style>
 </head>
 
@@ -97,27 +100,6 @@
     });
 
 
-    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-aside-toggle="tooltip"]'))
-    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-
-    // function asideTooltip() {
-    //     let width = $(window).width();
-    //     if(width < 992) {
-    //         let tooltipTriggered = [].slice.call(document.querySelectorAll('.aside-tooltip'))
-    //         tooltipTriggered.map(function (tooltipTriggerEl) {
-    //             return new bootstrap.Tooltip(tooltipTriggerEl)
-    //         })
-    //     }
-    // }
-    // asideTooltip();
-    //
-    // $('.wrapping-aside').on('resize', function () {
-    //     asideTooltip()
-    // })
-
-
     $(document).on('click', '.toggler', function (e) {
         e.preventDefault();
         $('.wrapping-aside').find('.toggleable-group').not($(this).parents('.toggleable-group')).find('.toggleable-menu').stop().slideUp(300).queue(function () {
@@ -129,6 +111,12 @@
             $(this).toggleClass('show').dequeue();
         });
     });
+
+    // tooltip
+  var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+    new bootstrap.Tooltip(tooltipTriggerEl)
+  })
 </script>
 </body>
 

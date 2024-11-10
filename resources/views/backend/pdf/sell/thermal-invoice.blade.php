@@ -176,7 +176,9 @@
                 <p class="text-center my-0 py-0 py-1">
                     <span class="invoice_no">E-Bill : </span> <span class="bill ">{{ $sell->invoice_id }}</span>
                     <br>
+                    @if ($sell->table)
                     <span class="invoice_no">Table : </span> <span class="bill ">{{ $sell->table->name }}</span>
+                    @endif
                 </p>
 
             </div>
@@ -185,7 +187,9 @@
         <p class="text-center my-0 py-0 py-1">
             <span class="invoice_no">E-Bill : </span> <span class="bill ">{{ $sell->invoice_id }}</span>
             <br>
+            @if ($sell->table)
             <span class="invoice_no">Table : </span> <span class="bill ">{{ $sell->table->name }}</span>
+            @endif
         </p>
         @endif
 

@@ -69,9 +69,8 @@ class SellController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-
         return view('backend.sell.create',[
-            'categories' => Auth::user()->business->category()->orderBY('id', 'DESC')->get(),
+            'categories' => Auth::user()->business->category()->orderBY('id', 'DESC')->where('type',1)->get(),
         ]);
     }
 
@@ -101,14 +100,15 @@ class SellController extends Controller
         $sell->paid_amount = $paid_amount;
         $sell->status=0;
         $sell->table_id=$request->table;
+        $sell->order_mode=$request->order_mode;
         $sell->save();
 
 
         $table=Table::find($request->table);
-        if ($table) {
+        if ($table&&$request->order_mode==2&&$request->isKot) {
         $table->status=1;
         $table->current_sell_id=$sell->id;
-        $table->total_amount=$paid_amount;
+        $table->total_amount=$sell->grand_total_price;
         $table->save();
         }
 
@@ -196,20 +196,21 @@ class SellController extends Controller
         $sell->grand_total_price = $request->summary['grand_total_price'];
         $sell->due_amount = $request->summary['due_amount'];
         $sell->paid_amount = $paid_amount;
+        $sell->status=1;
         $sell->save();
 
         Auth::user()->business->sellProduct()->where('sell_id', $id)->delete();
         $this->updateSellProducts($request, $sell);
-        $table=Table::find($request->table);
 
         // if kot then just print
-        if (!$request->kot&&$table) {
+        $table=Table::find($sell->table_id);
+        if (!$request->order_mode==2&&$table&&!$request->kot) {
         $table->status=0;
         $table->current_sell_id=null;
         $table->total_amount=null;
         $table->save();
         }else if($request->kot&&$table){
-            $table->total_amount=$request->summary['sub_total'];
+            $table->total_amount=$sell->grand_total_price;
             $table->save();
         }
 
@@ -291,7 +292,7 @@ class SellController extends Controller
     }
 
     public function printInvoice(Request $request,$sell_id){
-        $kot=$request->kot??false;
+        $kot=(int)$request->kot??0;
         $sell = Auth::user()->business->sell()->where('id',$sell_id)->firstOrFail();
         return view('backend.pdf.sell.thermal-invoice',compact('sell','kot'))->render();
         // $pdf = PDF::loadView('backend.pdf.sell.rtl-invoice', compact('sell'))->setPaper('a4');

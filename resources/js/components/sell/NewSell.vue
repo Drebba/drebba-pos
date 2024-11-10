@@ -21,8 +21,8 @@
                         </div>
                     </div>
                     <div class="sell-card-body">
-                        <div class="wiz-box d-flex flex-column h-100">
-                            <div class="cart-products sell-card position-relative sell-cart-scroll">
+                        <div class="wiz-box d-flex flex-column ">
+                            <div class="cart-products sell-card position-relative sell-cart-scroll" style="height:220px!important">
                                 <h1 v-if="carts.length == 0"
                                     style="text-align: center; color:#d1d1d1;margin-top: 100px">{{ lang.empty_carts }}
                                 </h1>
@@ -45,8 +45,8 @@
                                             <td>
                                                 <span class="cart-product-title"
                                                     v-if="cart.title.length < 35">{{ cart.title }} </span>
-                                                <span class="cart-product-title" v-else>{{
-                                                    cart.title.substring(0, 35) + ".." }} </span>
+                                                <span class="cart-product-title" v-else>{{ cart.title.substring(0, 35) +
+                                                    ".." }} </span>
                                             </td>
                                             <td class="text-center w-100px">
                                                 <input type="number" v-model.number="cart.sell_price" step=".1" min=".1"
@@ -87,28 +87,24 @@
                                     <table class="table table-sm table-bordered wiz-table w-auto">
                                         <tbody>
                                             <tr>
-                                                <td> {{ lang.total }}</td>
-                                                <td width="50%">
+                                            <td>
+                                                {{ lang.total }}
                                                     <input type="number"
                                                         v-model.number="summary.sub_total = subTotalotalCartsValue"
                                                         class="form-control form-control-sm" readonly>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>{{ lang.discount }} </td>
-                                                <td>
+                                            </td>
+                                            <td>
+                                                {{ lang.discount }}
                                                     <input type="number" v-model="summary.discount"
                                                         class="form-control form-control-sm">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>{{ lang.grand_total }}</td>
-                                                <td width="50%">
+                                            </td>
+                                            <td>
+                                                {{ lang.grand_total }}
                                                     <input type="number"
                                                         v-model.number="summary.grand_total_price = grandTotalotalCartsValue"
                                                         class="form-control form-control-sm" readonly>
-                                                </td>
-                                            </tr>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -117,7 +113,7 @@
                                             @click="createPayment()">{{ lang.payment }}</a></div>
                                     <div><a href="javascript:void(0)"
                                             class="btn btn-brand btn-brand-secondary btn-sm"
-                                            @click="storeKot()">KOT </a></div>
+                                            @click="storeKotOrSell()">KOT </a></div>
                                     <!-- <div><a href="javascript:void(0)"
                                                 class="btn btn-brand btn-primary btn-sm">ESTIMATE BILL </a></div> -->
                                     <div><a href="javascript:void(0);" @click="clearAll()"
@@ -130,7 +126,38 @@
                 </div>
             </div>
             <div class="col-md-7">
-                <div class="table-card" v-if="tableWiseBilling&&showTable">
+                <!-- //order types like dinein ... -->
+                <div class="row mb-2">
+                    <div class="col-md-2" v-if="checkOrderType && !showTable">
+                        <div class="text-center text-end card bg-primary text-white cursor-pointer" title="Back to table list"
+                            style="width:125px;height:70px">
+                            <div class="card-body" @click="checkKOT"> ⬅ {{ selectedTable.name }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" v-for="(type, index) in order_types" :key="index">
+                        <label>
+                            <div class="card" style="width:125px;height:70px">
+                                <div class="card-body justify-content-center py-0 px-1 d-flex align-items-center">
+                                    <input type="radio" name="order_mode" :value="type.id"
+                                        :checked="type.name == 'Dine in'" class="mt-2" @click="order_mode = type.id">
+                                    <div class="ms-2">
+                                        <img :src="type.description" alt="" width="40" height="40">
+                                        <p> {{ type.name }} </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="text-center text-end bg-secondary card text-white cursor-pointer" title="Recent Transaction"
+                            style="width:125px;height:70px" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                            <div class="card-body" @click="getRecentTransaction"><i class="fas fa-redo fa-3x" style="transform:rotate(90deg)"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- table section display only if table module is activated -->
+                <div class="table-card" v-if="checkOrderType && showTable">
                     <div class="row">
                         <div class="col-md-3 cursor-pointer" v-for="table in all_tables" :key="table.id"
                             @click="changeTable(table)">
@@ -138,7 +165,7 @@
                                 <div class="card-body d-flex justify-content-center align-items-center text-white"
                                     style="height:80px">
                                     <div> {{ table.name }} <div v-if="table.status" class="text-center"> {{
-                                            appConfig('app_currency') }} {{ table.total_amount }} </div>
+                                        appConfig('app_currency') }} {{ table.total_amount }} </div>
                                     </div>
                                 </div>
                             </div>
@@ -146,8 +173,6 @@
                     </div>
                 </div>
                 <div class="sell-card-group" v-if="!showTable">
-                    <div class="text-right text-end" v-if="tableWiseBilling"><button class="btn btn-primary rounded-0" @click="checkKOT"> ⬅
-                            {{ selectedTable.name }}</button></div>
                     <div class="sell-card-header">
                         <div class="wiz-box p-2">
                             <div class="input-with-icon">
@@ -171,8 +196,9 @@
                     <div class="sell-card-body sell-card-product-scroll">
                         <div class="p-2">
                             <div class="row g-3 justify-content-center all-products">
+                                <!-- v-if="product.current_stock_quantity > 0" -->
                                 <div class="col-md-2 col-6" v-for="(product, index) in filteredProduct"
-                                    v-if="product.current_stock_quantity > 0" :key="product.id">
+                                    :key="product.id">
                                     <div class="single-product" :class="{ selected: isAlreadyInCart(product.id) }"
                                         @click="addToCart(product.id)">
                                         <div class="ratio ratio-16x9">
@@ -510,14 +536,7 @@
                                     </div>
                                     <div class="mt-2">
                                         <a href="javascript:void(0)" class="btn btn-brand btn-brand-primary w-100"
-                                            v-if="!this.isSellStoreProcessing"
-                                            @click="storeSell(false,true)">{{ lang.confirm_payment }}</a>
-                                        <a href="javascript:void(0)" class="btn btn-brand btn-brand-primary w-100"
-                                            v-if="this.isSellStoreProcessing">
-                                            <div class="spinner-border text-danger" role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </a>
+                                            @click="storeKotOrSell(0)">{{ lang.confirm_payment }}</a>
                                     </div>
                                 </div>
                                 <div class="mt-5" v-if="sell.invoice_id != null">
@@ -533,11 +552,20 @@
                 </div>
             </div>
         </div>
+
+    <recent-transaction :transactions="transactions" @changeCurrentId="changeId"/>
+
     </div>
     <!-- /.container-fluid -->
 </template>
 <script>
+import axios from 'axios';
+import RecentTransaction from './RecentTransaction.vue';
 export default {
+    components: {
+        RecentTransaction
+    },
+
     mounted() {
         // const ps = new PerfectScrollbar('.perfect-ps');
         // const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
@@ -590,14 +618,39 @@ export default {
             createPaymentDrawer: false,
             cardInformationArea: false,
             isSellStoreProcessing: false,
-            tableWiseBilling:true,
+            tableWiseBilling: true,
             showTable: true,
             selectedTable: {},
             kot: true,
+            order_types: [],
+            order_mode: 2,
+            currenSellId: null,
+            transactions:[]
+
         }
     },
 
     methods: {
+
+        changeId(id){
+        this.currenSellId=id;
+        this.clearAll();
+        // close the off canvas
+        const offcanvasEl = document.getElementById('offcanvasRight');
+      const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      if (offcanvas) {
+        offcanvas.hide();
+      }
+      // now get detail of the order
+      this.getSellDetail();
+       this.order_mode=1;
+        },
+        getRecentTransaction(){
+            axios.get('../vue/api/transactions').then((response) => {
+                        this.transactions = response.data;
+                    });
+        },
+
         handleBeforeUnload(event) {
             // Check if there are unsaved changes
             if (!this.kot) {
@@ -613,7 +666,9 @@ export default {
             this.showTable = false;
             this.selectedTable = table;
             this.kot = true;
+            this.currenSellId = null;
             if (table.status) {
+                this.currenSellId = table.current_sell_id;
                 this.getSellDetail();
             }
         },
@@ -621,8 +676,8 @@ export default {
             if (!this.kot) {
                 toastr["error"]("print KOT");
                 return false;
-            }else{
-            this.carts = [];
+            } else {
+                this.carts = [];
             }
             axios.get('../vue/api/tables').then((response) => {
                 this.all_tables = response.data;
@@ -657,7 +712,7 @@ export default {
             this.kot = false;
         },
         getSellDetail: function () {
-            axios.get('../../vue/api/sell-details/' + this.selectedTable.current_sell_id).then((response) => {
+            axios.get('../../vue/api/sell-details/' + this.currenSellId).then((response) => {
                 this.sell_details = response.data;
                 this.customer = this.sell_details.customer;
                 this.sell_details.sell_products.forEach((sell_product) => {
@@ -667,6 +722,14 @@ export default {
                     sell_product.tax = sell_product.product.tax;
                     this.carts.push(sell_product);
                 });
+
+                this.summary.sub_total = this.sell_details.sub_total;
+                this.summary.discount = this.sell_details.discount;
+                this.summary.grand_total_price = this.sell_details.grand_total_price;
+                this.summary.paid_amount = this.sell_details.paid_amount;
+                this.summary.due_amount = this.sell_details.due_amount;
+                this.summary.change_amount = this.sell_details.change_amount;
+
             });
         },
         isAlreadyInCart: function (product_id) {
@@ -694,117 +757,59 @@ export default {
             }
         },
 
-        updateSell:function(sell_id,onlyKot=false){
-                        if (this.summary.paid_amount >= 0){
-                            axios.patch('../../sell/' + sell_id, {carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary,table: this.selectedTable.id,kot:onlyKot}).then((response) => {
-                                // this.updated_sell = response.data.sell;
-                                // this.sell = this.updated_sell;
-                            }).catch((error) =>{
-                                console.error(error);
-                            });
-                        }else{
-                            toastr["error"]("!Paid amount cannot should be negative");
-                        }
+        updateSell: function (sell_id, onlyKot = false) {
+            if (this.summary.paid_amount >= 0) {
+                axios.patch('../../sell/' + sell_id, { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary, kot: onlyKot }).then((response) => {
+                }).catch((error) => {
+                    console.error(error);
+                });
+            } else {
+                toastr["error"]("!Paid amount cannot should be negative");
+            }
 
-            },
-            storeKot: function () {
+        },
+        storeKotOrSell: function (type=1) {
 
-                // check if kot is already done for the table and also check if tablewise billing is enable or not
-                //Note Reprint KOT option is only available for table enable module
-                if(this.tableWiseBilling&&this.selectedTable.status){
-                this.updateSell(this.selectedTable.current_sell_id,true);
+            if (this.currenSellId) {
+                this.updateSell(this.currenSellId, type);
                 setTimeout(() => {
-                    this.printInvoice(true, this.selectedTable.current_sell_id); //print kot
+                    this.printInvoice(type, this.currenSellId); //print kot
                 }, 100);
-                this.kot=true;
-                return;
-                }
+            } else {
 
                 if (this.sellStoreValidation()) {
-                if (this.carts.length != 0) {
-                    if (this.summary.paid_amount >= 0) {
-                        this.isSellStoreProcessing = true;
-                        // store sells and make it kot if its is kot btn click
-                        axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary, table: this.selectedTable.id, isKot: true }).then((response) => {
-                            this.sell = response.data.sell;
-                            this.sell.custome_sell_date = response.data.sell_date;
-                            this.clearAll();
-                            this.printInvoice(true, this.sell.id); //print kot
-
-                            // change the status of kot so that table list can be shown
-                            this.kot = true;
-
-                            // module availabe for only table module enable user
-                            if(this.tableWiseBilling){
-                                this.checkKOT();
-                            }
-
-                        }).catch((error) => {
-                            console.error(error);
-                            this.isSellStoreProcessing = false;
-                        });
-                    } else {
-                        toastr["error"]("!Paid amount cannot should be negative");
-                    }
-                } else {
-                    toastr["error"]("!Empty Cart");
-                }
-            }
-
-            },
-
-        storeSell: function (isKot = true, payment = false) {
-            // if kot is already store for this table then just print kot
-            if (this.tableWiseBilling && this.selectedTable.status) {
-
-            }
-            //if kot is done for the table and porceed to pay
-            else if (payment && this.selectedTable.status) {
-                this.invoicePrintBtn = true;
-                this.isSellStoreProcessing = false;
-                this.updateSell(this.selectedTable.current_sell_id);
-                this.clearAll();
-                this.printInvoice(false,this.selectedTable.current_sell_id);
-                return;
-            }
-
-            if (this.sellStoreValidation()) {
-                if (this.carts.length != 0) {
-                    if (this.summary.paid_amount >= 0) {
-                        this.isSellStoreProcessing = true;
-                        // store sells and make it kot if its is kot btn click
-                        axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary, table: this.selectedTable.id, isKot: isKot }).then((response) => {
-                            this.sell = response.data.sell;
-                            this.sell.custome_sell_date = response.data.sell_date;
-                            this.clearAll();
-
-                            // if the input is not for kot then just print the invoice
-                            if (!isKot) {
-                                this.invoicePrintBtn = true;
+                    if (this.carts.length != 0) {
+                        if (this.summary.paid_amount >= 0) {
+                            this.isSellStoreProcessing = true;
+                            // store sells and make it kot if   kot btn clicked
+                            axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary, table: this.selectedTable?.id??null, isKot: type, order_mode: this.order_mode }).then((response) => {
+                                this.sell = response.data.sell;
+                                this.sell.custome_sell_date = response.data.sell_date;
+                                this.currenSellId = this.sell.id;
+                                this.printInvoice(1, this.sell.id); //print kot
+                            }).catch((error) => {
+                                console.error(error);
                                 this.isSellStoreProcessing = false;
-                                this.printInvoice(false, this.sell.id);
-                            } else {
-                                this.printInvoice(true, this.sell.id);
-
-                            }
-
-                            // change the status of kot so that table list can be shown
-                            this.kot = true;
-
-                        }).catch((error) => {
-                            console.error(error);
-                            this.isSellStoreProcessing = false;
-                        });
+                            });
+                        } else {
+                            toastr["error"]("!Paid amount cannot should be negative");
+                        }
                     } else {
-                        toastr["error"]("!Paid amount cannot should be negative");
+                        toastr["error"]("!Empty Cart");
                     }
-                } else {
-                    toastr["error"]("!Empty Cart");
                 }
+            }
+            this.clearAll();
+            // change the status of kot so that table list can be shown
+            this.kot = true;
+            // module availabe for only table module enable user and also only if dine in module is selected
+            if (this.tableWiseBilling && this.order_mode == 2) {
+                this.checkKOT();
             }
         },
 
-        printInvoice: function (kot = false, sell_id) {
+
+        printInvoice: function (kot = 0, sell_id) {
             axios.get('../export/sell/print-invoice/id=' + sell_id + '?kot=' + kot)
                 .then((response) => {
                     const printableContent = response.data;
@@ -836,6 +841,7 @@ export default {
                     this.createPaymentDrawer = false;
                     this.invoicePrintBtn = false;
                     this.sell = []; // Reset sell data after printing
+                    this.currenSellId = null;
                 });
         },
 
@@ -961,23 +967,22 @@ export default {
 
     computed: {
         subTotalotalCartsValue() {
-            this.carts.forEach((element, key) => {
-                axios.get('../vue/api/product-available-stock-qty/' + element.id).then((response) => {
-                    if (response.data == 0) {
-                        this.carts.splice(key, 1)
-                    };
-                    if (element.quantity > response.data) {
-                        toastr["error"]("This quantity is not available");
-                        element.quantity = response.data;
-                    }
-                });
-            });
-
             let total = 0;
             this.carts.forEach((cart) => {
                 total += cart.total_price;
             });
             return parseFloat((total).toFixed(2));
+        },
+
+        checkOrderType() {
+            if (this.order_mode != 2) {
+                this.showTable = false;
+                this.selectedTable=null;
+            } else if (this.tableWiseBilling && this.order_mode == '2') {
+                this.showTable = true;
+            }
+            this.clearAll();
+            return false;
         },
 
         grandTotalotalCartsValue() {
@@ -1026,6 +1031,10 @@ export default {
 
     beforeMount() {
 
+        axios.get('../vue/api/order-type').then((response) => {
+            this.order_types = response.data;
+        });
+
         axios.get('../vue/api/products?type=sell').then((response) => {
             this.products = response.data;
         });
@@ -1042,12 +1051,12 @@ export default {
             this.customers = response.data;
             this.configs.forEach((element) => {
                 if (element.option_key == 'default_customer') {
-              // fetch table only when if table module is enable
-            axios.get('../vue/api/tables').then((response) => {
-            this.all_tables = response.data;
-           });
-                     this.tableWiseBilling=true;
-                     this.showTable=true;
+                    // fetch table only when if table module is enable
+                    axios.get('../vue/api/tables').then((response) => {
+                        this.all_tables = response.data;
+                    });
+                    this.tableWiseBilling = true;
+                    this.showTable = true;
                 }
                 if (element.option_key == 'default_customer') {
                     this.customers.forEach((customer) => {

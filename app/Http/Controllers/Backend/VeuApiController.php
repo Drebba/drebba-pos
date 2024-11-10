@@ -18,6 +18,8 @@ use App\Models\Settings;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\OrderType;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class VeuApiController extends Controller
@@ -124,13 +126,35 @@ class VeuApiController extends Controller
         return $debit - $credit;
     }
 
-
-
-
     public function categories()
     {
         $categories = Auth::user()->business->category()->where('type',0)->where('status', 1)->orderBy('id', 'DESC')->get();
         return response($categories);
+    }
+
+    public function transactions()
+    {
+        $transactions = Auth::user()->business->sell()->limit(12)->orderBy('id', 'DESC')->get();
+        $transactions=$transactions->map(function($transaction){
+            return [
+                'id' => $transaction->id,
+                'invoice_id' => $transaction->invoice_id,
+                'grand_total_price' => $transaction->grand_total_price,
+                'discount' => $transaction->discount,
+                'table_name' => $transaction->table?->name??null,
+                'order_mode_name'=>$transaction->orderMode?->name??null,
+                'order_mode'=>$transaction->order_mode,
+                'sell_date'=>Carbon::parse($transaction->sell_date)->format(get_option('app_date_format')),
+
+            ];
+        });
+        return response($transactions);
+    }
+
+    public function orderTypes()
+    {
+        $types = OrderType::all();
+        return response($types);
     }
 
     public function brands()
@@ -171,6 +195,7 @@ class VeuApiController extends Controller
         $customer->phone = $request->new_customer['phone'];
         $customer->email = $request->new_customer['email'];
         $customer->address = $request->new_customer['address'];
+        $customer->business_id = Auth::user()->business_id;
         $customer->save();
         return response($customer);
     }

@@ -9,7 +9,7 @@ use App\Models\PaymentFromCustomer;
 use App\Models\Sell;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Toastr;
 use File;
@@ -65,6 +65,7 @@ class CustomerController extends Controller
         if($request->hasFile('photo')){
             $customer->photo = $request->photo->move('uploads/customer/', Str::random(20) . '.' . $request->photo->extension());;
         }
+        $customer->business_id=Auth::user()->business_id;
         $customer->save();
         Toastr::success('Customer has been created', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         return redirect()->back();

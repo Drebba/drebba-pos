@@ -32,6 +32,11 @@ class Sell extends Model
         return $this->belongsTo(Table::class, 'table_id','id');
     }
 
+    public function orderMode()
+    {
+        return $this->belongsTo(OrderType::class, 'order_mode','id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
