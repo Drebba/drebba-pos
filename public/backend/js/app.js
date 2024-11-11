@@ -6884,8 +6884,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     changeId: function changeId(id) {
-      this.currenSellId = id;
-      this.clearAll(); // close the off canvas
+      this.currenSellId = id; //   this.clearAll();
+      // close the off canvas
 
       var offcanvasEl = document.getElementById('offcanvasRight');
       var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
@@ -7257,6 +7257,7 @@ __webpack_require__.r(__webpack_exports__);
         this.selectedTable = null;
       } else if (this.tableWiseBilling && this.order_mode == '2') {
         this.showTable = true;
+        return true;
       }
 
       this.clearAll();

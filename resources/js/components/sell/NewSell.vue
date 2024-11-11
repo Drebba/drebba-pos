@@ -980,6 +980,7 @@ export default {
                 this.selectedTable=null;
             } else if (this.tableWiseBilling && this.order_mode == '2') {
                 this.showTable = true;
+                return true;
             }
             this.clearAll();
             return false;
