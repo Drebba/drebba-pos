@@ -7255,7 +7255,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.order_mode != 2) {
         this.showTable = false;
         this.selectedTable = null;
-      } else if (this.tableWiseBilling && this.order_mode == '2') {
+      } else if (this.tableWiseBilling && this.order_mode == 2) {
         this.showTable = true;
         return true;
       }
@@ -7321,7 +7321,9 @@ __webpack_require__.r(__webpack_exports__);
         return element.option_key === 'table_billing';
       });
 
-      if (tableBillingConfig && tableBillingConfig.option_value === '1') {
+      console.log(_this12.configs);
+
+      if (tableBillingConfig && tableBillingConfig.option_value == 1) {
         // Fetch table data only if table billing is enabled
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/tables').then(function (response) {
           _this12.all_tables = response.data;

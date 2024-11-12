@@ -44,7 +44,7 @@ class CurrencyController extends Controller
         $currency->business_id=Auth::user()->business_id;
         $currency->save();
 
-        $option = Auth::where('business_id',Auth::user()->business_id)->firstOrCreate(['option_key' => 'app_currency']);
+        $option = Settings::where('business_id',Auth::user()->business_id)->firstOrCreate(['option_key' => 'app_currency']);
         $option->option_value = $currency->currency;
         $option->business_id=Auth::user()->business_id;
         $option->save();

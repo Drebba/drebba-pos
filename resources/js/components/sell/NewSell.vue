@@ -978,7 +978,7 @@ export default {
             if (this.order_mode != 2) {
                 this.showTable = false;
                 this.selectedTable=null;
-            } else if (this.tableWiseBilling && this.order_mode == '2') {
+            } else if (this.tableWiseBilling && this.order_mode == 2) {
                 this.showTable = true;
                 return true;
             }
@@ -1050,7 +1050,9 @@ export default {
     (element) => element.option_key === 'table_billing'
 );
 
-if (tableBillingConfig && tableBillingConfig.option_value === '1') {
+console.log(this.configs);
+
+if (tableBillingConfig && tableBillingConfig.option_value == 1) {
     // Fetch table data only if table billing is enabled
     axios.get('../vue/api/tables').then((response) => {
         this.all_tables = response.data;

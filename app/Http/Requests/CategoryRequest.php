@@ -25,7 +25,7 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'category.title' => ['required','string','max:255','unique:categories,title'],
+            'category.title' => ['required','string','max:255'],
         ];
 
         if ($this->getMethod() == 'PATCH') {
