@@ -7321,7 +7321,7 @@ __webpack_require__.r(__webpack_exports__);
         return element.option_key === 'table_billing';
       });
 
-      console.log(_this12.configs);
+      console.log(tableBillingConfig);
 
       if (tableBillingConfig && tableBillingConfig.option_value == 1) {
         // Fetch table data only if table billing is enabled
@@ -38054,28 +38054,32 @@ var render = function() {
                                   "div",
                                   { staticClass: "d-flex invoice-summary" },
                                   [
-                                    _c("div", { staticClass: "col-6" }, [
-                                      _c("div", { staticClass: "mb-2" }, [
-                                        _c("span", [
-                                          _vm._v(
-                                            _vm._s(_vm.lang.customer_name) +
-                                              ": " +
-                                              _vm._s(_vm.customer.name) +
-                                              " "
-                                          )
+                                    _vm.customer
+                                      ? _c("div", { staticClass: "col-6" }, [
+                                          _c("div", { staticClass: "mb-2" }, [
+                                            _c("span", [
+                                              _vm._v(
+                                                _vm._s(_vm.lang.customer_name) +
+                                                  ": " +
+                                                  _vm._s(_vm.customer.name) +
+                                                  " "
+                                              )
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("div", [
+                                            _c("span", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.lang.customer_phone
+                                                ) +
+                                                  ": " +
+                                                  _vm._s(_vm.customer.phone)
+                                              )
+                                            ])
+                                          ])
                                         ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("div", [
-                                        _c("span", [
-                                          _vm._v(
-                                            _vm._s(_vm.lang.customer_phone) +
-                                              ": " +
-                                              _vm._s(_vm.customer.phone)
-                                          )
-                                        ])
-                                      ])
-                                    ]),
+                                      : _vm._e(),
                                     _vm._v(" "),
                                     _c(
                                       "div",

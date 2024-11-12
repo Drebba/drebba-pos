@@ -297,7 +297,7 @@
                                 <div class="mb-3" v-if="carts.length > 0">
                                     <div class="border-bottom border-bottom pb-3 mb-4">
                                         <div class="d-flex invoice-summary">
-                                            <div class="col-6" v-if="">
+                                            <div class="col-6" v-if="customer">
                                                 <div class="mb-2">
                                                     <span>{{ lang.customer_name }}: {{ customer.name }} </span>
                                                 </div>
@@ -1050,7 +1050,7 @@ export default {
     (element) => element.option_key === 'table_billing'
 );
 
-console.log(this.configs);
+console.log(tableBillingConfig);
 
 if (tableBillingConfig && tableBillingConfig.option_value == 1) {
     // Fetch table data only if table billing is enabled

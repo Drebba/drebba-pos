@@ -26,7 +26,7 @@ class VeuApiController extends Controller
 {
     public function getAppConfigs()
     {
-        return response(Settings::all());
+        return response(Settings::where('business_id',Auth::user()->business_id)->get());
     }
 
     public function getAppLang()
