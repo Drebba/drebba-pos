@@ -41,6 +41,17 @@
                         </div>
                     </div>
 
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="phone" class="custom-label">Table Billing<span class="text-danger">*</span></label>
+                            <select name="table_billing" id="" class="form-control form-select" required>
+                                <option value="1" {{get_option('table_billing')?'selected':''}}>Enable</option>
+                                <option value="0" {{!get_option('table_billing')?'selected':''}}>Disable</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="default_customer" class="custom-label">{{__('pages.default_customer')}} <span class="text-danger">*</span></label>

@@ -786,7 +786,7 @@ export default {
                                 this.sell = response.data.sell;
                                 this.sell.custome_sell_date = response.data.sell_date;
                                 this.currenSellId = this.sell.id;
-                                this.printInvoice(1, this.sell.id); //print kot
+                                this.printInvoice(type, this.sell.id); //print kot
                             }).catch((error) => {
                                 console.error(error);
                                 this.isSellStoreProcessing = false;
@@ -1046,19 +1046,28 @@ export default {
 
         axios.get('../vue/api/get-app-configs').then((response) => {
             this.configs = response.data;
-        });
+            const tableBillingConfig = this.configs.find(
+    (element) => element.option_key === 'table_billing'
+);
+
+if (tableBillingConfig && tableBillingConfig.option_value === '1') {
+    // Fetch table data only if table billing is enabled
+    axios.get('../vue/api/tables').then((response) => {
+        this.all_tables = response.data;
+    });
+    this.tableWiseBilling = true;
+    this.showTable = true;
+} else {
+    this.tableWiseBilling = false;
+    this.showTable = false;
+}
+    });
+
 
         axios.get('../vue/api/customers').then((response) => {
             this.customers = response.data;
+
             this.configs.forEach((element) => {
-                if (element.option_key == 'default_customer') {
-                    // fetch table only when if table module is enable
-                    axios.get('../vue/api/tables').then((response) => {
-                        this.all_tables = response.data;
-                    });
-                    this.tableWiseBilling = true;
-                    this.showTable = true;
-                }
                 if (element.option_key == 'default_customer') {
                     this.customers.forEach((customer) => {
                         if (customer.id == element.option_value) {

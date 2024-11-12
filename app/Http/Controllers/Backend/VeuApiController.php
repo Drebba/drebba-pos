@@ -134,7 +134,7 @@ class VeuApiController extends Controller
 
     public function transactions()
     {
-        $transactions = Auth::user()->business->sell()->limit(12)->orderBy('id', 'DESC')->get();
+        $transactions = Auth::user()->business->sell()->whereDate('created_at',today())->limit(12)->orderBy('id', 'DESC')->get();
         $transactions=$transactions->map(function($transaction){
             return [
                 'id' => $transaction->id,

@@ -6884,8 +6884,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     changeId: function changeId(id) {
-      this.currenSellId = id; //   this.clearAll();
-      // close the off canvas
+      this.currenSellId = id;
+      this.clearAll(); // close the off canvas
 
       var offcanvasEl = document.getElementById('offcanvasRight');
       var offcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
@@ -7067,7 +7067,7 @@ __webpack_require__.r(__webpack_exports__);
                 _this6.sell.custome_sell_date = response.data.sell_date;
                 _this6.currenSellId = _this6.sell.id;
 
-                _this6.printInvoice(1, _this6.sell.id); //print kot
+                _this6.printInvoice(type, _this6.sell.id); //print kot
 
               })["catch"](function (error) {
                 console.error(error);
@@ -7316,20 +7316,27 @@ __webpack_require__.r(__webpack_exports__);
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/get-app-configs').then(function (response) {
       _this12.configs = response.data;
+
+      var tableBillingConfig = _this12.configs.find(function (element) {
+        return element.option_key === 'table_billing';
+      });
+
+      if (tableBillingConfig && tableBillingConfig.option_value === '1') {
+        // Fetch table data only if table billing is enabled
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/tables').then(function (response) {
+          _this12.all_tables = response.data;
+        });
+        _this12.tableWiseBilling = true;
+        _this12.showTable = true;
+      } else {
+        _this12.tableWiseBilling = false;
+        _this12.showTable = false;
+      }
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/customers').then(function (response) {
       _this12.customers = response.data;
 
       _this12.configs.forEach(function (element) {
-        if (element.option_key == 'default_customer') {
-          // fetch table only when if table module is enable
-          axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/tables').then(function (response) {
-            _this12.all_tables = response.data;
-          });
-          _this12.tableWiseBilling = true;
-          _this12.showTable = true;
-        }
-
         if (element.option_key == 'default_customer') {
           _this12.customers.forEach(function (customer) {
             if (customer.id == element.option_value) {

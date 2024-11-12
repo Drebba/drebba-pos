@@ -112,7 +112,6 @@ class SettingsController extends Controller
         $inputs = Arr::except($request->all(), ['_token']);
         $keys = [];
 
-
         foreach ($inputs as $k => $v) {
             $keys[$k] = $k;
         }
@@ -120,6 +119,8 @@ class SettingsController extends Controller
         foreach ($inputs as $key => $value) {
 
             $option = Settings::where('business_id',Auth::user()->business_id)->firstOrCreate(['option_key' => $key]);
+            $option->business_id=Auth::user()->business_id;
+
             if($request->hasFile('app_logo') && $key == 'app_logo'){
                 $option->option_value = $request->app_logo->move('uploads/settings/', Str::random(20) . '.' . $request->app_logo->extension());
                 $option->save();
@@ -131,7 +132,6 @@ class SettingsController extends Controller
                 $option->save();
             }else {
                 $option->option_value = $value;
-                $option->business_id=Auth::user()->business_id;
                 $option->save();
             }
 
