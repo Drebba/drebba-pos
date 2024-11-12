@@ -6922,7 +6922,7 @@ __webpack_require__.r(__webpack_exports__);
       this.kot = true;
       this.currenSellId = null;
 
-      if (table.status) {
+      if (parseInt(table.status)) {
         this.currenSellId = table.current_sell_id;
         this.getSellDetail();
       }
@@ -37483,7 +37483,9 @@ var render = function() {
                           {
                             class:
                               "card rounded-0 " +
-                              (table.status ? "bg-danger" : "bg-success")
+                              (parseInt(table.status)
+                                ? "bg-danger"
+                                : "bg-success")
                           },
                           [
                             _c(
@@ -37496,7 +37498,7 @@ var render = function() {
                               [
                                 _c("div", [
                                   _vm._v(" " + _vm._s(table.name) + " "),
-                                  table.status
+                                  parseInt(table.status)
                                     ? _c(
                                         "div",
                                         { staticClass: "text-center" },

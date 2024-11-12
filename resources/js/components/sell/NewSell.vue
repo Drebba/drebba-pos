@@ -161,10 +161,10 @@
                     <div class="row">
                         <div class="col-md-3 cursor-pointer" v-for="table in all_tables" :key="table.id"
                             @click="changeTable(table)">
-                            <div :class="'card rounded-0 ' + (table.status ? 'bg-danger' : 'bg-success')">
+                            <div :class="'card rounded-0 ' + (parseInt(table.status) ? 'bg-danger' : 'bg-success')">
                                 <div class="card-body d-flex justify-content-center align-items-center text-white"
                                     style="height:80px">
-                                    <div> {{ table.name }} <div v-if="table.status" class="text-center"> {{
+                                    <div> {{ table.name }} <div v-if="parseInt(table.status)" class="text-center"> {{
                                         appConfig('app_currency') }} {{ table.total_amount }} </div>
                                     </div>
                                 </div>
@@ -667,7 +667,7 @@ export default {
             this.selectedTable = table;
             this.kot = true;
             this.currenSellId = null;
-            if (table.status) {
+            if (parseInt(table.status)) {
                 this.currenSellId = table.current_sell_id;
                 this.getSellDetail();
             }
