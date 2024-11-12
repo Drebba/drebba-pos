@@ -22,7 +22,7 @@ class MenuCategoryController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        return view('backend.category.index',[
+        return view('backend.menucategory.index',[
             'categories' =>Auth::user()->business->category()
             ->where('type',1)->orderBy('id', 'DESC')->get()
         ]);
