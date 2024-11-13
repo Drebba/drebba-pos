@@ -6815,6 +6815,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6825,6 +6829,7 @@ __webpack_require__.r(__webpack_exports__);
     // const ps = new PerfectScrollbar('.perfect-ps');
     // const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
     // const psForCart = new PerfectScrollbar('.sell-cart-scroll');
+    // console.log(this.customers);
     window.addEventListener("beforeunload", this.handleBeforeUnload);
   },
   beforeUnmount: function beforeUnmount() {
@@ -7321,8 +7326,6 @@ __webpack_require__.r(__webpack_exports__);
         return element.option_key === 'table_billing';
       });
 
-      console.log(tableBillingConfig);
-
       if (tableBillingConfig && tableBillingConfig.option_value == 1) {
         // Fetch table data only if table billing is enabled
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/tables').then(function (response) {
@@ -7338,13 +7341,13 @@ __webpack_require__.r(__webpack_exports__);
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/customers').then(function (response) {
       _this12.customers = response.data;
 
-      _this12.configs.forEach(function (element) {
-        if (element.option_key == 'default_customer') {
-          _this12.customers.forEach(function (customer) {
-            if (customer.id == element.option_value) {
-              _this12.customer = customer;
-            }
-          });
+      var defaultCustomer = _this12.configs.find(function (element) {
+        return element.option_key == 'default_customer';
+      });
+
+      _this12.customers.forEach(function (customer) {
+        if (customer.id == defaultCustomer.option_value) {
+          _this12.customer = customer;
         }
       });
     });
@@ -8662,7 +8665,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.custom-offcanvas-width[data-v-30ea88f1] {\n  width: 50vw; /* Set the desired width, e.g., 50% of the viewport */\n  max-width: 100%; /* Ensure it does not exceed viewport width */\n}", ""]);
+exports.push([module.i, "\n@media screen and (min-width: 768px) {\n.custom-offcanvas-width[data-v-30ea88f1] {\n  width: 50vw; /* Set the desired width, e.g., 50% of the viewport */\n  max-width: 100%; /* Ensure it does not exceed viewport width */\n}\n}\n", ""]);
 
 // exports
 
@@ -36768,7 +36771,7 @@ var render = function() {
     { staticClass: "container-fluid" },
     [
       _c("div", { staticClass: "row g-3 sell-pos" }, [
-        _c("div", { staticClass: "col-md-5" }, [
+        _c("div", { staticClass: "col-md-5 order-2 order-md-1" }, [
           _c("div", { staticClass: "sell-card-group" }, [
             _c("div", { staticClass: "sell-card-header pb-2 mb-2" }, [
               _c("div", { staticClass: "wiz-box p-2" }, [
@@ -37347,26 +37350,145 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-7" }, [
-          _c(
-            "div",
-            { staticClass: "row mb-2" },
-            [
+        _c("div", { staticClass: "col-md-7 order-1 order-md-2" }, [
+          _c("div", { staticClass: " mb-2 d-none d-md-block" }, [
+            _c(
+              "div",
+              { staticClass: "row" },
+              [
+                _vm.checkOrderType && !_vm.showTable
+                  ? _c("div", { staticClass: "col-md-2 col-6  my-1 my-md-0" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-center text-end card bg-primary text-white cursor-pointer",
+                          staticStyle: { width: "125px", height: "70px" },
+                          attrs: { title: "Back to table list" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "card-body",
+                              on: { click: _vm.checkKOT }
+                            },
+                            [_vm._v(" ⬅ " + _vm._s(_vm.selectedTable.name))]
+                          )
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._l(_vm.order_types, function(type, index) {
+                  return _c(
+                    "div",
+                    { key: index, staticClass: "col-md-2 col-6  my-1 my-md-0" },
+                    [
+                      _c("label", [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "card",
+                            staticStyle: { width: "125px", height: "70px" }
+                          },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "card-body justify-content-center py-0 px-1 d-flex align-items-center"
+                              },
+                              [
+                                _c("input", {
+                                  staticClass: "mt-2",
+                                  attrs: { type: "radio", name: "order_mode" },
+                                  domProps: {
+                                    value: type.id,
+                                    checked: type.name == "Dine in"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.order_mode = type.id
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "ms-2" }, [
+                                  _c("img", {
+                                    attrs: {
+                                      src: type.description,
+                                      alt: "",
+                                      width: "40",
+                                      height: "40"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c("p", [
+                                    _vm._v(" " + _vm._s(type.name) + " ")
+                                  ])
+                                ])
+                              ]
+                            )
+                          ]
+                        )
+                      ])
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-2 col-6 my-1 my-md-0" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "text-center text-end bg-secondary card text-white cursor-pointer",
+                      staticStyle: { width: "125px", height: "70px" },
+                      attrs: {
+                        title: "Recent Transaction",
+                        "data-bs-toggle": "offcanvas",
+                        "data-bs-target": "#offcanvasRight",
+                        "aria-controls": "offcanvasRight"
+                      }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "card-body",
+                          on: { click: _vm.getRecentTransaction }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-redo fa-3x",
+                            staticStyle: { transform: "rotate(90deg)" }
+                          })
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: " mb-2 d-block d-md-none" }, [
+            _c("div", { staticClass: "row" }, [
               _vm.checkOrderType && !_vm.showTable
-                ? _c("div", { staticClass: "col-md-2" }, [
+                ? _c("div", { staticClass: "col-4  my-1" }, [
                     _c(
                       "div",
                       {
                         staticClass:
                           "text-center text-end card bg-primary text-white cursor-pointer",
-                        staticStyle: { width: "125px", height: "70px" },
                         attrs: { title: "Back to table list" }
                       },
                       [
                         _c(
-                          "div",
+                          "button",
                           {
-                            staticClass: "card-body",
+                            staticClass: "btn btn-primary",
                             on: { click: _vm.checkKOT }
                           },
                           [_vm._v(" ⬅ " + _vm._s(_vm.selectedTable.name))]
@@ -37376,91 +37498,55 @@ var render = function() {
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm._l(_vm.order_types, function(type, index) {
-                return _c("div", { key: index, staticClass: "col-md-2" }, [
-                  _c("label", [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "card",
-                        staticStyle: { width: "125px", height: "70px" }
-                      },
-                      [
-                        _c(
-                          "div",
-                          {
-                            staticClass:
-                              "card-body justify-content-center py-0 px-1 d-flex align-items-center"
-                          },
-                          [
-                            _c("input", {
-                              staticClass: "mt-2",
-                              attrs: { type: "radio", name: "order_mode" },
-                              domProps: {
-                                value: type.id,
-                                checked: type.name == "Dine in"
-                              },
-                              on: {
-                                click: function($event) {
-                                  _vm.order_mode = type.id
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "ms-2" }, [
-                              _c("img", {
-                                attrs: {
-                                  src: type.description,
-                                  alt: "",
-                                  width: "40",
-                                  height: "40"
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("p", [_vm._v(" " + _vm._s(type.name) + " ")])
-                            ])
-                          ]
-                        )
-                      ]
-                    )
-                  ])
-                ])
-              }),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-md-2" }, [
+              _c("div", { staticClass: "col-2  my-1" }, [
                 _c(
-                  "div",
+                  "button",
                   {
-                    staticClass:
-                      "text-center text-end bg-secondary card text-white cursor-pointer",
-                    staticStyle: { width: "125px", height: "70px" },
+                    staticClass: "btn btn-primary bg-secondary",
+                    attrs: { title: "Print KOT" },
+                    on: {
+                      click: function($event) {
+                        return _vm.storeKotOrSell()
+                      }
+                    }
+                  },
+                  [_vm._v("KOT")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-3  my-1" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn bg-secondary text-white",
+                    on: {
+                      click: function($event) {
+                        return _vm.createPayment()
+                      }
+                    }
+                  },
+                  [_vm._v("Payment")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-2 my-1" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
                     attrs: {
                       title: "Recent Transaction",
                       "data-bs-toggle": "offcanvas",
                       "data-bs-target": "#offcanvasRight",
                       "aria-controls": "offcanvasRight"
-                    }
+                    },
+                    on: { click: _vm.getRecentTransaction }
                   },
-                  [
-                    _c(
-                      "div",
-                      {
-                        staticClass: "card-body",
-                        on: { click: _vm.getRecentTransaction }
-                      },
-                      [
-                        _c("i", {
-                          staticClass: "fas fa-redo fa-3x",
-                          staticStyle: { transform: "rotate(90deg)" }
-                        })
-                      ]
-                    )
-                  ]
+                  [_c("i", { staticClass: "fas fa-redo" })]
                 )
               ])
-            ],
-            2
-          ),
+            ])
+          ]),
           _vm._v(" "),
           _vm.checkOrderType && _vm.showTable
             ? _c("div", { staticClass: "table-card" }, [
@@ -37472,7 +37558,7 @@ var render = function() {
                       "div",
                       {
                         key: table.id,
-                        staticClass: "col-md-3 cursor-pointer",
+                        staticClass: "col-md-3 col-4 cursor-pointer",
                         on: {
                           click: function($event) {
                             return _vm.changeTable(table)
@@ -37647,7 +37733,7 @@ var render = function() {
                         _vm._l(_vm.filteredProduct, function(product, index) {
                           return _c(
                             "div",
-                            { key: product.id, staticClass: "col-md-2 col-6" },
+                            { key: product.id, staticClass: "col-md-2 col-4" },
                             [
                               _c(
                                 "div",
@@ -38013,28 +38099,6 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body p-0" }, [
-              _c("div", { staticClass: "text-center bg-soft-primary p-3" }, [
-                _c("h3", { staticClass: "company-name fw-medium" }, [
-                  _vm._v(_vm._s(_vm.appConfig("app_name")))
-                ]),
-                _vm._v(" "),
-                _c("p", { staticClass: "address mb-1" }, [
-                  _vm._v(
-                    _vm._s(_vm.lang.address) +
-                      ": " +
-                      _vm._s(_vm.appConfig("address"))
-                  )
-                ]),
-                _vm._v(" "),
-                _c("p", { staticClass: "vat mb-1" }, [
-                  _vm._v(
-                    _vm._s(_vm.lang.vat_reg_number) +
-                      " : " +
-                      _vm._s(_vm.appConfig("vat_reg_no"))
-                  )
-                ])
-              ]),
-              _vm._v(" "),
               _c("div", { staticClass: "p-4" }, [
                 _c("div", { staticClass: "row g-4 gx-lg-5" }, [
                   _c(
@@ -38489,74 +38553,6 @@ var render = function() {
                       _vm._v(" "),
                       _vm.sell.invoice_id != null
                         ? _c("div", { staticClass: "row" }, [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "col-md-12 border-bottom-dotted pb-1"
-                              },
-                              [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass: "d-flex pt-1 invoice-summary"
-                                  },
-                                  [
-                                    _c("div", { staticClass: "col-6" }, [
-                                      _c("div", { staticClass: "mb-2" }, [
-                                        _c("span", [
-                                          _vm._v(
-                                            _vm._s(_vm.lang.customer_name) +
-                                              ": " +
-                                              _vm._s(_vm.sell.customer.name)
-                                          )
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("div", [
-                                        _c("span", [
-                                          _vm._v(
-                                            _vm._s(_vm.lang.customer_phone) +
-                                              ": " +
-                                              _vm._s(_vm.sell.customer.phone)
-                                          )
-                                        ])
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "col-6 text-end" },
-                                      [
-                                        _c("div", { staticClass: "mb-2" }, [
-                                          _c("span", [
-                                            _vm._v(
-                                              _vm._s(_vm.lang.invoice_id) +
-                                                ": " +
-                                                _vm._s(_vm.sell.invoice_id)
-                                            )
-                                          ])
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("div", [
-                                          _c("span", [
-                                            _vm._v(
-                                              _vm._s(_vm.lang.date) +
-                                                ": " +
-                                                _vm._s(
-                                                  _vm.sell.custome_sell_date
-                                                ) +
-                                                " "
-                                            )
-                                          ])
-                                        ])
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
                             _c("div", { staticClass: "col-md-12" }, [
                               _c("div", [
                                 _c(

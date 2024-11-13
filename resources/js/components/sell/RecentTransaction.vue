@@ -47,7 +47,11 @@ export default {
 </script>
 
 <style scoped>
-.custom-offcanvas-width {
+@media screen and (min-width: 768px) {
+
+    .custom-offcanvas-width {
   width: 50vw; /* Set the desired width, e.g., 50% of the viewport */
   max-width: 100%; /* Ensure it does not exceed viewport width */
-}</style>
+}
+}
+</style>

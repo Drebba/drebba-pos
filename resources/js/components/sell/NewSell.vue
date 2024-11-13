@@ -2,7 +2,7 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <div class="row g-3 sell-pos">
-            <div class="col-md-5">
+            <div class="col-md-5 order-2 order-md-1">
                 <div class="sell-card-group">
                     <div class="sell-card-header pb-2 mb-2">
                         <div class="wiz-box p-2">
@@ -125,16 +125,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-7">
-                <!-- //order types like dinein ... -->
-                <div class="row mb-2">
-                    <div class="col-md-2" v-if="checkOrderType && !showTable">
+            <div class="col-md-7 order-1 order-md-2">
+                <!-- //order types like dinein form DESKTOP view only ... -->
+
+                <div class=" mb-2 d-none d-md-block">
+                <div class="row">
+                    <div class="col-md-2 col-6  my-1 my-md-0" v-if="checkOrderType && !showTable">
                         <div class="text-center text-end card bg-primary text-white cursor-pointer" title="Back to table list"
                             style="width:125px;height:70px">
                             <div class="card-body" @click="checkKOT"> ⬅ {{ selectedTable.name }}</div>
                         </div>
                     </div>
-                    <div class="col-md-2" v-for="(type, index) in order_types" :key="index">
+                    <div class="col-md-2 col-6  my-1 my-md-0" v-for="(type, index) in order_types" :key="index">
                         <label>
                             <div class="card" style="width:125px;height:70px">
                                 <div class="card-body justify-content-center py-0 px-1 d-flex align-items-center">
@@ -149,17 +151,43 @@
                         </label>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-2 col-6 my-1 my-md-0">
                         <div class="text-center text-end bg-secondary card text-white cursor-pointer" title="Recent Transaction"
                             style="width:125px;height:70px" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                             <div class="card-body" @click="getRecentTransaction"><i class="fas fa-redo fa-3x" style="transform:rotate(90deg)"></i></div>
                         </div>
                     </div>
                 </div>
+                </div>
+
+                <!-- For Mobile view  -->
+                <div class=" mb-2 d-block d-md-none">
+                <div class="row">
+                    <div class="col-4  my-1" v-if="checkOrderType && !showTable">
+                        <div class="text-center text-end card bg-primary text-white cursor-pointer" title="Back to table list">
+                            <button class="btn btn-primary" @click="checkKOT"> ⬅ {{ selectedTable.name }}</button>
+                        </div>
+                    </div>
+
+                    <div class="col-2  my-1">
+                            <button class="btn btn-primary bg-secondary" @click="storeKotOrSell()"  title="Print KOT">KOT</button>
+                    </div>
+
+                    <div class="col-3  my-1">
+                            <button class="btn bg-secondary text-white" @click="createPayment()">Payment</button>
+                    </div>
+
+                    <div class="col-2 my-1">
+
+                            <button class="btn btn-secondary" title="Recent Transaction" @click="getRecentTransaction"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fas fa-redo"></i></button>
+                    </div>
+                </div>
+            </div>
                 <!-- table section display only if table module is activated -->
                 <div class="table-card" v-if="checkOrderType && showTable">
                     <div class="row">
-                        <div class="col-md-3 cursor-pointer" v-for="table in all_tables" :key="table.id"
+                        <div class="col-md-3 col-4 cursor-pointer" v-for="table in all_tables" :key="table.id"
                             @click="changeTable(table)">
                             <div :class="'card rounded-0 ' + (parseInt(table.status) ? 'bg-danger' : 'bg-success')">
                                 <div class="card-body d-flex justify-content-center align-items-center text-white"
@@ -197,7 +225,7 @@
                         <div class="p-2">
                             <div class="row g-3 justify-content-center all-products">
                                 <!-- v-if="product.current_stock_quantity > 0" -->
-                                <div class="col-md-2 col-6" v-for="(product, index) in filteredProduct"
+                                <div class="col-md-2 col-4" v-for="(product, index) in filteredProduct"
                                     :key="product.id">
                                     <div class="single-product" :class="{ selected: isAlreadyInCart(product.id) }"
                                         @click="addToCart(product.id)">
@@ -286,11 +314,6 @@
                     <button class="close" @click="closeCreatePaymentDrawer()"><i class="bi bi-x-lg"></i></button>
                 </div>
                 <div class="card-body p-0">
-                    <div class="text-center bg-soft-primary p-3">
-                        <h3 class="company-name fw-medium">{{ appConfig('app_name') }}</h3>
-                        <p class="address mb-1">{{ lang.address }}: {{ appConfig('address') }}</p>
-                        <p class="vat mb-1">{{ lang.vat_reg_number }} : {{ appConfig('vat_reg_no') }}</p>
-                    </div>
                     <div class="p-4">
                         <div class="row g-4 gx-lg-5">
                             <div class="col-lg-8 sell-invoice border-md-end">
@@ -389,26 +412,7 @@
                                     </div>
                                 </div>
                                 <div class="row" v-if="sell.invoice_id != null">
-                                    <div class="col-md-12 border-bottom-dotted pb-1">
-                                        <div class="d-flex pt-1 invoice-summary">
-                                            <div class="col-6">
-                                                <div class="mb-2">
-                                                    <span>{{ lang.customer_name }}: {{ sell.customer.name }}</span>
-                                                </div>
-                                                <div>
-                                                    <span>{{ lang.customer_phone }}: {{ sell.customer.phone }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 text-end">
-                                                <div class="mb-2">
-                                                    <span>{{ lang.invoice_id }}: {{ sell.invoice_id }}</span>
-                                                </div>
-                                                <div>
-                                                    <span>{{ lang.date }}: {{ sell.custome_sell_date }} </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="col-md-12">
                                         <div>
                                             <div class="table-responsive sell-invoice-table">
@@ -570,6 +574,7 @@ export default {
         // const ps = new PerfectScrollbar('.perfect-ps');
         // const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
         // const psForCart = new PerfectScrollbar('.sell-cart-scroll');
+        // console.log(this.customers);
         window.addEventListener("beforeunload", this.handleBeforeUnload);
     },
     beforeUnmount() {
@@ -1050,7 +1055,6 @@ export default {
     (element) => element.option_key === 'table_billing'
 );
 
-console.log(tableBillingConfig);
 
 if (tableBillingConfig && tableBillingConfig.option_value == 1) {
     // Fetch table data only if table billing is enabled
@@ -1068,16 +1072,15 @@ if (tableBillingConfig && tableBillingConfig.option_value == 1) {
 
         axios.get('../vue/api/customers').then((response) => {
             this.customers = response.data;
-
-            this.configs.forEach((element) => {
-                if (element.option_key == 'default_customer') {
+            const defaultCustomer = this.configs.find(
+    (element) => element.option_key == 'default_customer'
+);
                     this.customers.forEach((customer) => {
-                        if (customer.id == element.option_value) {
+                        if (customer.id == defaultCustomer.option_value) {
                             this.customer = customer;
                         }
                     });
-                }
-            });
+
         });
 
     }
