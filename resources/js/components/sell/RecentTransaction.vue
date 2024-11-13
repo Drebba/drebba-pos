@@ -24,7 +24,10 @@
             {{ transaction.table_name?transaction.table_name:null }}
          </td>
          <td>{{ transaction.grand_total_price }}</td>
-         <td><a href="#" @click="changeCurrentId(transaction.id)"><i class="fas fa-edit"></i></a></td>
+         <td><a href="#" @click="changeCurrentId(transaction.id)"><i class="fas fa-edit"></i></a>
+         <!-- <br>
+         <a  href="#" @click="changeCurrentId(transaction.id)"><i class="fas fa-table"></i></a> -->
+         </td>
 
         </tr>
      </tbody>

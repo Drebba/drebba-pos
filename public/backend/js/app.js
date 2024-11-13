@@ -6747,78 +6747,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7365,6 +7293,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -37211,39 +37142,6 @@ var render = function() {
                             _c("td", [
                               _vm._v(
                                 "\n                                            " +
-                                  _vm._s(_vm.lang.discount) +
-                                  "\n                                                "
-                              ),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.summary.discount,
-                                    expression: "summary.discount"
-                                  }
-                                ],
-                                staticClass: "form-control form-control-sm",
-                                attrs: { type: "number" },
-                                domProps: { value: _vm.summary.discount },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.summary,
-                                      "discount",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("td", [
-                              _vm._v(
-                                "\n                                            " +
                                   _vm._s(_vm.lang.grand_total) +
                                   "\n                                                "
                               ),
@@ -37473,147 +37371,178 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: " mb-2 d-block d-md-none" }, [
-            _c("div", { staticClass: "row" }, [
-              _vm.checkOrderType && !_vm.showTable
-                ? _c("div", { staticClass: "col-4  my-1" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "text-center text-end card bg-primary text-white cursor-pointer",
-                        attrs: { title: "Back to table list" }
-                      },
-                      [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-primary",
-                            on: { click: _vm.checkKOT }
-                          },
-                          [_vm._v(" ⬅ " + _vm._s(_vm.selectedTable.name))]
-                        )
-                      ]
-                    )
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-2  my-1" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary bg-secondary",
-                    attrs: { title: "Print KOT" },
-                    on: {
-                      click: function($event) {
-                        return _vm.storeKotOrSell()
+          _c(
+            "div",
+            {
+              staticClass: "d-block d-md-none",
+              staticStyle: {
+                position: "fixed",
+                bottom: "-20px",
+                left: "0px",
+                "z-index": "9999"
+              }
+            },
+            [
+              _c("div", { staticClass: "row " }, [
+                _vm.checkOrderType
+                  ? _c("div", { staticClass: "col-6" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-center text-end card bg-primary text-white cursor-pointer",
+                          attrs: { title: "Back to table list" }
+                        },
+                        [
+                          !_vm.showTable
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary w-100",
+                                  on: { click: _vm.checkKOT }
+                                },
+                                [_vm._v(" ⬅ " + _vm._s(_vm.selectedTable.name))]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.showTable
+                            ? _c(
+                                "a",
+                                {
+                                  staticClass: "btn btn-primary",
+                                  attrs: { href: "#table-section" }
+                                },
+                                [_vm._v(" Select Table")]
+                              )
+                            : _vm._e()
+                        ]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary bg-secondary w-100",
+                      attrs: { title: "Print KOT" },
+                      on: {
+                        click: function($event) {
+                          return _vm.storeKotOrSell()
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("KOT")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-3  my-1" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn bg-secondary text-white",
-                    on: {
-                      click: function($event) {
-                        return _vm.createPayment()
-                      }
-                    }
-                  },
-                  [_vm._v("Payment")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-2 my-1" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: {
-                      title: "Recent Transaction",
-                      "data-bs-toggle": "offcanvas",
-                      "data-bs-target": "#offcanvasRight",
-                      "aria-controls": "offcanvasRight"
                     },
-                    on: { click: _vm.getRecentTransaction }
-                  },
-                  [_c("i", { staticClass: "fas fa-redo" })]
-                )
-              ])
-            ])
-          ]),
+                    [_vm._v("Print KOT")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6  mt-1" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn w-100 bg-secondary text-white",
+                      on: {
+                        click: function($event) {
+                          return _vm.createPayment()
+                        }
+                      }
+                    },
+                    [_vm._v(" Confirm Payment")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6 mt-1" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn w-100 btn-secondary",
+                      attrs: {
+                        title: "Recent Transaction",
+                        "data-bs-toggle": "offcanvas",
+                        "data-bs-target": "#offcanvasRight",
+                        "aria-controls": "offcanvasRight"
+                      },
+                      on: { click: _vm.getRecentTransaction }
+                    },
+                    [_vm._v("\n                        Recent Transaction")]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("hr")
+            ]
+          ),
           _vm._v(" "),
           _vm.checkOrderType && _vm.showTable
-            ? _c("div", { staticClass: "table-card" }, [
-                _c(
-                  "div",
-                  { staticClass: "row" },
-                  _vm._l(_vm.all_tables, function(table) {
-                    return _c(
-                      "div",
-                      {
-                        key: table.id,
-                        staticClass: "col-md-3 col-4 cursor-pointer",
-                        on: {
-                          click: function($event) {
-                            return _vm.changeTable(table)
+            ? _c(
+                "div",
+                { staticClass: "table-card", attrs: { id: "table-section" } },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "row" },
+                    _vm._l(_vm.all_tables, function(table) {
+                      return _c(
+                        "div",
+                        {
+                          key: table.id,
+                          staticClass: "col-md-2 col-4 cursor-pointer my-1",
+                          on: {
+                            click: function($event) {
+                              return _vm.changeTable(table)
+                            }
                           }
-                        }
-                      },
-                      [
-                        _c(
-                          "div",
-                          {
-                            class:
-                              "card rounded-0 " +
-                              (parseInt(table.status)
-                                ? "bg-danger"
-                                : "bg-success")
-                          },
-                          [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "card-body d-flex justify-content-center align-items-center text-white",
-                                staticStyle: { height: "80px" }
-                              },
-                              [
-                                _c("div", [
-                                  _vm._v(" " + _vm._s(table.name) + " "),
-                                  parseInt(table.status)
-                                    ? _c(
-                                        "div",
-                                        { staticClass: "text-center" },
-                                        [
-                                          _vm._v(
-                                            " " +
-                                              _vm._s(
-                                                _vm.appConfig("app_currency")
-                                              ) +
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              class:
+                                "card  " +
+                                (parseInt(table.status)
+                                  ? "bg-danger"
+                                  : "bg-success")
+                            },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "card-body d-flex justify-content-center align-items-center text-white",
+                                  staticStyle: { height: "80px" }
+                                },
+                                [
+                                  _c("div", [
+                                    _vm._v(" " + _vm._s(table.name) + " "),
+                                    parseInt(table.status)
+                                      ? _c(
+                                          "div",
+                                          { staticClass: "text-center" },
+                                          [
+                                            _vm._v(
                                               " " +
-                                              _vm._s(table.total_amount) +
-                                              " "
-                                          )
-                                        ]
-                                      )
-                                    : _vm._e()
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ]
-                    )
-                  }),
-                  0
-                )
-              ])
+                                                _vm._s(
+                                                  _vm.appConfig("app_currency")
+                                                ) +
+                                                " " +
+                                                _vm._s(table.total_amount) +
+                                                " "
+                                            )
+                                          ]
+                                        )
+                                      : _vm._e()
+                                  ])
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ]
+              )
             : _vm._e(),
           _vm._v(" "),
           !_vm.showTable
@@ -37789,7 +37718,7 @@ var render = function() {
                                         "div",
                                         {
                                           staticClass:
-                                            "d-flex justify-content-between gap-2"
+                                            "d-md-flex justify-content-between gap-2"
                                         },
                                         [
                                           _c("div", [
@@ -37843,7 +37772,10 @@ var render = function() {
                                       _vm._v(" "),
                                       _c(
                                         "div",
-                                        { staticClass: "single-sku-price" },
+                                        {
+                                          staticClass:
+                                            "single-sku-price d-none d-md-block"
+                                        },
                                         [
                                           _c(
                                             "small",
@@ -38111,7 +38043,7 @@ var render = function() {
                               "div",
                               {
                                 staticClass:
-                                  "border-bottom border-bottom pb-3 mb-4"
+                                  "border-bottom border-bottom pb-3 mb-4 d-none d-md-block"
                               },
                               [
                                 _c(
@@ -38211,10 +38143,6 @@ var render = function() {
                                             ]),
                                             _vm._v(" "),
                                             _c("th", [
-                                              _vm._v(_vm._s(_vm.lang.tax))
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("th", [
                                               _vm._v(_vm._s(_vm.lang.qty))
                                             ]),
                                             _vm._v(" "),
@@ -38249,27 +38177,6 @@ var render = function() {
                                                     )
                                                   ) + _vm._s(cart.sell_price)
                                                 )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  _vm._s(
-                                                    _vm.appConfig(
-                                                      "app_currency"
-                                                    )
-                                                  ) +
-                                                    _vm._s(cart.tax_amount) +
-                                                    " "
-                                                ),
-                                                _c("sub", [
-                                                  _vm._v(
-                                                    "(\n                                                            " +
-                                                      _vm._s(
-                                                        cart.tax_percentage
-                                                      ) +
-                                                      "% )"
-                                                  )
-                                                ])
                                               ]),
                                               _vm._v(" "),
                                               _c("td", [
@@ -38309,7 +38216,7 @@ var render = function() {
                                               "td",
                                               {
                                                 staticClass: "text-end pe-5",
-                                                attrs: { colspan: "5" }
+                                                attrs: { colspan: "4" }
                                               },
                                               [
                                                 _vm._v(
@@ -38346,41 +38253,7 @@ var render = function() {
                                               "td",
                                               {
                                                 staticClass: "text-end pe-5",
-                                                attrs: { colspan: "5" }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  " (-) " +
-                                                    _vm._s(_vm.lang.discount) +
-                                                    ":\n                                                    "
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(" "),
-                                            _c("td", [
-                                              _vm._v(
-                                                " " +
-                                                  _vm._s(
-                                                    _vm.appConfig(
-                                                      "app_currency"
-                                                    )
-                                                  ) +
-                                                  _vm._s(
-                                                    _vm._f("formatNumber")(
-                                                      _vm.summary.discount
-                                                    )
-                                                  ) +
-                                                  " "
-                                              )
-                                            ])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c("tr", [
-                                            _c(
-                                              "td",
-                                              {
-                                                staticClass: "text-end pe-5",
-                                                attrs: { colspan: "5" }
+                                                attrs: { colspan: "4" }
                                               },
                                               [
                                                 _vm._v(
@@ -38417,7 +38290,7 @@ var render = function() {
                                               "td",
                                               {
                                                 staticClass: "text-end pe-5",
-                                                attrs: { colspan: "5" }
+                                                attrs: { colspan: "4" }
                                               },
                                               [
                                                 _vm.summary.payment_type == 1
@@ -38469,7 +38342,7 @@ var render = function() {
                                                   {
                                                     staticClass:
                                                       "text-end pe-5",
-                                                    attrs: { colspan: "5" }
+                                                    attrs: { colspan: "4" }
                                                   },
                                                   [
                                                     _vm._v(
@@ -38508,7 +38381,7 @@ var render = function() {
                                                   {
                                                     staticClass:
                                                       "text-end pe-5",
-                                                    attrs: { colspan: "5" }
+                                                    attrs: { colspan: "4" }
                                                   },
                                                   [
                                                     _vm._v(
@@ -38547,376 +38420,6 @@ var render = function() {
                                   )
                                 ]
                               )
-                            ])
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.sell.invoice_id != null
-                        ? _c("div", { staticClass: "row" }, [
-                            _c("div", { staticClass: "col-md-12" }, [
-                              _c("div", [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "table-responsive sell-invoice-table"
-                                  },
-                                  [
-                                    _c(
-                                      "table",
-                                      {
-                                        staticClass:
-                                          "table table-bordered text-center",
-                                        attrs: {
-                                          width: "100%",
-                                          cellspacing: "0"
-                                        }
-                                      },
-                                      [
-                                        _c("thead", [
-                                          _c(
-                                            "tr",
-                                            {
-                                              staticClass:
-                                                "bg-secondary text-white"
-                                            },
-                                            [
-                                              _c("th", [
-                                                _vm._v(_vm._s(_vm.lang.sl))
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("th", [
-                                                _vm._v(
-                                                  _vm._s(_vm.lang.product_title)
-                                                )
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("th", [
-                                                _vm._v(_vm._s(_vm.lang.price))
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("th", [
-                                                _vm._v(_vm._s(_vm.lang.tax))
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("th", [
-                                                _vm._v(_vm._s(_vm.lang.qty))
-                                              ]),
-                                              _vm._v(" "),
-                                              _c("th", [
-                                                _vm._v(_vm._s(_vm.lang.total))
-                                              ])
-                                            ]
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _c(
-                                          "tbody",
-                                          [
-                                            _vm._l(
-                                              _vm.sell.sell_products,
-                                              function(sell_produtc, index) {
-                                                return _c("tr", [
-                                                  _c("td", [
-                                                    _vm._v(_vm._s(index + 1))
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        sell_produtc.product
-                                                          .title
-                                                      )
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        _vm.appConfig(
-                                                          "app_currency"
-                                                        )
-                                                      ) +
-                                                        _vm._s(
-                                                          _vm._f(
-                                                            "formatNumber"
-                                                          )(
-                                                            sell_produtc.sell_price
-                                                          )
-                                                        )
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        _vm.appConfig(
-                                                          "app_currency"
-                                                        )
-                                                      ) +
-                                                        _vm._s(
-                                                          _vm._f(
-                                                            "formatNumber"
-                                                          )(
-                                                            sell_produtc.tax_amount
-                                                          )
-                                                        ) +
-                                                        " "
-                                                    ),
-                                                    _c("sub", [
-                                                      _vm._v(
-                                                        "( " +
-                                                          _vm._s(
-                                                            sell_produtc.tax_percentage
-                                                          ) +
-                                                          "% )"
-                                                      )
-                                                    ])
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        sell_produtc.quantity
-                                                      ) +
-                                                        " " +
-                                                        _vm._s(
-                                                          sell_produtc.product
-                                                            .unit
-                                                            ? sell_produtc
-                                                                .product.unit
-                                                                .title
-                                                            : ""
-                                                        )
-                                                    )
-                                                  ]),
-                                                  _vm._v(" "),
-                                                  _c("td", [
-                                                    _vm._v(
-                                                      _vm._s(
-                                                        _vm.appConfig(
-                                                          "app_currency"
-                                                        )
-                                                      ) +
-                                                        _vm._s(
-                                                          sell_produtc.total_price
-                                                        ) +
-                                                        " "
-                                                    )
-                                                  ])
-                                                ])
-                                              }
-                                            ),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-right pr-5",
-                                                  attrs: { colspan: "5" }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(
-                                                        _vm.lang.sub_total_price
-                                                      ) +
-                                                      ": "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  " " +
-                                                    _vm._s(
-                                                      _vm.appConfig(
-                                                        "app_currency"
-                                                      )
-                                                    ) +
-                                                    _vm._s(
-                                                      _vm._f("formatNumber")(
-                                                        _vm.sell.sub_total
-                                                      )
-                                                    ) +
-                                                    " "
-                                                )
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-right pr-5",
-                                                  attrs: { colspan: "5" }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " (-) " +
-                                                      _vm._s(
-                                                        _vm.lang.discount
-                                                      ) +
-                                                      ": "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  " " +
-                                                    _vm._s(
-                                                      _vm.appConfig(
-                                                        "app_currency"
-                                                      )
-                                                    ) +
-                                                    _vm._s(
-                                                      _vm._f("formatNumber")(
-                                                        _vm.sell.discount
-                                                      )
-                                                    ) +
-                                                    " "
-                                                )
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-right pr-5",
-                                                  attrs: { colspan: "5" }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(
-                                                        _vm.lang.net_payable
-                                                      ) +
-                                                      ": "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  " " +
-                                                    _vm._s(
-                                                      _vm.appConfig(
-                                                        "app_currency"
-                                                      )
-                                                    ) +
-                                                    _vm._s(
-                                                      _vm._f("formatNumber")(
-                                                        _vm.sell
-                                                          .grand_total_price
-                                                      )
-                                                    ) +
-                                                    " "
-                                                )
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-right pr-5",
-                                                  attrs: { colspan: "5" }
-                                                },
-                                                [
-                                                  _vm.sell.payment_type == 1
-                                                    ? _c("strong", [
-                                                        _vm._v(
-                                                          _vm._s(
-                                                            _vm.lang.cash_paid
-                                                          ) +
-                                                            ":\n                                                            "
-                                                        )
-                                                      ])
-                                                    : _vm._e(),
-                                                  _vm._v(" "),
-                                                  _vm.sell.payment_type == 2
-                                                    ? _c("strong", [
-                                                        _vm._v(
-                                                          _vm._s(
-                                                            _vm.lang.card_paid
-                                                          ) +
-                                                            ":\n                                                            "
-                                                        )
-                                                      ])
-                                                    : _vm._e()
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _c("strong", [
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(
-                                                        _vm.appConfig(
-                                                          "app_currency"
-                                                        )
-                                                      ) +
-                                                      _vm._s(
-                                                        _vm._f("formatNumber")(
-                                                          _vm.sell.paid_amount
-                                                        )
-                                                      ) +
-                                                      " "
-                                                  )
-                                                ])
-                                              ])
-                                            ]),
-                                            _vm._v(" "),
-                                            _c("tr", [
-                                              _c(
-                                                "td",
-                                                {
-                                                  staticClass:
-                                                    "text-right pr-5",
-                                                  attrs: { colspan: "5" }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(
-                                                        _vm.lang.due_amount
-                                                      ) +
-                                                      ": "
-                                                  )
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c("td", [
-                                                _vm._v(
-                                                  " " +
-                                                    _vm._s(
-                                                      _vm.appConfig(
-                                                        "app_currency"
-                                                      )
-                                                    ) +
-                                                    _vm._s(
-                                                      _vm._f("formatNumber")(
-                                                        _vm.sell.due_amount
-                                                      )
-                                                    ) +
-                                                    " "
-                                                )
-                                              ])
-                                            ])
-                                          ],
-                                          2
-                                        )
-                                      ]
-                                    )
-                                  ]
-                                )
-                              ])
                             ])
                           ])
                         : _vm._e()
@@ -38991,6 +38494,50 @@ var render = function() {
                                           },
                                           blur: function($event) {
                                             return _vm.$forceUpdate()
+                                          }
+                                        }
+                                      })
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("tr", [
+                                    _c("td", [
+                                      _vm._v(
+                                        "\n                                            " +
+                                          _vm._s(_vm.lang.discount) +
+                                          "\n                                               "
+                                      )
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("td", [
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.summary.discount,
+                                            expression: "summary.discount"
+                                          }
+                                        ],
+                                        staticClass:
+                                          "form-control form-control-sm",
+                                        attrs: {
+                                          type: "number",
+                                          align: "right"
+                                        },
+                                        domProps: {
+                                          value: _vm.summary.discount
+                                        },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.summary,
+                                              "discount",
+                                              $event.target.value
+                                            )
                                           }
                                         }
                                       })
@@ -39168,29 +38715,6 @@ var render = function() {
                               [_vm._v(_vm._s(_vm.lang.confirm_payment))]
                             )
                           ])
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.sell.invoice_id != null
-                      ? _c("div", { staticClass: "mt-5" }, [
-                          _c(
-                            "a",
-                            {
-                              staticClass:
-                                "btn btn-brand-warning btn-brand w-100",
-                              attrs: { target: "_blank" },
-                              on: { click: _vm.printInvoice }
-                            },
-                            [
-                              _c("i", { staticClass: "fa fa-print me-2" }),
-                              _vm._v(" "),
-                              _c("br"),
-                              _vm._v(" "),
-                              _c("strong", [
-                                _vm._v(_vm._s(_vm.lang.print_invoice))
-                              ])
-                            ]
-                          )
                         ])
                       : _vm._e()
                   ])

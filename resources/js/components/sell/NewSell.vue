@@ -93,11 +93,7 @@
                                                         v-model.number="summary.sub_total = subTotalotalCartsValue"
                                                         class="form-control form-control-sm" readonly>
                                             </td>
-                                            <td>
-                                                {{ lang.discount }}
-                                                    <input type="number" v-model="summary.discount"
-                                                        class="form-control form-control-sm">
-                                            </td>
+
                                             <td>
                                                 {{ lang.grand_total }}
                                                     <input type="number"
@@ -161,35 +157,39 @@
                 </div>
 
                 <!-- For Mobile view  -->
-                <div class=" mb-2 d-block d-md-none">
-                <div class="row">
-                    <div class="col-4  my-1" v-if="checkOrderType && !showTable">
+                <div class="d-block d-md-none" style="position:fixed;bottom:-20px;left:0px;z-index:9999">
+                <div class="row ">
+                    <div class="col-6" v-if="checkOrderType">
                         <div class="text-center text-end card bg-primary text-white cursor-pointer" title="Back to table list">
-                            <button class="btn btn-primary" @click="checkKOT"> ⬅ {{ selectedTable.name }}</button>
+
+                            <button v-if="!showTable" class="btn btn-primary w-100" @click="checkKOT"> ⬅ {{ selectedTable.name }}</button>
+                            <a href="#table-section" v-if="showTable" class="btn btn-primary"> Select Table</a>
                         </div>
                     </div>
 
-                    <div class="col-2  my-1">
-                            <button class="btn btn-primary bg-secondary" @click="storeKotOrSell()"  title="Print KOT">KOT</button>
+                    <div class="col-6">
+                            <button class="btn btn-primary bg-secondary w-100" @click="storeKotOrSell()"  title="Print KOT">Print KOT</button>
                     </div>
 
-                    <div class="col-3  my-1">
-                            <button class="btn bg-secondary text-white" @click="createPayment()">Payment</button>
+                    <div class="col-6  mt-1">
+                            <button class="btn w-100 bg-secondary text-white" @click="createPayment()"> Confirm Payment</button>
                     </div>
 
-                    <div class="col-2 my-1">
+                    <div class="col-6 mt-1">
 
-                            <button class="btn btn-secondary" title="Recent Transaction" @click="getRecentTransaction"
-                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fas fa-redo"></i></button>
+                            <button class="btn w-100 btn-secondary" title="Recent Transaction" @click="getRecentTransaction"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                            Recent Transaction</button>
                     </div>
                 </div>
+                <hr>
             </div>
                 <!-- table section display only if table module is activated -->
-                <div class="table-card" v-if="checkOrderType && showTable">
+                <div class="table-card" v-if="checkOrderType && showTable" id="table-section">
                     <div class="row">
-                        <div class="col-md-3 col-4 cursor-pointer" v-for="table in all_tables" :key="table.id"
+                        <div class="col-md-2 col-4 cursor-pointer my-1" v-for="table in all_tables" :key="table.id"
                             @click="changeTable(table)">
-                            <div :class="'card rounded-0 ' + (parseInt(table.status) ? 'bg-danger' : 'bg-success')">
+                            <div :class="'card  ' + (parseInt(table.status) ? 'bg-danger' : 'bg-success')">
                                 <div class="card-body d-flex justify-content-center align-items-center text-white"
                                     style="height:80px">
                                     <div> {{ table.name }} <div v-if="parseInt(table.status)" class="text-center"> {{
@@ -238,7 +238,7 @@
                                             </div>
                                         </div>
                                         <div class="single-product-body">
-                                            <div class="d-flex justify-content-between gap-2">
+                                            <div class="d-md-flex justify-content-between gap-2">
                                                 <div>
                                                     <h6 class="single-product-title">
                                                         <span v-if="product.title.length < 15">{{ product.title
@@ -249,7 +249,7 @@
                                                 <div class="single-product-price"> {{ appConfig('app_currency') }}{{
                                                     product.sell_price }}</div>
                                             </div>
-                                            <div class="single-sku-price">
+                                            <div class="single-sku-price d-none d-md-block">
                                                 <small class="extra-small">Sku: {{ product.sku }}</small>
                                             </div>
                                         </div>
@@ -318,7 +318,7 @@
                         <div class="row g-4 gx-lg-5">
                             <div class="col-lg-8 sell-invoice border-md-end">
                                 <div class="mb-3" v-if="carts.length > 0">
-                                    <div class="border-bottom border-bottom pb-3 mb-4">
+                                    <div class="border-bottom border-bottom pb-3 mb-4 d-none d-md-block">
                                         <div class="d-flex invoice-summary">
                                             <div class="col-6" v-if="customer">
                                                 <div class="mb-2">
@@ -347,7 +347,6 @@
                                                         <th>{{ lang.sl }}</th>
                                                         <th>{{ lang.product_title }}</th>
                                                         <th>{{ lang.price }}</th>
-                                                        <th>{{ lang.tax }}</th>
                                                         <th>{{ lang.qty }}</th>
                                                         <th>{{ lang.total }}</th>
                                                     </tr>
@@ -357,33 +356,27 @@
                                                         <td>{{ index + 1 }}</td>
                                                         <td>{{ cart.title }}</td>
                                                         <td>{{ appConfig('app_currency') }}{{ cart.sell_price }}</td>
-                                                        <td>{{ appConfig('app_currency') }}{{ cart.tax_amount }} <sub>(
-                                                                {{ cart.tax_percentage }}% )</sub></td>
+
                                                         <td>{{ cart.quantity }} {{ cart.unit ? cart.unit.title : '' }}
                                                         </td>
                                                         <td>{{ appConfig('app_currency') }} {{ cart.total_price |
                                                             formatNumber }} </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="5" class="text-end pe-5"> {{ lang.sub_total_price
+                                                        <td colspan="4" class="text-end pe-5"> {{ lang.sub_total_price
                                                             }}: </td>
                                                         <td> {{ appConfig('app_currency') }} {{ summary.sub_total |
                                                             formatNumber }} </td>
                                                     </tr>
+
                                                     <tr>
-                                                        <td colspan="5" class="text-end pe-5"> (-) {{ lang.discount }}:
-                                                        </td>
-                                                        <td> {{ appConfig('app_currency') }}{{ summary.discount |
-                                                            formatNumber }} </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="5" class="text-end pe-5"> {{ lang.net_payable }}
+                                                        <td colspan="4" class="text-end pe-5"> {{ lang.net_payable }}
                                                         </td>
                                                         <td> {{ appConfig('app_currency') }}{{ summary.grand_total_price
                                                             | formatNumber }} </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="5" class="text-end pe-5">
+                                                        <td colspan="4" class="text-end pe-5">
                                                             <strong v-if="summary.payment_type == 1">{{ lang.cash_paid
                                                                 }}: </strong>
                                                             <strong v-if="summary.payment_type == 2">{{ lang.card_paid
@@ -395,13 +388,13 @@
                                                         </td>
                                                     </tr>
                                                     <tr v-if="summary.due_amount > 0">
-                                                        <td colspan="5" class="text-end pe-5"> {{ lang.due_amount }}:
+                                                        <td colspan="4" class="text-end pe-5"> {{ lang.due_amount }}:
                                                         </td>
                                                         <td> {{ appConfig('app_currency') }}{{ summary.due_amount |
                                                             formatNumber }} </td>
                                                     </tr>
                                                     <tr v-if="summary.change_amount > 0">
-                                                        <td colspan="5" class="text-end pe-5"> {{ lang.change_amount }}:
+                                                        <td colspan="4" class="text-end pe-5"> {{ lang.change_amount }}:
                                                         </td>
                                                         <td> {{ appConfig('app_currency') }}{{ summary.change_amount |
                                                             formatNumber }} </td>
@@ -411,81 +404,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row" v-if="sell.invoice_id != null">
 
-                                    <div class="col-md-12">
-                                        <div>
-                                            <div class="table-responsive sell-invoice-table">
-                                                <table class="table table-bordered text-center" width="100%"
-                                                    cellspacing="0">
-                                                    <thead>
-                                                        <tr class="bg-secondary text-white">
-                                                            <th>{{ lang.sl }}</th>
-                                                            <th>{{ lang.product_title }}</th>
-                                                            <th>{{ lang.price }}</th>
-                                                            <th>{{ lang.tax }}</th>
-                                                            <th>{{ lang.qty }}</th>
-                                                            <th>{{ lang.total }}</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr v-for="(sell_produtc, index) in sell.sell_products">
-                                                            <td>{{ index + 1 }}</td>
-                                                            <td>{{ sell_produtc.product.title }}</td>
-                                                            <td>{{ appConfig('app_currency') }}{{
-                                                                sell_produtc.sell_price | formatNumber }}</td>
-                                                            <td>{{ appConfig('app_currency') }}{{
-                                                                sell_produtc.tax_amount | formatNumber }} <sub>( {{
-                                                                    sell_produtc.tax_percentage }}% )</sub></td>
-                                                            <td>{{ sell_produtc.quantity }} {{ sell_produtc.product.unit
-                                                                ? sell_produtc.product.unit.title : '' }}</td>
-                                                            <td>{{ appConfig('app_currency') }}{{
-                                                                (sell_produtc.total_price) }} </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="5" class="text-right pr-5"> {{
-                                                                lang.sub_total_price }}: </td>
-                                                            <td> {{ appConfig('app_currency') }}{{ sell.sub_total |
-                                                                formatNumber }} </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="5" class="text-right pr-5"> (-) {{
-                                                                lang.discount }}: </td>
-                                                            <td> {{ appConfig('app_currency') }}{{ sell.discount |
-                                                                formatNumber }} </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="5" class="text-right pr-5"> {{ lang.net_payable
-                                                                }}: </td>
-                                                            <td> {{ appConfig('app_currency') }}{{
-                                                                sell.grand_total_price | formatNumber }} </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="5" class="text-right pr-5">
-                                                                <strong
-                                                                    v-if="sell.payment_type == 1">{{ lang.cash_paid }}:
-                                                                </strong>
-                                                                <strong
-                                                                    v-if="sell.payment_type == 2">{{ lang.card_paid }}:
-                                                                </strong>
-                                                            </td>
-                                                            <td>
-                                                                <strong> {{ appConfig('app_currency') }}{{
-                                                                    sell.paid_amount | formatNumber }} </strong>
-                                                            </td>
-                                                        </tr>
-                                                        <tr v-if="">
-                                                            <td colspan="5" class="text-right pr-5"> {{ lang.due_amount
-                                                                }}: </td>
-                                                            <td> {{ appConfig('app_currency') }}{{ sell.due_amount |
-                                                                formatNumber }} </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="col-lg-4">
                                 <div v-if="carts.length > 0" class="mb-5">
@@ -504,6 +423,15 @@
                                                             v-model.number="summary.paid_amount"
                                                             class="form-control form-control-sm" align="right">
                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                {{ lang.discount }}
+                                                   </td>
+                                                   <td>
+                                                    <input type="number" v-model="summary.discount"
+                                                    class="form-control form-control-sm" align="right">
+                                                   </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -543,13 +471,13 @@
                                             @click="storeKotOrSell(0)">{{ lang.confirm_payment }}</a>
                                     </div>
                                 </div>
-                                <div class="mt-5" v-if="sell.invoice_id != null">
+                                <!-- <div class="mt-5" v-if="sell.invoice_id != null">
                                     <a @click="printInvoice" class="btn btn-brand-warning btn-brand w-100"
                                         target="_blank">
                                         <i class="fa fa-print me-2"></i> <br>
                                         <strong>{{ lang.print_invoice }}</strong>
                                     </a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

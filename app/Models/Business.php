@@ -37,6 +37,22 @@ class Business extends Model
         // attach owner id to busniess
         $model->owner_id=$user->id;
         $model->save();
+
+        // create default customer
+        $customer=new Customer();
+        $customer->business_id=$model->id;
+        $customer->name='Walk In customer';
+        $customer->phone='98565656'.rand(1,100);
+        $customer->email="email$model->id@gmail.com";
+        $customer->save();
+
+        //  // create default supplier Drebba
+        //  $customer=new Customer();
+        //  $customer->business_id=$model->id;
+        //  $customer->name='Walk In customer';
+        //  $customer->phone='98565656'.rand(1,100);
+        //  $customer->email="email$model->id@gmail.com";
+        //  $customer->save();
         });
 
 

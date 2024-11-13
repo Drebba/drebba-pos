@@ -17,9 +17,9 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('business_id');
             $table->string('title');
-            $table->string('sku')->unique();
+            $table->string('sku')->nullable();
             $table->integer('category_id');
-            $table->integer('tax_id');
+            $table->integer('tax_id')->nullable();
             $table->integer('unit_id')->nullable();
             $table->integer('price_type')->default(1);
             $table->double('purchase_price');
