@@ -192,8 +192,13 @@
                             <div :class="'card  ' + (parseInt(table.status) ? 'bg-danger' : 'bg-success')">
                                 <div class="card-body d-flex justify-content-center align-items-center text-white"
                                     style="height:80px">
-                                    <div> {{ table.name }} <div v-if="parseInt(table.status)" class="text-center"> {{
+                                    <div> {{ table.name }} <div v-if="parseInt(table.status)" class="text-center">
+                                        <div>
+                                             <!-- Todo Add Counter  -->
+                                        </div>
+                                         {{
                                         appConfig('app_currency') }} {{ table.total_amount }} </div>
+
                                     </div>
                                 </div>
                             </div>

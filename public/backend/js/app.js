@@ -6747,6 +6747,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -37519,8 +37524,9 @@ var render = function() {
                                           "div",
                                           { staticClass: "text-center" },
                                           [
+                                            _c("div"),
                                             _vm._v(
-                                              " " +
+                                              "\n                                     " +
                                                 _vm._s(
                                                   _vm.appConfig("app_currency")
                                                 ) +
