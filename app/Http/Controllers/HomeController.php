@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Business;
 use App\Models\Expense;
 use App\Models\PaymentFromCustomer;
 use App\Models\PaymentToSupplier;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Toastr;
 use Auth;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -110,5 +112,12 @@ class HomeController extends Controller
         }
 
         return  $sell + $payment_from_customer;
+    }
+
+
+    public function menu($uuid)  {
+        $business=Business::where('uuid',$uuid)->firstOrFail();
+        $menus=Product::where('business_id',$business->id)->get();
+        return view('menu',compact('business','menus'));
     }
 }

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
 
+Route::get('menus/{uuid}/list','HomeController@menu')->name('menus');
+
 Route::middleware('auth', 'active')->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/home', 'HomeController@index');
