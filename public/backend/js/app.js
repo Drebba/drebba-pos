@@ -6752,6 +6752,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6984,15 +6998,15 @@ __webpack_require__.r(__webpack_exports__);
         setTimeout(function () {
           _this6.printInvoice(type, _this6.currenSellId); //print kot
 
-        }, 100);
+        }, 10);
       } else {
         if (this.sellStoreValidation()) {
           if (this.carts.length != 0) {
             if (this.summary.paid_amount >= 0) {
               var _this$selectedTable$i, _this$selectedTable;
 
-              this.isSellStoreProcessing = true; // store sells and make it kot if   kot btn clicked
-
+              // this.isSellStoreProcessing = true;
+              // store sells and make it kot if   kot btn clicked
               axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('../vue/api/store-sell', {
                 carts: JSON.parse(JSON.stringify(this.carts)),
                 customer: JSON.parse(JSON.stringify(this.customer)),
@@ -36707,7 +36721,7 @@ var render = function() {
     { staticClass: "container-fluid" },
     [
       _c("div", { staticClass: "row g-3 sell-pos" }, [
-        _c("div", { staticClass: "col-md-5 order-2 order-md-1" }, [
+        _c("div", { staticClass: "col-md-4 order-2 order-md-1" }, [
           _c("div", { staticClass: "sell-card-group" }, [
             _c("div", { staticClass: "sell-card-header pb-2 mb-2" }, [
               _c("div", { staticClass: "wiz-box p-2" }, [
@@ -36756,7 +36770,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "sell-card-body" }, [
-              _c("div", { staticClass: "wiz-box d-flex flex-column " }, [
+              _c("div", { staticClass: "wiz-box d-flex flex-column px-0" }, [
                 _c(
                   "div",
                   {
@@ -36847,7 +36861,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "td",
-                                    { staticClass: "text-center w-100px" },
+                                    { staticClass: "text-center w-80px" },
                                     [
                                       cart.price_type == 1
                                         ? _c("input", {
@@ -36934,7 +36948,10 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "td",
-                                    { staticClass: "text-center w-125px" },
+                                    {
+                                      staticClass: "text-center",
+                                      staticStyle: { width: "100px!important" }
+                                    },
                                     [
                                       _c(
                                         "div",
@@ -37253,7 +37270,7 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-7 order-1 order-md-2" }, [
+        _c("div", { staticClass: "col-md-8 order-1 order-md-2" }, [
           _c("div", { staticClass: " mb-2 d-none d-md-block" }, [
             _c(
               "div",
@@ -37370,7 +37387,9 @@ var render = function() {
                       )
                     ]
                   )
-                ])
+                ]),
+                _vm._v(" "),
+                _vm._m(0)
               ],
               2
             )
@@ -37556,7 +37575,7 @@ var render = function() {
                 _c("div", { staticClass: "sell-card-header" }, [
                   _c("div", { staticClass: "wiz-box p-2" }, [
                     _c("div", { staticClass: "input-with-icon" }, [
-                      _vm._m(0),
+                      _vm._m(1),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -37707,7 +37726,8 @@ var render = function() {
                                             ? _c("img", {
                                                 staticClass: "img-fluid",
                                                 attrs: {
-                                                  src: "../images/default.png"
+                                                  src:
+                                                    "../type/default-image.webp"
                                                 }
                                               })
                                             : _vm._e()
@@ -38658,7 +38678,7 @@ var render = function() {
                                   staticClass: "form-control small",
                                   attrs: {
                                     rows: "3",
-                                    placeholder: "Card Information"
+                                    placeholder: "Any Information"
                                   },
                                   domProps: {
                                     value: _vm.summary.card_information
@@ -38700,7 +38720,7 @@ var render = function() {
                                   attrs: { href: "javasctipt:void(0)" },
                                   on: { click: _vm.paymentTypeCard }
                                 },
-                                [_vm._v(_vm._s(_vm.lang.card))]
+                                [_vm._v("Online/QR")]
                               )
                             ])
                           ]),
@@ -38740,6 +38760,52 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-2 col-6  my-1 my-md-0" }, [
+      _c("label", [
+        _c(
+          "div",
+          {
+            staticClass: "card",
+            staticStyle: { width: "125px", height: "70px" }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "card-body justify-content-center py-0 px-1 d-flex align-items-center"
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "ms-2",
+                    attrs: { href: "/kitchen", target: "_blank" }
+                  },
+                  [
+                    _c("img", {
+                      attrs: {
+                        src: "/type/kitchen.png",
+                        alt: "",
+                        width: "40",
+                        height: "40"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(" Kitchen ")])
+                  ]
+                )
+              ]
+            )
+          ]
+        )
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

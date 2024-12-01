@@ -44,7 +44,7 @@
 
             const card = `
                 <div class="card mb-4 rounded">
-                    <img src="${menu.thumbnail ? menu.thumbnail : '{{ asset("type/default-image.webp") }}'}" class="card-img-top rounded" alt="${menu.title}">
+                    <img src="${menu.thumbnail ? menu.thumbnail : '{{ asset("type/default-image.webp") }}'}" class="card-img-top rounded" alt="${menu.title}" loading="lazy">
                     <div class="card-body">
                         <h5 class="card-title">${menu.title}</h5>
                         <div>

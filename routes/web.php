@@ -18,10 +18,10 @@ Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('menus/{uuid}/list','HomeController@menu')->name('menus');
-
 Route::middleware('auth', 'active')->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/home', 'HomeController@index');
+    Route::get('kitchen', 'KitchenController@index');
 
     Route::resource('sells', 'Backend\SellController');
     Route::resource('branch-sells-target', 'Backend\SellsTargetController');

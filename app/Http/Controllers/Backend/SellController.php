@@ -103,6 +103,10 @@ class SellController extends Controller
         $sell->order_mode=$request->order_mode;
         $sell->save();
 
+        if(!$request->isKot){
+            $sell->status=1;
+            $sell->save();
+        }
 
         $table=Table::find($request->table);
         if ($table&&$request->order_mode==2&&$request->isKot) {
@@ -115,7 +119,7 @@ class SellController extends Controller
         $this->storeSellProducts($request, $sell);
 
         $data['sell'] = Sell::where('id', $sell->id)->with('sellProducts')->with('customer')->first();
-        $data['sell_date'] = Carbon::parse($sell->created_at)->format(get_option('app_date_format'). ', h:ia');
+        $data['sell_date'] = Carbon::parse($sell->sell_date)->format(get_option('app_date_format'). ', h:ia');
         return response($data);
     }
 

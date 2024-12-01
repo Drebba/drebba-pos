@@ -2,7 +2,7 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <div class="row g-3 sell-pos">
-            <div class="col-md-5 order-2 order-md-1">
+            <div class="col-md-4 order-2 order-md-1">
                 <div class="sell-card-group">
                     <div class="sell-card-header pb-2 mb-2">
                         <div class="wiz-box p-2">
@@ -21,7 +21,7 @@
                         </div>
                     </div>
                     <div class="sell-card-body">
-                        <div class="wiz-box d-flex flex-column ">
+                        <div class="wiz-box d-flex flex-column px-0">
                             <div class="cart-products sell-card position-relative sell-cart-scroll" style="height:220px!important">
                                 <h1 v-if="carts.length == 0"
                                     style="text-align: center; color:#d1d1d1;margin-top: 100px">{{ lang.empty_carts }}
@@ -48,7 +48,7 @@
                                                 <span class="cart-product-title" v-else>{{ cart.title.substring(0, 35) +
                                                     ".." }} </span>
                                             </td>
-                                            <td class="text-center w-100px">
+                                            <td class="text-center w-80px">
                                                 <input type="number" v-model.number="cart.sell_price" step=".1" min=".1"
                                                     value="10" class="form-control form-control-sm text-center"
                                                     v-if="cart.price_type == 1" readonly>
@@ -56,7 +56,7 @@
                                                     value="10" class="form-control form-control-sm text-center"
                                                     v-if="cart.price_type == 2">
                                             </td>
-                                            <td class="text-center w-125px">
+                                            <td class="text-center" style="width:100px!important">
                                                 <div class="input-group input-group-sm">
                                                     <input type="number" v-model.number="cart.quantity" min="1"
                                                         class="form-control form-control-sm text-center">
@@ -121,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-7 order-1 order-md-2">
+            <div class="col-md-8 order-1 order-md-2">
                 <!-- //order types like dinein form DESKTOP view only ... -->
 
                 <div class=" mb-2 d-none d-md-block">
@@ -152,6 +152,20 @@
                             style="width:125px;height:70px" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                             <div class="card-body" @click="getRecentTransaction"><i class="fas fa-redo fa-3x" style="transform:rotate(90deg)"></i></div>
                         </div>
+                    </div>
+
+                    <div class="col-md-2 col-6  my-1 my-md-0">
+                        <label>
+                            <div class="card" style="width:125px;height:70px">
+                                <div class="card-body justify-content-center py-0 px-1 d-flex align-items-center">
+
+                                    <a class="ms-2" href="/kitchen" target="_blank">
+                                        <img src="/type/kitchen.png" alt="" width="40" height="40">
+                                        <p> Kitchen </p>
+                                    </a>
+                                </div>
+                            </div>
+                        </label>
                     </div>
                 </div>
                 </div>
@@ -238,7 +252,7 @@
                                             <div class="single-product-header">
                                                 <img :src="'../' + product.thumbnail" class="img-fluid"
                                                     v-if="product.thumbnail != null">
-                                                <img :src="'../images/default.png'" class="img-fluid"
+                                                <img :src="'../type/default-image.webp'" class="img-fluid"
                                                     v-if="product.thumbnail == null">
                                             </div>
                                         </div>
@@ -461,7 +475,7 @@
                                     </div>
                                     <div class="mb-3" v-if="cardInformationArea">
                                         <textarea v-model="summary.card_information" class="form-control small" rows="3"
-                                            placeholder="Card Information"></textarea>
+                                            placeholder="Any Information"></textarea>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <div class="flex-grow-1"><a href="javasctipt:void(0)"
@@ -469,7 +483,7 @@
                                                 @click="paymentTypeCash">{{ lang.cash }}</a></div>
                                         <div class="flex-grow-1"><a href="javasctipt:void(0)"
                                                 class="btn btn-brand-dark-navy w-100"
-                                                @click="paymentTypeCard">{{ lang.card }}</a></div>
+                                                @click="paymentTypeCard">Online/QR</a></div>
                                     </div>
                                     <div class="mt-2">
                                         <a href="javascript:void(0)" class="btn btn-brand btn-brand-primary w-100"
@@ -712,13 +726,13 @@ export default {
                 this.updateSell(this.currenSellId, type);
                 setTimeout(() => {
                     this.printInvoice(type, this.currenSellId); //print kot
-                }, 100);
+                }, 10);
             } else {
 
                 if (this.sellStoreValidation()) {
                     if (this.carts.length != 0) {
                         if (this.summary.paid_amount >= 0) {
-                            this.isSellStoreProcessing = true;
+                            // this.isSellStoreProcessing = true;
                             // store sells and make it kot if   kot btn clicked
                             axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary, table: this.selectedTable?.id??null, isKot: type, order_mode: this.order_mode }).then((response) => {
                                 this.sell = response.data.sell;

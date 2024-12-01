@@ -6,6 +6,14 @@
         <span class="aside-nav-text">{{__('pages.dashboard')}}</span></a>
 </div>
 
+@can('manage_kitchen')
+        <li class="aside-nav-item">
+            <a class="aside-nav-link" href="/kitchen">
+                <span class="aside-nav-icon"><i class="fas fa-utensils"></i></span> <span class="aside-nav-text">Kitchen</span>
+            </a>
+        </li>
+    @endcan
+
 <div class="aside-menu-divider"></div>
 
 <ul class="aside-nav-menu">
@@ -259,6 +267,8 @@
         </li>
     @endcan
 
+
+
     @can('view_stock')
         <li class="aside-nav-item">
             <a class="aside-nav-link {{ active_if_full_match('report/stock-report') }}" href="{{url('report/stock-report')}}">
@@ -288,13 +298,7 @@
     @endcan
 
 
-    {{-- @can('application_setting')
-        <li class="aside-nav-item">
-            <a class="aside-nav-link" href="{{route('language.index')}}">
-                <span class="aside-nav-icon"><i class="fas fa-globe-europe"></i></span> <span class="aside-nav-text">{{__('pages.language_settings')}}</span>
-            </a>
-        </li>
-    @endcan --}}
+
 
     {{-- @can('manage_trash')
         <li class="aside-nav-item toggleable-group">
