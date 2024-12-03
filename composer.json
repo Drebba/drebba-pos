@@ -11,7 +11,6 @@
         "php": "^8.0",
         "ext-curl": "*",
         "barryvdh/laravel-dompdf": "^0.9.0",
-        "mpdf/mpdf": "^8.2",
         "brian2694/laravel-toastr": "^5.5",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -19,7 +18,9 @@
         "laravel/tinker": "^2.4.2",
         "laravel/ui": "^3.0",
         "league/csv": "^9.3",
+        "maatwebsite/excel": "^3.1",
         "milon/barcode": "^8.0",
+        "mpdf/mpdf": "^8.2",
         "php-curl-class/php-curl-class": "^9.1",
         "spatie/laravel-permission": "^3.0"
     },

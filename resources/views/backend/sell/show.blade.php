@@ -8,7 +8,7 @@
         <div class="wiz-box d-flex justify-content-between align-items-center mb-3">
             <h6 class="page-title mb-0">{{__('pages.sell_details')}}</h6>
             <div class="btn-group btn-group-sm custom-btn-group" role="group">
-                <a href="{{route('sell.edit', [$sell->id])}}" class="btn btn-brand-primary rounded-0"><i class="bi bi-pencil me-1"></i> {{__('pages.edit')}} </a>
+                {{-- <a href="{{route('sell.edit', [$sell->id])}}" class="btn btn-brand-primary rounded-0"><i class="bi bi-pencil me-1"></i> {{__('pages.edit')}} </a> --}}
                 <a href="{{url('export/sell/invoice/id='.encrypt($sell->id).'/type=1')}}" class="btn btn-brand-secondary"><i class="fa fa-download me-1"></i> {{__('pages.pdf')}} </a>
                 <a href="{{url('export/sell/invoice/id='.encrypt($sell->id).'/type=2')}}" target="_blank" class="btn btn-brand-warning"><i class="fa fa-print me-1"></i> {{__('pages.print_invoice')}} </a>
             </div>

@@ -12,13 +12,35 @@
             </div>
 
             <div class="collapse d-md-block" id="mwFilterCollapse">
-                <form action="{{route('sell.index')}}" method="get">
+                <form action="{{route('sell.index')}}" method="get" id="form">
                 <div class="row g-3">
                     <div class="col-sm-6 col-md-4 col-lg">
                         <div class="form-group">
                             <input type="text" name="invoice_id" value="{{Request::get('invoice_id')}}" class="form-control" placeholder="{{__('pages.invoice_id')}}">
                         </div>
                     </div>
+                    <div class="col-sm-6 col-md-4 col-lg">
+                        <div class="form-group">
+                            <select name="table_id" class="form-select select2-basic">
+                                <option value="">All Table</option>
+                                @foreach(Auth::user()->business->table as $table)
+                                    <option value="{{$table->id}}" {{Request::get('table_id') == $table->id ? 'selected' : ''}}>{{$table->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg">
+                        <div class="form-group">
+                            <select name="order_mode" class="form-select select2-basic">
+                                <option value="">All Mode</option>
+                                @foreach(App\Models\OrderType::all() as $type)
+                                    <option value="{{$type->id}}" {{Request::get('order_mode') == $type->id ? 'selected' : ''}}>{{$type->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="col-sm-6 col-md-4 col-lg">
                         <div class="form-group">
                             <select name="user_id" class="form-select select2-basic">
@@ -52,7 +74,8 @@
                     </div>
                     <div class="col-sm-6 col-md-4 col-lg">
                         <div class="form-group">
-                            <button class="btn btn-brand-primary btn-brand w-100">{{__('pages.search')}}</button>
+                            <button class="btn btn-primary btn-sm"><i class="fas fa-search" style="font-size: 20px"></i></button>
+                            <button name="export" class="text-light btn btn-success" value="1"><i class="fas fa-file-excel" style="font-size: 20px"></i></button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +85,9 @@
 
         <div class="wiz-card">
             <div class="wiz-card-body">
-                <h5 class="wiz-card-title">Sell</h5>
+                <div class="d-flex justify-content-between">
+                    <h5 class="wiz-card-title">Sell</h5>
+                </div>
                 <div class="table-responsive-xl">
                     <table class="table table-bordered text-center wiz-table mw-col-width-skip-first">
                         <thead class="sticky-top">
@@ -78,7 +103,17 @@
                         </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $grandtotal=0;
+                                $paid=0;
+                                $due=0;
+                            @endphp
                         @foreach($sells as $key => $sell)
+                        @php
+                            $grandtotal+=$sell->grand_total_price;
+                            $paid+=$sell->paid_amount;
+                            $due+=$sell->due_amount;
+                        @endphp
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$sell->invoice_id}}</td>
@@ -97,6 +132,13 @@
                                 </td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <th colspan="4">Total</th>
+                            <th>{{$grandtotal}}</th>
+                            <th>{{$paid}}</th>
+                            <th>{{$due}}</th>
+
+                        </tr>
                         </tbody>
                     </table>
                 </div>

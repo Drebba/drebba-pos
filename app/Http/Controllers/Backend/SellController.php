@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\SellExport;
 use App\Models\Customer;
 use App\Models\Category;
 use App\Models\Product;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Table;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Toastr;
 
 class SellController extends Controller
@@ -52,6 +54,17 @@ class SellController extends Controller
             $sells = $sells->where('invoice_id', 'like', '%'.$request->invoice_id.'%');
         }
 
+        if ($request->table_id){
+            $sells = $sells->where('table_id', $request->table_id);
+        }
+        if ($request->order_mode){
+            $sells = $sells->where('order_mode', $request->order_mode);
+        }
+
+        if ($request->export) {
+            return Excel::download(new SellExport($sells->get()), now().".xlsx");
+
+        }
         $sells = $sells->with(['customer'])->paginate(50);
 
         return view('backend.sell.index', [
@@ -263,7 +276,6 @@ class SellController extends Controller
                 return redirect()->back()->with('denied');
             }
         }
-        return view('backend.pdf.sell.thermal-invoice',compact('sell'));
         // Initialize mPDF with UTF-8 encoding and A4 page size
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
@@ -292,8 +304,9 @@ class SellController extends Controller
             // Download PDF
             $mpdf->Output($filename, 'D');
         } else {
+            $kot=0;
             // Display in browser
-            $mpdf->Output($filename, 'I');
+            return view('backend.pdf.sell.thermal-invoice',compact('sell','kot'));
         }
     }
 
