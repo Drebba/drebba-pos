@@ -27,10 +27,6 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('branch-sells-target', 'Backend\SellsTargetController');
     Route::resource('purchase', 'Backend\PurchaseController');
 
-    Route::resource('requisition', 'Backend\RequisitionController');
-    Route::get('pending-requisition', 'Backend\RequisitionController@pendingRequisition')->name('pending-requisition');
-    Route::get('requisition-received/{id}', 'Backend\RequisitionController@statuaChgangeToReceived')->name('requisition-received');
-    Route::post('requisition-canceled/{id}', 'Backend\RequisitionController@statuaChgangeToCanceled')->name('requisition-canceled');
     Route::resource('expense-category', 'Backend\ExpenseCategoryController');
     Route::resource('expense', 'Backend\ExpenseController');
     Route::get('expense-filter', 'Backend\ExpenseController@filter')->name('expense-filter');
@@ -122,7 +118,6 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('sell/invoice/id={sell_id}/type={action_type}', 'Backend\SellController@pdf');
         Route::get('sell/print-invoice/id={sell_id}', 'Backend\SellController@printInvoice');
         Route::get('purchase/print-invoice/id={purchase_id}/type={action_type}', 'Backend\PurchaseController@pdf');
-        Route::get('requisition/print-invoice/id={requisition_id}/type={action_type}', 'Backend\RequisitionController@pdf');
         Route::get('stock-report/filter', 'Backend\StockReportController@filter');
         Route::get('stock-report-pdf', 'Backend\StockReportController@stockReportPdf');
     });
@@ -168,12 +163,6 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('customers','Backend\VeuApiController@customers');
         Route::post('store-customer','Backend\VeuApiController@storeCustomer');
         Route::post('store-sell','Backend\SellController@store');
-
-        Route::post('store-requisition','Backend\RequisitionController@store');
-        Route::get('requisition-details/{requisition_id}','Backend\RequisitionController@getRequisitionDetails');
-        Route::post('update-requisition-to-confirm','Backend\RequisitionController@updateRequisitionToConfirm');
-        Route::post('reject-requisition','Backend\RequisitionController@updateRequisitionToReject');
-        Route::post('update-requisition','Backend\RequisitionController@updateRequisition');
 
         Route::get('purchase-details/{purchase_id}','Backend\PurchaseController@getPurchaseDetails');
         Route::get('sell-details/{sell_id}','Backend\SellController@getSellDetails');

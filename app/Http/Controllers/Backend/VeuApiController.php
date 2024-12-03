@@ -2,20 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Requests\CustomerRequest;
-use App\Models\Branch;
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Customer;
 use App\Models\PaymentToSupplier;
-use App\Models\Product;
 use App\Models\Purchase;
-use App\Models\PurchaseProduct;
-use App\Models\Requisition;
-use App\Models\RequisitionProduct;
-use App\Models\SellProduct;
-use App\Models\Settings;
-use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\OrderType;

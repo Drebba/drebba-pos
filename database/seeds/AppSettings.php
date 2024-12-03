@@ -37,7 +37,6 @@ class AppSettings extends Seeder
        Settings::create(['option_key' => 'product_sku_prefix', 'option_value' => 'P']);
        Settings::create(['option_key' => 'purchase_invoice_prefix', 'option_value' => 'P']);
        Settings::create(['option_key' => 'sell_invoice_prefix', 'option_value' => 'S']);
-       Settings::create(['option_key' => 'requisition_id_prefix', 'option_value' => 'R']);
        Settings::create(['option_key' => 'expense_id_prefix', 'option_value' => 'E']);
        Settings::create(['option_key' => 'invoice_length', 'option_value' => '6']);
        Settings::create(['option_key' => 'address', 'option_value' => 'Your Company Address']);

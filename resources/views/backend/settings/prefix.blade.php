@@ -41,13 +41,6 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="requisition_id_prefix" class="custom-label">{{__('pages.requisition_id')}}</label>
-                                <input name="requisition_id_prefix" value="{{get_option('requisition_id_prefix')}}" type="text" class="form-control" placeholder="Requisition ID Prefix" required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="form-group">
                                 <label for="expense_id_prefix" class="custom-label">{{__('pages.expense_id')}}</label>
                                 <input name="expense_id_prefix" value="{{get_option('expense_id_prefix')}}" type="text" class="form-control" placeholder="Expense ID Prefix" required>
                             </div>

@@ -23,7 +23,6 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'manage_purchase_invoice']);
         Permission::create(['name' => 'manage_supplier_payment']);
         Permission::create(['name' => 'manage_customer_payment']);
-        Permission::create(['name' => 'manage_requisition']);
         Permission::create(['name' => 'manage_department']);
         Permission::create(['name' => 'manage_designation']);
         Permission::create(['name' => 'manage_employee']);

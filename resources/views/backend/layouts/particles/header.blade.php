@@ -1,5 +1,5 @@
 <!-- Topbar -->
-<nav class="navbar px-3 navbar-expand-xl navbar-light bg-white main-nav-header @if(active_if_full_match('admin/purchase/create') == 'active' || active_if_full_match('admin/purchase/*/edit') == 'active' || active_if_full_match('admin/sell/create') == 'active' || active_if_full_match('admin/sell/*/edit') == 'active' || active_if_full_match('admin/requisition/create') == 'active' || active_if_full_match('admin/requisition/*/edit') == 'active') @else @endif  static-top border-bottom-primary-slim">
+<nav class="navbar px-3 navbar-expand-xl navbar-light bg-white main-nav-header @if(active_if_full_match('admin/purchase/create') == 'active' || active_if_full_match('admin/purchase/*/edit') == 'active' || active_if_full_match('admin/sell/create') == 'active' || active_if_full_match('admin/sell/*/edit') == 'active') @else @endif  static-top border-bottom-primary-slim">
 
         <!-- Sidebar Toggle (Topbar) -->
         <div class="me-2 me-lg-4">
@@ -135,8 +135,7 @@
                 || active_if_full_match('purchase/*/edit') == 'active'
                 ||  active_if_full_match('sell/create') == 'active'
                 || active_if_full_match('sell/*/edit') == 'active'
-                || active_if_full_match('requisition/create') == 'active'
-                || active_if_full_match('requisition/*/edit') == 'active'
+
                  )
                     <li class="nav-item">
                         <a class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('home')}}" target="_blank">
@@ -177,13 +176,7 @@
                     </a>
                 </li>
             @endcan
-            {{-- @can('manage_requisition')
-                <li class="nav-item">
-                    <a class="text-nowrap btn btn-success btn-sm" href="{{route('requisition.index')}}">
-                        <i class="fa fa-shopping-cart me-2"></i>Order
-                    </a>
-                </li>
-            @endcan --}}
+
             </ul>
         </div>
     </nav>
