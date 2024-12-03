@@ -49,9 +49,6 @@ Vue.component('designation', require('./components/designation/DesignationCompon
 Vue.component('expense-category', require('./components/expense-category/ExpenseCategoryComponent.vue').default);
 Vue.component('tax', require('./components/tax/Tax.vue').default);
 Vue.component('role', require('./components/role/Role.vue').default);
-Vue.component('todo', require('./components/todo/TodoComponent.vue').default);
-Vue.component('todo-st2', require('./components/todo/TodoComponent2.vue').default);
-Vue.component('todo-st3', require('./components/todo/TodoComponent3.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

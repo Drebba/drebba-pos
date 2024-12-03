@@ -171,9 +171,6 @@ Route::middleware('auth', 'active')->group(function () {
         /** ====== get designations ========= */
         Route::get('designations', 'Backend\DesignationController@designations');
         Route::get('taxes','Backend\TaxController@taxes');
-        Route::get('pending-todos','Backend\TodoController@getPendingTodos');
-        Route::get('change-task-status-to-complete/{id}','Backend\TodoController@changeStatusToCompleted');
-        Route::get('delete-todo-task/{id}','Backend\TodoController@deleteTask');
     });
 
     Route::prefix('chart/api')->group(function (){
@@ -184,7 +181,6 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('purchase-report-statistic-data', 'Backend\ChartApiController@purchaseReportStatisticData');
         Route::get('purchase-report-statistic-by-day/{days}','Backend\ChartApiController@purchaseReportStatisticByDay');
         Route::get('purchase-report-statistics-filter/{selected_month}/{selected_year}/{selected_branch}/{search_type}','Backend\ChartApiController@purchaseReportStatisticsFilter');
-
         Route::get('get-dashboard-sell-purchase-data','HomeController@dashboardSellPurchaseData');
 
         Route::get('get-product-data/{id}','Backend\ChartApiController@product');

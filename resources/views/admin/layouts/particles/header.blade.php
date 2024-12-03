@@ -64,24 +64,6 @@
                 @endif
             </li>
 
-
-            @if(active_if_full_match('*/*/*') == 'active')
-                <li class="nav-item dropdown px-2 px-xl-0">
-                    <todo-st3></todo-st3>
-                </li>
-            @elseif(active_if_full_match('*/*') == 'active')
-                <li class="nav-item dropdown px-2 px-xl-0">
-                    <todo-st2></todo-st2>
-                </li>
-            @else
-                <li class="nav-item dropdown px-2 px-xl-0">
-                    <todo></todo>
-                </li>
-            @endif
-
-
-
-
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow px-2 px-xl-0">
                 <a class="nav-link py-1 d-flex align-items-center " href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -40,7 +40,6 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'manage_user']);
         Permission::create(['name' => 'manage_trash']);
         Permission::create(['name' => 'manage_notice']);
-        Permission::create(['name' => 'manage_todo']);
         Permission::create(['name' => 'access_to_all_branch']);
 
         $role = Role::where('name', 'Super Admin')->first();

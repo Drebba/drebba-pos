@@ -65,19 +65,7 @@
             </li>
 
 
-            @if(active_if_full_match('*/*/*') == 'active')
-                <li class="nav-item dropdown px-2 px-xl-0">
-                    <todo-st3></todo-st3>
-                </li>
-            @elseif(active_if_full_match('*/*') == 'active')
-                <li class="nav-item dropdown px-2 px-xl-0">
-                    <todo-st2></todo-st2>
-                </li>
-            @else
-                <li class="nav-item dropdown px-2 px-xl-0">
-                    <todo></todo>
-                </li>
-            @endif
+
 
 
 
