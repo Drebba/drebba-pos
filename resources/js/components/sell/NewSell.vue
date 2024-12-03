@@ -490,13 +490,7 @@
                                             @click="storeKotOrSell(0)">{{ lang.confirm_payment }}</a>
                                     </div>
                                 </div>
-                                <!-- <div class="mt-5" v-if="sell.invoice_id != null">
-                                    <a @click="printInvoice" class="btn btn-brand-warning btn-brand w-100"
-                                        target="_blank">
-                                        <i class="fa fa-print me-2"></i> <br>
-                                        <strong>{{ lang.print_invoice }}</strong>
-                                    </a>
-                                </div> -->
+
                             </div>
                         </div>
                     </div>
@@ -732,7 +726,6 @@ export default {
                 if (this.sellStoreValidation()) {
                     if (this.carts.length != 0) {
                         if (this.summary.paid_amount >= 0) {
-                            // this.isSellStoreProcessing = true;
                             // store sells and make it kot if   kot btn clicked
                             axios.post('../vue/api/store-sell', { carts: JSON.parse(JSON.stringify(this.carts)), customer: JSON.parse(JSON.stringify(this.customer)), summary: this.summary, table: this.selectedTable?.id??null, isKot: type, order_mode: this.order_mode }).then((response) => {
                                 this.sell = response.data.sell;
@@ -751,13 +744,7 @@ export default {
                     }
                 }
             }
-            this.clearAll();
-            // change the status of kot so that table list can be shown
-            this.kot = true;
-            // module availabe for only table module enable user and also only if dine in module is selected
-            if (this.tableWiseBilling && this.order_mode == 2) {
-                this.checkKOT();
-            }
+
         },
 
 
@@ -794,7 +781,16 @@ export default {
                     this.invoicePrintBtn = false;
                     this.sell = []; // Reset sell data after printing
                     this.currenSellId = null;
+
+            this.clearAll();
+            // change the status of kot so that table list can be shown
+            this.kot = true;
+            // module availabe for only table module enable user and also only if dine in module is selected
+            if (this.tableWiseBilling && this.order_mode == 2) {
+                this.checkKOT();
+            }
                 });
+
         },
 
         newCustomer: function () {

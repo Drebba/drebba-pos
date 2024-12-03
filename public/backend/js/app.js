@@ -6760,12 +6760,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7005,7 +6999,6 @@ __webpack_require__.r(__webpack_exports__);
             if (this.summary.paid_amount >= 0) {
               var _this$selectedTable$i, _this$selectedTable;
 
-              // this.isSellStoreProcessing = true;
               // store sells and make it kot if   kot btn clicked
               axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('../vue/api/store-sell', {
                 carts: JSON.parse(JSON.stringify(this.carts)),
@@ -7032,14 +7025,6 @@ __webpack_require__.r(__webpack_exports__);
             toastr["error"]("!Empty Cart");
           }
         }
-      }
-
-      this.clearAll(); // change the status of kot so that table list can be shown
-
-      this.kot = true; // module availabe for only table module enable user and also only if dine in module is selected
-
-      if (this.tableWiseBilling && this.order_mode == 2) {
-        this.checkKOT();
       }
     },
     printInvoice: function printInvoice() {
@@ -7074,6 +7059,15 @@ __webpack_require__.r(__webpack_exports__);
         _this7.sell = []; // Reset sell data after printing
 
         _this7.currenSellId = null;
+
+        _this7.clearAll(); // change the status of kot so that table list can be shown
+
+
+        _this7.kot = true; // module availabe for only table module enable user and also only if dine in module is selected
+
+        if (_this7.tableWiseBilling && _this7.order_mode == 2) {
+          _this7.checkKOT();
+        }
       });
     },
     newCustomer: function newCustomer() {
