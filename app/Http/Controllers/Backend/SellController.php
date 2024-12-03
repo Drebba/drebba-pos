@@ -38,13 +38,15 @@ class SellController extends Controller
         if ($request->customer_id){
             $sells = $sells->where('customer_id', $request->customer_id);
         }
+        if ($request->user_id){
+            $sells = $sells->where('created_by', $request->user_id);
+        }
 
-        if ($request->start_date != '' || $request->end_date != ''){
-            $start_date = $request->start_date ? $request->start_date : Sell::oldest()->pluck('sell_date')->first();
-            $end_date = $request->end_date ? $request->end_date : Sell::latest()->pluck('sell_date')->first();
+            $start_date = $request->start_date ? $request->start_date : today()->subWeek(1);
+            $end_date = $request->end_date ? $request->end_date :today();
 
             $sells = $sells->whereBetween('sell_date', [$start_date, $end_date]);
-        }
+
 
         if ($request->invoice_id){
             $sells = $sells->where('invoice_id', 'like', '%'.$request->invoice_id.'%');
@@ -54,7 +56,7 @@ class SellController extends Controller
 
         return view('backend.sell.index', [
             'sells' => $sells,
-            'customers' => Customer::all(),
+            'customers' => Auth::user()->business->customer,
         ]);
     }
 

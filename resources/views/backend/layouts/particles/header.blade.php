@@ -64,12 +64,6 @@
                 @endif
             </li>
 
-
-
-
-
-
-
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow px-2 px-xl-0">
                 <a class="nav-link py-1 d-flex align-items-center " href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

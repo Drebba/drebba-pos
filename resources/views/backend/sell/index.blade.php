@@ -19,6 +19,16 @@
                             <input type="text" name="invoice_id" value="{{Request::get('invoice_id')}}" class="form-control" placeholder="{{__('pages.invoice_id')}}">
                         </div>
                     </div>
+                    <div class="col-sm-6 col-md-4 col-lg">
+                        <div class="form-group">
+                            <select name="user_id" class="form-select select2-basic">
+                                <option value="">All User</option>
+                                @foreach(Auth::user()->business->user as $user)
+                                    <option value="{{$user->id}}" {{Request::get('user_id') == $user->id ? 'selected' : ''}}>{{$user->name}}, {{$user->phone}} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="col-sm-6 col-md-4 col-lg">
                         <div class="form-group">
@@ -59,10 +69,8 @@
                         <tr class="bg-secondary text-white">
                             <th>{{__('pages.sl')}}</th>
                             <th>{{__('pages.invoice_id')}}</th>
-                            <th>{{__('pages.customer')}}</th>
+                            <th>Serve BY</th>
                             <th>{{__('pages.sell_date')}}</th>
-                            <th>{{__('pages.sub_total')}}</th>
-                            <th>{{__('pages.discount')}}</th>
                             <th>{{__('pages.grand_total')}}</th>
                             <th>{{__('pages.paid_amount')}}</th>
                             <th>{{__('pages.due_amount')}}</th>
@@ -74,16 +82,14 @@
                             <tr>
                                 <td>{{$key+1}}</td>
                                 <td>{{$sell->invoice_id}}</td>
-                                <td>{{$sell->customer->name}}</td>
+                                <td>{{$sell->user?->name}}</td>
                                 <td> @formatdate($sell->sell_date) </td>
-                                <td> {{get_option('app_currency')}}{{number_format($sell->sub_total, 2)}} </td>
-                                <td> {{get_option('app_currency')}}{{number_format($sell->discount, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->grand_total_price, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->paid_amount, 2)}} </td>
                                 <td> {{get_option('app_currency')}}{{number_format($sell->due_amount, 2)}} </td>
                                 <td class="font-14">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                        <a href="{{route('sell.edit', [$sell->id])}}" class="mx-2 text-brand-primary"><i class="bi bi-pencil"></i></a>
+                                        {{-- <a href="{{route('sell.edit', [$sell->id])}}" class="mx-2 text-brand-primary"><i class="bi bi-pencil"></i></a> --}}
                                         <a href="{{route('sell.show', [$sell->id])}}" class="mx-2"><i class="bi bi-eye"></i></a>
                                         <a href="javascript:void(0);" onclick="$(this).confirmDelete($('#delete-{{$key}}')) " class="mx-2 text-danger"><i class="bi bi-trash3"></i></a>
                                         <form action="{{ route('sell.destroy',$sell->id) }}" method="post" id="delete-{{$key}}"> @csrf @method('delete') </form>

@@ -6,15 +6,12 @@ use App\Models\Business;
 use App\Models\Expense;
 use App\Models\PaymentFromCustomer;
 use App\Models\PaymentToSupplier;
-use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Sell;
-use App\Models\SellsTarget;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Toastr;
 use Auth;
-use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -38,7 +35,6 @@ class HomeController extends Controller
 
 
 
-        $sells_targets = SellsTarget::where('month', Carbon::now()->format('Y-m'))->get();
 
         $collection = collect(Auth::user()->business->product);
         $low_stock_products = $collection->sortBy('current_stock_quantity')->take(10);
@@ -46,7 +42,6 @@ class HomeController extends Controller
 
 
         return view('backend/dashboard',[
-            'sells_targets' => $sells_targets,
             'low_stock_products' => $low_stock_products->values()->all(),
             'trending_products' => $trending_products->values()->all(),
         ]);

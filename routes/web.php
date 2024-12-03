@@ -24,7 +24,6 @@ Route::middleware('auth', 'active')->group(function () {
     Route::get('kitchen', 'KitchenController@index');
 
     Route::resource('sells', 'Backend\SellController');
-    Route::resource('branch-sells-target', 'Backend\SellsTargetController');
     Route::resource('purchase', 'Backend\PurchaseController');
 
     Route::resource('expense-category', 'Backend\ExpenseCategoryController');
