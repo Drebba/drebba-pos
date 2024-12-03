@@ -77,7 +77,7 @@
                                         {{__('pages.edit')}}
                                     </a>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>

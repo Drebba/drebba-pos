@@ -126,7 +126,7 @@ class SellReportController extends Controller
         }
 
         return view('backend.report.sell.product-wise.index',[
-            'products' => Product::orderBy('title')->get(),
+            'products' => Auth::user()->business->product()->orderBy('title')->get(),
             'sell_products' => $sell_products,
         ]);
     }
@@ -187,7 +187,7 @@ class SellReportController extends Controller
         }
 
         if ($request->product_id != ''){
-            $product =  Product::findOrFail($request->product_id);
+            $product =  Auth::user()->business->product()->where('id',$request->product_id)->first();
             $product_name = $product->title;
         }else{
             $product_name = 'All Products';

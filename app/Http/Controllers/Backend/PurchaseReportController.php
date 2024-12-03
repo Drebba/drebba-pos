@@ -158,7 +158,7 @@ class PurchaseReportController extends Controller
         }
 
         return view('backend.report.purchase.product-wise.index',[
-            'products' => Product::orderBy('title')->get(),
+            'products' => Auth::user()->business->product()->orderBy('title')->get(),
             'purchase_products' => $purchase_products,
         ]);
     }
@@ -279,7 +279,7 @@ class PurchaseReportController extends Controller
 
     private function productWiseFilterQuery(Request $request)
     {
-        $product_id = $request->product_id ? [$request->product_id] : PurchaseProduct::select('product_id')->distinct()->get();
+        $product_id = $request->product_id ? [$request->product_id] : Auth::user()->business->purchaseProduct()->select('product_id')->distinct()->get();
 
         $start_date = $request->start_date ? $request->start_date : Carbon::now()->subDay(60)->toDateString();
         $end_date = $request->end_date ? $request->end_date :  Carbon::now()->toDateString();
@@ -334,7 +334,7 @@ class PurchaseReportController extends Controller
         }
 
         if ($request->product_id != ''){
-            $product =  Product::findOrFail($request->product_id);
+            $product =  Auth::user()->business->product()->where('id',$request->product_id)->first();
             $product_name = $product->title;
         }else{
             $product_name = 'All Products';

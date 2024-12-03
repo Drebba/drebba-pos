@@ -95,7 +95,6 @@ Route::middleware('auth', 'active')->group(function () {
             Route::get('summary', 'Backend\SellReportController@sellsSummary');
             Route::get('product-wise', 'Backend\SellReportController@productWise');
             Route::get('sells', 'Backend\SellReportController@sells');
-
             Route::get('statistics', 'Backend\SellReportController@sellsStatistics');
             Route::get('statistics-filter', 'Backend\SellReportController@sellsStatisticsFilter');
             Route::get('statistics-pdf', 'Backend\SellReportController@sellsStatisticsFilterPDF');
@@ -105,15 +104,12 @@ Route::middleware('auth', 'active')->group(function () {
             Route::get('summary', 'Backend\PurchaseReportController@summary');
             Route::get('product-wise', 'Backend\PurchaseReportController@productWise');
             Route::get('purchases', 'Backend\PurchaseReportController@purchases');
-
-
             Route::get('statistics', 'Backend\PurchaseReportController@statistics');
             Route::get('statistics-filter', 'Backend\PurchaseReportController@statisticsFilter');
             Route::get('statistics-pdf', 'Backend\PurchaseReportController@statisticsFilterPDF');
         });
 
         Route::get('stock-report', 'Backend\StockReportController@index');
-        Route::get('stock-report/filter', 'Backend\StockReportController@filter');
         Route::get('stock-report-pdf', 'Backend\StockReportController@stockReportPdf');
         Route::get('payment/supplier', 'Backend\PaymentToSupplierController@pdf');
         Route::get('payment/customer', 'Backend\PaymentFromCustomerController@pdf');
@@ -172,9 +168,6 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('customers','Backend\VeuApiController@customers');
         Route::post('store-customer','Backend\VeuApiController@storeCustomer');
         Route::post('store-sell','Backend\SellController@store');
-        Route::post('store-draft','Backend\DraftController@store');
-        Route::get('drafts','Backend\DraftController@drafts');
-        Route::get('delete-drafts/{id}','Backend\DraftController@destroy');
 
         Route::post('store-requisition','Backend\RequisitionController@store');
         Route::get('requisition-details/{requisition_id}','Backend\RequisitionController@getRequisitionDetails');

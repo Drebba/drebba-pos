@@ -40,7 +40,7 @@ class HomeController extends Controller
 
         $sells_targets = SellsTarget::where('month', Carbon::now()->format('Y-m'))->get();
 
-        $collection = collect(Product::all());
+        $collection = collect(Auth::user()->business->product);
         $low_stock_products = $collection->sortBy('current_stock_quantity')->take(10);
         $trending_products = $collection->sortByDesc('total_sell_qty')->take(10);
 
@@ -117,7 +117,7 @@ class HomeController extends Controller
 
     public function menu($uuid)  {
         $business=Business::where('uuid',$uuid)->firstOrFail();
-        $menus=Product::where('business_id',$business->id)->get();
+        $menus=$business->product;
         return view('menu',compact('business','menus'));
     }
 }

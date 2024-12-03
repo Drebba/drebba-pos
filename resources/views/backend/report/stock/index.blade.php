@@ -15,11 +15,6 @@
                 <button type="submit" class="btn btn-sm btn-brand-danger rounded-end-0 px-2 px-md-3"><i class="fas fa-file-download me-1"></i> {{__('pages.pdf')}} </button>
             </form>
 
-            <form action="{{url('report/stock-report-pdf')}}" method="get" target="_blank">
-                <input type="hidden" name="action_type" value="print">
-                <button type="submit" class="btn btn-sm btn-brand-warning rounded-0 px-2 px-md-3"><i class="fa fa-print me-1"></i> {{__('pages.print')}} </button>
-            </form>
-
             <form action="{{url('report/stock-report-pdf')}}" method="get">
                 <input type="hidden" name="action_type" value="csv">
                 <button type="submit" class="btn btn-sm btn-brand-success rounded-start-0 px-2 px-md-3"><i class="fa fa-file-csv me-1"></i> {{__('pages.csv')}} </button>

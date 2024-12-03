@@ -122,7 +122,7 @@ class MenuCategoryController extends Controller
         if (!Auth::user()->can('manage_category')) {
             return redirect('home')->with(denied());
         } // end permission checking
-        if (Product::where('category_id',$id)->first()) {
+        if (Auth::user()->business->product()->where('category_id',$id)->first()) {
             return response()->json(['error', "Category can't be deleted"]);
         }
 

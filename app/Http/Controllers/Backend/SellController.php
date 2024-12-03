@@ -306,7 +306,7 @@ class SellController extends Controller
     private function storeSellProducts($request, $sell)
     {
         foreach ($request->carts as $cart_product) {
-            $product = Product::findOrFail($cart_product['id']);
+            $product = Auth::user()->business->product()->where('id',$cart_product['id'])->first();
 
 
             $sell_product = new SellProduct();
@@ -327,9 +327,7 @@ class SellController extends Controller
 
     private function updateSellProducts($request, $sell){
         foreach ($request->carts as $cart_product) {
-            $product = Product::findOrFail($cart_product['id']);
-
-
+            $product = Auth::user()->business->product()->where('id',$cart_product['id'])->first();
             $sell_product = new SellProduct();
             $sell_product->sell_id = $sell->id;
             $sell_product->product_id = $cart_product['id'];

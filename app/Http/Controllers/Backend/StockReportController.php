@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Branch;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,57 +25,18 @@ class StockReportController extends Controller
         ]);
     }
 
-    public function filter(Request $request){
-        if (!Auth::user()->can('view_stock')) {
-            return redirect('home')->with(denied());
-        } // end permission checking
-
-        if ($request->business_id != ''){
-            $products = Product::with('productStockHistories', 'unit')->get();
-
-            $product_requisitions = [];
-            foreach ($products as $key => $product){
-                $productStockHistories = $product->productStockHistories->where('business_id', $request->business_id);
-
-                $product_requisitions[$key]['product_id'] = $product->id;
-                $product_requisitions[$key]['product_title'] = $product->title;
-                $product_requisitions[$key]['product_sku'] = $product->sku;
-                $product_requisitions[$key]['product_sell_price'] = $product->sell_price;
-                $product_requisitions[$key]['purchase_qty'] = $productStockHistories->sum('purchase_qty');
-                $product_requisitions[$key]['branch_requisitions_from_qty'] = $productStockHistories->sum('req_send'); // Stock Out
-                $product_requisitions[$key]['sell_qty'] = $productStockHistories->sum('sell_qty');
-
-                $product_requisitions[$key]['branch_requisitions_to_qty'] = $productStockHistories->sum('req_received');;
-                $product_requisitions[$key]['current_stock'] = ($product_requisitions[$key]['purchase_qty'] + $product_requisitions[$key]['branch_requisitions_from_qty']) - ($product_requisitions[$key]['sell_qty'] + $product_requisitions[$key]['branch_requisitions_to_qty']);
-                $product_requisitions[$key]['unit'] = $product->unit->title ?? '';
-
-            }
-
-
-            return view('backend.report.stock.filter',[
-                'product_requisitions' => $product_requisitions,
-            ]);
-        }else{
-            return redirect(url('report/stock-report'));
-        }
-    }
-
     public function stockReportPdf(Request $request){
         if (!Auth::user()->can('view_stock')) {
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $products = Product::all();
+        $products =Auth::user()->business->product()->get();
 
         $random_string = Str::random(10);
         $pdf = PDF::loadView('backend.pdf.reports.stock.all-branch', compact('products', 'request'))->setPaper('a4');
 
         if ($request->action_type == 'download'){
             return $pdf->download('stock-report-' . Carbon::now()->format(get_option('app_date_format')) . '-'. $random_string . '.pdf');
-        }elseif($request->action_type == 'print'){
-            @unlink('pdf/reports/stock/' . 'stock-report.pdf');
-            $pdf->save('pdf/reports/stock/' . 'stock-report.pdf');
-            return redirect('pdf/reports/stock/' . 'stock-report.pdf');
         }else{
 
             $headers = [
@@ -98,7 +58,7 @@ class StockReportController extends Controller
                 __('pages.current_stock_value'),
             ]);
 
-            $products = Product::all();
+            $products = Auth::user()->business->product()->get();
             foreach ($products as $key => $product) {
 
                    $purchaseQuantity = $product->purchaseProducts->sum('quantity');

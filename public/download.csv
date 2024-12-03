@@ -1,3 +1,8 @@
 SL,Product,"Purchase Quantity","Sales Quantity","Current Stock Qty","Current Stock Sell Value"
-1,Lauka|P000002,81.5,0,81.5,"4,890.00"
-2,Milk|P000001,122,29,93,"9,300.00"
+1,Ice|T0111,10,0,10,10.00
+2,"Flavia Marsh|T90909",0,34,-34,"-33,864.00"
+3,"Amethyst Howe|T89889",0,273,-273,"-142,506.00"
+4,"Zachery Alvarado|T8888",0,87,-87,"-41,151.00"
+5,"Lavinia Miranda|T9999",0,9,-9,"-3,096.00"
+6,"Jane Medina|T0007",0,4,-4,"-2,896.00"
+7,"Minim elit enim in|TMinim voluptate",10,0,10,10.00

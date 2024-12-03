@@ -120,7 +120,7 @@ class TaxController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        if (Product::where('tax_id',$id)->first()) {
+        if (Auth::user()->business->product()->where('tax_id',$id)->first()) {
             return response()->json(['error', "Tax can't be deleted"]);
         }
         Auth::user()->business->tax()->where('id',$id)->delete();

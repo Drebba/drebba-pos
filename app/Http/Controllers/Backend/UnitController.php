@@ -121,7 +121,7 @@ class UnitController extends Controller
         if (!Auth::user()->can('manage_unit')) {
             return redirect('home')->with(denied());
         } // end permission checking
-        if (Product::where('unit_id',$id)->first()) {
+        if (Auth::user()->business->product()->where('unit_id',$id)->first()) {
             return response()->json(['error', "Unit can't be deleted"]);
         }
         Auth::user()->business->unit()->where('id',$id)->delete();

@@ -71,7 +71,7 @@ class VeuApiController extends Controller
 
     public function productAvailableStockQty($product_id)
     {
-       return Product::findOrFail($product_id)->current_stock_quantity;
+       return Auth::user()->business->product()->where('id',$product_id)->current_stock_quantity;
     }
 
 
@@ -82,46 +82,19 @@ class VeuApiController extends Controller
         /**
          * Debit Quantity
          **/
-        $total_purchase_products_qty = PurchaseProduct::where('business_id', $business_id)
+        $total_purchase_products_qty = Auth::user()->business->purchaseProduct()
             ->where('product_id', $product_id)
             ->sum('quantity');
 
-        $branch_requisitions_from = Requisition::where('requisition_from', $business_id)
-            ->where('status', 2)
-            ->select('id')
-            ->distinct()
-            ->get();
-
-        $branch_requisitions_from_qty = RequisitionProduct::whereIn('requisition_id', $branch_requisitions_from)
-            ->where('product_id', $product_id)
-            ->select('id')
-            ->sum('quantity');
-
-
-        /**
-         * Credit Quantity
-         **/
-
-        $total_sell_products_qty = SellProduct::where('business_id', $business_id)
+        $total_sell_products_qty = Auth::user()->business->sellProduct()
             ->where('sell_id', '!=', $sell_id)
             ->where('product_id', $product_id)
             ->sum('quantity');
 
-        $branch_requisitions_to = Requisition::where('requisition_to', $business_id)
-            ->where('status', 2)
-            ->select('id')
-            ->distinct()
-            ->get();
-
-        $branch_requisitions_to_qty = RequisitionProduct::whereIn('requisition_id', $branch_requisitions_to)
-            ->where('product_id', $product_id)
-            ->select('id')
-            ->sum('quantity');
 
 
-
-        $debit = $total_purchase_products_qty + $branch_requisitions_from_qty;
-        $credit = $total_sell_products_qty + $branch_requisitions_to_qty;
+        $debit = $total_purchase_products_qty;
+        $credit = $total_sell_products_qty ;
 
         return $debit - $credit;
     }

@@ -70,7 +70,7 @@ class ProductController extends Controller
             'categories' => Auth::user()->business->category()->where('status', '1')->get(),
             'taxes' => Auth::user()->business->tax()->orderBy('title', 'asc')->get(),
             'units' => Auth::user()->business->unit()->orderBy('title', 'asc')->get(),
-            'new_sku' => str_pad(Product::withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT),
+            'new_sku' => str_pad(Auth::user()->business->product()->withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT),
         ]);
     }
 
@@ -141,7 +141,7 @@ class ProductController extends Controller
         if (!Auth::user()->can('manage_product')) {
             return redirect('home')->with(denied());
         } // end permission checking
-        $data['product'] = Auth::user()->business->product()->where('id',$id)->first();
+        $data['product'] = Auth::user()->business->product()->where('id',$id)->firstOrFail();
         $data['categories'] = Auth::user()->business->category()->where('status', '1')->orderBy('title', 'asc')->get();
         $data['taxes'] = Auth::user()->business->tax()->orderBy('title', 'asc')->get();
         $data['units'] = Auth::user()->business->unit()->orderBy('title', 'asc')->get();
@@ -162,7 +162,7 @@ class ProductController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $product = Product::findOrFail($id);
+        $product = Auth::user()->business->product()->where('id',$id)->firstOrFail();
         $product->fill($request->all());
         $product->sell_price=$request->sell_price??$product->sell_price;
         if($request->hasFile('thumbnail')){
