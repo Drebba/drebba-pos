@@ -6,8 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>E-BILL {{ $sell->invoice_id }}</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
     <style>
+       #invoice-POS p,#invoice-POS h1,#invoice-POS h2,#invoice-POS h3,#invoice-POS h4,#invoice-POS h5,#invoice-POS h6,#invoice-POS div,#invoice-POS * {
+            /* font-family: 'Nunito Sans', sans-serif!important; */
+            font-family: "Silkscreen", sans-serif!important;
+
+
+        }
         #invoice-POS {
             box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
             padding: 2mm;
@@ -138,7 +146,6 @@
         *,
         p,
         .itemtext {
-            font-family: Arial, Helvetica, sans-serif !important;
             font-size: 12px !important;
             color: #666!important;
         }
@@ -225,11 +232,11 @@
                                 {{$sell_product->product->title}}
                             </td>
                            @if (!$kot)
-                            <td class="itemtext"> {{get_option('app_currency')}} {{number_format($sell_product->sell_price, 2)}} </td>
+                            <td class="itemtext">  {{number_format($sell_product->sell_price,0)}} </td>
                             @endif
                             <td class="itemtext"> {{$sell_product->quantity}}  {{$sell_product->product->unit ? $sell_product->product->unit->title : ''}} </td>
                             @if (!$kot)
-                            <td class="itemtext"> {{get_option('app_currency')}} {{number_format($sell_product->total_price, 2)}} </td>
+                            <td class="itemtext"> {{number_format($sell_product->total_price,0)}} </td>
                             @endif
                         </tr>
                     @endforeach
@@ -247,7 +254,7 @@
                             {{__('pages.sub_total')}}:
                         </th>
                         <th>
-                            {{get_option('app_currency')}} {{number_format($sell->sub_total,2)}}
+                            {{get_option('app_currency')}} {{number_format($sell->sub_total,0)}}
                         </th>
                     </tr>
 
@@ -258,7 +265,7 @@
                             {{__('pages.discount')}}:
                         </th>
                         <td>
-                            {{get_option('app_currency')}} {{number_format($sell->discount,2)}}
+                            {{get_option('app_currency')}} {{number_format($sell->discount,0)}}
                         </td>
                     </tr>
                     @endif
@@ -268,7 +275,7 @@
                             {{__('pages.grand_total')}}:
                         </th>
                         <th>
-                            {{get_option('app_currency')}} {{number_format($sell->grand_total_price,2)}}
+                            {{get_option('app_currency')}} {{number_format($sell->grand_total_price,0)}}
                         </th>
                     </tr>
                     @endif

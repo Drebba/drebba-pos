@@ -25,6 +25,7 @@
     <script src="{{ asset('admin/plugin/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
     <script>
         const ordersList = document.getElementById('ordersList');
+        let orders = [];  // Store orders data
 
         // Function to create an order card
         function createOrderCard(order) {
@@ -41,6 +42,7 @@
                         <h6 class="card-text">Order Mode: ${order.orderMode} (${order.invoice_id})</h6>
                         <h6 class="card-text">Table: ${order.table}</h6>
                         <ul>${productsList}</ul>
+                        <button class='text-center btn btn-primary' id="elapsed-time-${order.id}">${getElapsedTime(order.updated_at)}</button>
                     </div>
                 </div>
             `;
@@ -50,8 +52,7 @@
         }
 
         // Function to render the orders
-        function renderOrders(orders) {
-            console.log(orders);
+        function renderOrders() {
             ordersList.innerHTML = ''; // Clear existing content
 
             if (orders.length === 0) {
@@ -77,16 +78,43 @@
                 }
 
                 const data = await response.json();
-                renderOrders(data);
+                orders = data;  // Update orders array
+                renderOrders();  // Render orders after fetching
             } catch (error) {
                 console.error('Error fetching orders:', error);
                 ordersList.innerHTML = '<p class="text-center text-danger">Failed to load orders. Please try again later.</p>';
             }
         }
 
+        // Get elapsed time based on table's updated_at timestamp
+        function getElapsedTime(updated_at) {
+            if (!updated_at) return '0:00';  // In case updated_at is missing
+
+            const now = new Date().getTime();
+            const startTime = new Date(updated_at).getTime();  // Convert updated_at to timestamp
+            const diff = now - startTime;  // Time difference in milliseconds
+
+            const seconds = Math.floor((diff / 1000) % 60);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Update the elapsed time for each order every second
+        function updateElapsedTimes() {
+            orders.forEach(order => {
+                const elapsedTimeElement = document.getElementById(`elapsed-time-${order.id}`);
+                if (elapsedTimeElement) {
+                    elapsedTimeElement.innerText = getElapsedTime(order.updated_at);
+                }
+            });
+        }
+
         // Fetch orders initially and every 20 seconds
         fetchOrders();
-        setInterval(fetchOrders, 20000);
+        setInterval(fetchOrders, 20000);  // Refresh orders every 20 seconds
+        setInterval(updateElapsedTimes, 1000);  // Update elapsed time every second
     </script>
 </body>
 </html>

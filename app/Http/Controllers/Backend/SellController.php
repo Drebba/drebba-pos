@@ -215,7 +215,7 @@ class SellController extends Controller
         $sell->grand_total_price = $request->summary['grand_total_price'];
         $sell->due_amount = $request->summary['due_amount'];
         $sell->paid_amount = $paid_amount;
-        $sell->status=1;
+        $sell->status=$request->kot?0:1;
         $sell->save();
 
         Auth::user()->business->sellProduct()->where('sell_id', $id)->delete();

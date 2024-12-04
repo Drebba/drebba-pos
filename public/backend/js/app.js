@@ -5752,10 +5752,7 @@ __webpack_require__.r(__webpack_exports__);
     RecentTransaction: _RecentTransaction_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   mounted: function mounted() {
-    // const ps = new PerfectScrollbar('.perfect-ps');
-    // const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
-    // const psForCart = new PerfectScrollbar('.sell-cart-scroll');
-    // console.log(this.customers);
+    this.updateTableTimes();
     window.addEventListener("beforeunload", this.handleBeforeUnload);
   },
   beforeUnmount: function beforeUnmount() {
@@ -6172,6 +6169,29 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
       return result;
+    },
+    updateTableTimes: function updateTableTimes() {
+      var _this11 = this;
+
+      setInterval(function () {
+        _this11.all_tables = _this11.all_tables.map(function (table) {
+          return table;
+        });
+      }, 1000);
+    },
+    // Get elapsed time based on table's updated_at timestamp
+    getElapsedTime: function getElapsedTime(updated_at) {
+      if (!updated_at) return '0:00'; // In case updated_at is missing
+
+      var now = new Date().getTime();
+      var startTime = new Date(updated_at).getTime(); // Convert updated_at to timestamp
+
+      var diff = now - startTime; // Time difference in milliseconds
+
+      var seconds = Math.floor(diff / 1000 % 60);
+      var minutes = Math.floor(diff / (1000 * 60) % 60);
+      var hours = Math.floor(diff / (1000 * 60 * 60) % 24);
+      return "".concat(hours, ":").concat(minutes, ":").concat(seconds);
     }
   },
   computed: {
@@ -6216,17 +6236,17 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     filteredProduct: function filteredProduct() {
-      var _this11 = this;
+      var _this12 = this;
 
       if (this.filter.category_id != '') {
         return this.products.filter(function (product) {
-          return product.category_id == _this11.filter.category_id && (product.sku.toLowerCase().match(_this11.filter.search.toLowerCase()) || product.title.toLowerCase().match(_this11.filter.search.toLowerCase()));
+          return product.category_id == _this12.filter.category_id && (product.sku.toLowerCase().match(_this12.filter.search.toLowerCase()) || product.title.toLowerCase().match(_this12.filter.search.toLowerCase()));
         });
       }
 
       if (this.filter.search != '') {
         return this.products.filter(function (product) {
-          return product.title.toLowerCase().match(_this11.filter.search.toLowerCase()) || product.sku.toLowerCase().match(_this11.filter.search.toLowerCase());
+          return product.title.toLowerCase().match(_this12.filter.search.toLowerCase()) || product.sku.toLowerCase().match(_this12.filter.search.toLowerCase());
         });
       }
 
@@ -6234,46 +6254,46 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   beforeMount: function beforeMount() {
-    var _this12 = this;
+    var _this13 = this;
 
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/order-type').then(function (response) {
-      _this12.order_types = response.data;
+      _this13.order_types = response.data;
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/products?type=sell').then(function (response) {
-      _this12.products = response.data;
+      _this13.products = response.data;
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/get-local-lang').then(function (response) {
-      _this12.lang = response.data;
+      _this13.lang = response.data;
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/get-app-configs').then(function (response) {
-      _this12.configs = response.data;
+      _this13.configs = response.data;
 
-      var tableBillingConfig = _this12.configs.find(function (element) {
+      var tableBillingConfig = _this13.configs.find(function (element) {
         return element.option_key === 'table_billing';
       });
 
       if (tableBillingConfig && tableBillingConfig.option_value == 1) {
         // Fetch table data only if table billing is enabled
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/tables').then(function (response) {
-          _this12.all_tables = response.data;
+          _this13.all_tables = response.data;
         });
-        _this12.tableWiseBilling = true;
-        _this12.showTable = true;
+        _this13.tableWiseBilling = true;
+        _this13.showTable = true;
       } else {
-        _this12.tableWiseBilling = false;
-        _this12.showTable = false;
+        _this13.tableWiseBilling = false;
+        _this13.showTable = false;
       }
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('../vue/api/customers').then(function (response) {
-      _this12.customers = response.data;
+      _this13.customers = response.data;
 
-      var defaultCustomer = _this12.configs.find(function (element) {
+      var defaultCustomer = _this13.configs.find(function (element) {
         return element.option_key == 'default_customer';
       });
 
-      _this12.customers.forEach(function (customer) {
+      _this13.customers.forEach(function (customer) {
         if (customer.id == defaultCustomer.option_value) {
-          _this12.customer = customer;
+          _this13.customer = customer;
         }
       });
     });
@@ -34228,16 +34248,30 @@ var render = function() {
                                           "div",
                                           { staticClass: "text-center" },
                                           [
-                                            _c("div"),
-                                            _vm._v(
-                                              "\n                                     " +
-                                                _vm._s(
-                                                  _vm.appConfig("app_currency")
-                                                ) +
+                                            _c("div", [
+                                              _c("small", [
+                                                _vm._v(
+                                                  _vm._s(
+                                                    _vm.getElapsedTime(
+                                                      table.updated_at
+                                                    )
+                                                  )
+                                                )
+                                              ])
+                                            ]),
+                                            _vm._v(" "),
+                                            _c("small", [
+                                              _vm._v(
                                                 " " +
-                                                _vm._s(table.total_amount) +
-                                                " "
-                                            )
+                                                  _vm._s(
+                                                    _vm.appConfig(
+                                                      "app_currency"
+                                                    )
+                                                  ) +
+                                                  " " +
+                                                  _vm._s(table.total_amount)
+                                              )
+                                            ])
                                           ]
                                         )
                                       : _vm._e()

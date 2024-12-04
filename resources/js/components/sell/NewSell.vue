@@ -208,10 +208,10 @@
                                     style="height:80px">
                                     <div> {{ table.name }} <div v-if="parseInt(table.status)" class="text-center">
                                         <div>
-                                             <!-- Todo Add Counter  -->
+                                             <small>{{ getElapsedTime(table.updated_at) }}</small>
                                         </div>
-                                         {{
-                                        appConfig('app_currency') }} {{ table.total_amount }} </div>
+                                        <small> {{
+                                            appConfig('app_currency') }} {{ table.total_amount }}</small> </div>
 
                                     </div>
                                 </div>
@@ -512,10 +512,7 @@ export default {
     },
 
     mounted() {
-        // const ps = new PerfectScrollbar('.perfect-ps');
-        // const psForProduct = new PerfectScrollbar('.sell-card-product-scroll');
-        // const psForCart = new PerfectScrollbar('.sell-cart-scroll');
-        // console.log(this.customers);
+        this.updateTableTimes();
         window.addEventListener("beforeunload", this.handleBeforeUnload);
     },
     beforeUnmount() {
@@ -910,11 +907,35 @@ export default {
             });
 
             return result;
-        }
+        },
+
+
+    updateTableTimes() {
+        setInterval(() => {
+        this.all_tables = this.all_tables.map(table => {
+              return table;
+        });
+    },1000)
+    },
+
+    // Get elapsed time based on table's updated_at timestamp
+    getElapsedTime(updated_at) {
+        if (!updated_at) return '0:00';  // In case updated_at is missing
+
+        const now = new Date().getTime();
+        const startTime = new Date(updated_at).getTime();  // Convert updated_at to timestamp
+        const diff = now - startTime;  // Time difference in milliseconds
+
+        const seconds = Math.floor((diff / 1000) % 60);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+        return `${hours}:${minutes}:${seconds}`;
+    }
     },
 
     computed: {
-        subTotalotalCartsValue() {
+           subTotalotalCartsValue() {
             let total = 0;
             this.carts.forEach((cart) => {
                 total += cart.total_price;

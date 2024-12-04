@@ -34,6 +34,7 @@ class KitchenController extends Controller
         return [
             'id' => $order->id,
             'invoice_id' => $order->invoice_id,
+            'updated_at' => $order->updated_at,
             'orderMode'=>$order->orderMode->name,
             'table'=>$order->table?->name??null,
             'products' => $order->sellProducts->map(function ($product) {
