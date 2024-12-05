@@ -293,6 +293,13 @@
         </li>
     @endcan
 
+    @can('manage_backup')
+    <li class="aside-nav-item">
+        <a class="aside-nav-link" href="{{route('backup')}}">
+            <span class="aside-nav-icon"><i class="fas fa-shopping-bag"></i></span> <span class="aside-nav-text">Backup Data</span>
+        </a>
+    </li>
+@endcan
 
 
 

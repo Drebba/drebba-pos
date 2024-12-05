@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DatabaseExport;
 use App\Models\Business;
 use App\Models\Expense;
 use App\Models\PaymentFromCustomer;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Toastr;
 use Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -114,5 +116,17 @@ class HomeController extends Controller
         $business=Business::where('uuid',$uuid)->firstOrFail();
         $menus=$business->product;
         return view('menu',compact('business','menus'));
+    }
+
+
+    public function backup(){
+        if (!Auth::user()->can('manage_backup')){
+            abort(403);
+        }
+        return view('backup',compact('backup'));
+        $business_id = Auth::user()->business_id;
+        return Excel::download(new DatabaseExport($business_id), 'database_export.xlsx');
+
+
     }
 }
