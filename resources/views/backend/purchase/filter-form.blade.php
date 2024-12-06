@@ -7,6 +7,16 @@
         </div>
         <div class="col-sm-6 col-md-4 col-lg">
             <div class="form-group">
+                <select name="user_id" class="form-select select2-basic">
+                    <option value="">All User</option>
+                    @foreach(Auth::user()->business->user as $user)
+                        <option value="{{$user->id}}" {{Request::get('user_id') == $user->id ? 'selected' : ''}}>{{$user->name}}, {{$user->phone}} </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg">
+            <div class="form-group">
                 <select name="supplier_id" class="form-control select2-basic">
                     <option value="">{{__('pages.all_supplier')}}</option>
                     @foreach($suppliers as $supplier)

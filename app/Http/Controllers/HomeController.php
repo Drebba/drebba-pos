@@ -2,18 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DatabaseExport;
-use App\Models\Backup;
 use App\Models\Business;
-use App\Models\Expense;
-use App\Models\PaymentFromCustomer;
-use App\Models\PaymentToSupplier;
-use App\Models\Purchase;
-use App\Models\Sell;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Toastr;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
@@ -37,8 +30,6 @@ class HomeController extends Controller
     {
 
 
-
-
         $collection = collect(Auth::user()->business->product);
         $low_stock_products = $collection->sortBy('current_stock_quantity')->take(10);
         $trending_products = $collection->sortByDesc('total_sell_qty')->take(10);
@@ -53,10 +44,10 @@ class HomeController extends Controller
     public function dashboardSellPurchaseData(){
 
             $business_id = Auth::user()->business_id;
-            $sell_of_this_month = Sell::where('business_id', $business_id)->whereMonth('sell_date', Carbon::now()->format('m-Y'))->sum('grand_total_price');
-            $total_sell = Sell::where('business_id', $business_id)->sum('grand_total_price');
-            $purchase_of_this_month = Purchase::where('business_id', $business_id)->whereMonth('purchase_date', Carbon::now()->format('m-Y'))->sum('total_amount');
-            $total_purchase = Purchase::where('business_id', $business_id)->sum('total_amount');
+            $sell_of_this_month = Auth::user()->business->sell()->whereMonth('sell_date', Carbon::now()->format('m-Y'))->sum('grand_total_price');
+            $total_sell = Auth::user()->business->sell()->sum('grand_total_price');
+            $purchase_of_this_month = Auth::user()->business->purchase()->whereMonth('purchase_date', Carbon::now()->format('m-Y'))->sum('total_amount');
+            $total_purchase = Auth::user()->business->purchase()->sum('total_amount');
 
 
         $data = [];
@@ -85,30 +76,18 @@ class HomeController extends Controller
     }
 
     private function expenseByDate($date){
-        if (Auth::user()->can('access_to_all_branch')){
-            $expense =  Expense::where('expense_date', $date)->sum('amount');
-            $supplier_payment = PaymentToSupplier::where('payment_date', $date)->sum('amount');
-        }else{
+
             $business_id = Auth::user()->business_id;
 
-            $expense =  Expense::where('business_id', $business_id)->where('expense_date', $date)->sum('amount');
-            $supplier_payment = PaymentToSupplier::where('business_id', $business_id)->where('payment_date', $date)->sum('amount');
-        }
+            $expense =  Auth::user()->business->expense()->where('expense_date', $date)->sum('amount');
+            $supplier_payment = Auth::user()->business->paymenttosupplier()->where('payment_date', $date)->sum('amount');
 
         return  $expense + $supplier_payment;
     }
 
     private function incomeByDate($date){
-        if (Auth::user()->can('access_to_all_branch')){
-            $sell =  Sell::where('sell_date', $date)->sum('paid_amount');
-            $payment_from_customer = PaymentFromCustomer::where('payment_date', $date)->sum('amount');
-        }else{
-            $business_id = Auth::user()->business_id;
-
-            $sell =  Sell::where('business_id', $business_id)->where('sell_date', $date)->sum('paid_amount');
-            $payment_from_customer = PaymentFromCustomer::where('business_id', $business_id)->where('payment_date', $date)->sum('amount');
-        }
-
+            $sell =  Auth::user()->business->sell()->where('sell_date', $date)->sum('paid_amount');
+            $payment_from_customer = Auth::user()->business->paymentfromcustomer()->where('payment_date', $date)->sum('amount');
         return  $sell + $payment_from_customer;
     }
 

@@ -29,7 +29,7 @@ class CustomerController extends Controller
         } // end permission checking
 
         return view('backend.customer.index',[
-            'customers' => Customer::orderBy('id', 'DESC')->with('sells')->paginate(20)
+            'customers' => Auth::user()->business->customer()->orderBy('id', 'DESC')->with('sells')->paginate(20)
         ]);
     }
 
@@ -83,9 +83,9 @@ class CustomerController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $sells = Sell::where('customer_id', $id)->orderBy('id', 'DESC')->paginate(20);
+        $sells = Auth::user()->business->sell()->where('customer_id', $id)->orderBy('id', 'DESC')->paginate(20);
 
-        $customer = Customer::findOrFail($id);
+        $customer = Auth::user()->business->customer()->where('id',$id)->firstOrFail();
 
         return view('backend.customer.show',[
             'customer' => $customer,
@@ -107,7 +107,7 @@ class CustomerController extends Controller
 
 
         return view('backend.customer.edit',[
-            'customer' => Customer::findOrFail($id)
+            'customer' => Auth::user()->business->customer()->where('id',$id)->firstOrFail()
         ]);
     }
 
@@ -124,7 +124,7 @@ class CustomerController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $customer = Customer::findOrFail($id);
+        $customer = Auth::user()->business->customer()->where('id',$id)->firstOrFail();
         $customer->fill($request->all());
         if($request->hasFile('photo')){
             File::delete($customer->photo);
@@ -148,7 +148,7 @@ class CustomerController extends Controller
         } // end permission checking
 
 
-        $customer = Customer::findOrFail($id);
+        $customer =Auth::user()->business->customer()->where('id',$id)->firstOrFail();
         if ($customer->sells->count() > 0){
             Toastr::error('You can not delete this customer. this customer already have '. $customer->sells->count() .' sell', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         }else{

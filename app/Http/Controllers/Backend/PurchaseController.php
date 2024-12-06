@@ -26,18 +26,23 @@ class PurchaseController extends Controller
         if (!Auth::user()->can('manage_purchase_invoice')) {
             return redirect('home')->with(denied());
         } // end permission checking
+        $start_date = $request->start_date ? Carbon::parse($request->start_date) : today()->subWeek(1);
+        $end_date = $request->end_date ? Carbon::parse($request->end_date) : today();
+
+        if ($start_date->diffInMonths($end_date) > 3) {
+            Toastr::error('Select date range should be less than 3 month', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
+            return redirect()->back();
+        }
 
         $purchases = Auth::user()->business->purchase()->orderBy('id', 'DESC');
         if ($request->supplier_id){
             $purchases = $purchases->where('supplier_id', $request->supplier_id);
         }
-
-        if ($request->start_date != '' || $request->end_date != ''){
-            $start_date = $request->start_date ;
-            $end_date = $request->end_date;
-
-            $purchases = $purchases->whereBetween('purchase_date', [$start_date, $end_date]);
+        if ($request->user_id){
+            $purchases = $purchases->where('created_by', $request->user_id);
         }
+
+        $purchases = $purchases->whereBetween('purchase_date', [$start_date, $end_date]);
 
         if ($request->invoice_id){
             $purchases = $purchases->where('invoice_id', 'like', '%'.$request->invoice_id.'%');
@@ -116,12 +121,6 @@ class PurchaseController extends Controller
 
 
         $purchase = Auth::user()->business->purchase()->where('id',$id)->firstOrFail();
-        if (!Auth::user()->can('access_to_all_branch')) {
-            if ($purchase->business_id != Auth::user()->business_id){
-                return redirect()->back()->with(denied());
-            }
-        }
-
         return view('backend.purchase.show', [
             'purchase' => $purchase
         ]);
@@ -133,17 +132,9 @@ class PurchaseController extends Controller
         } // end permission checking
 
         $purchase =Auth::user()->business->purchase()->where('id',$purchase_id)->firstOrFail();
-        if (!Auth::user()->can('access_to_all_branch')) {
-            if ($purchase->business_id != Auth::user()->business_id){
-                return redirect()->back()->with(denied());
-            }
-        }
 
         $pdf = PDF::loadView('backend.pdf.purchase.invoice', compact('purchase'))->setPaper('a4');
-
             return $pdf->stream($purchase->invoice_id . '.pdf');
-
-
     }
 
     /**

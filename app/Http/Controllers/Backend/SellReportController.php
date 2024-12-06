@@ -166,7 +166,7 @@ class SellReportController extends Controller
 
          return view('backend.report.sell.sells.sells',[
             'sells' => $sells,
-            'customers' => Customer::orderBy('id', 'DESC')->get(),
+            'customers' => Auth::user()->business->customer()->orderBy('id', 'DESC')->get(),
          ]);
     }
 

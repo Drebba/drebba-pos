@@ -76,8 +76,5 @@ class Product extends Model
             $model->business_id =  auth()->user()->business_id;
         });
 
-        static::addGlobalScope('short', function (Builder $builder) {
-            $builder->orderByDesc('id');
-        });
     }
 }

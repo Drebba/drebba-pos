@@ -31,47 +31,41 @@ class SellController extends Controller
     public function index(Request $request)
     {
         if (!Auth::user()->can('manage_sell_invoice')) {
-            return redirect('home')->with(denied());
-        } // end permission checking
-
-
-        $sells = Auth::user()->business->sell()->orderBy('id', 'DESC');
-
-        if ($request->customer_id){
-            $sells = $sells->where('customer_id', $request->customer_id);
-        }
-        if ($request->user_id){
-            $sells = $sells->where('created_by', $request->user_id);
+            return redirect('home')->with('error', 'You do not have permission to manage sales invoices.');
         }
 
-            $start_date = $request->start_date ? $request->start_date : today()->subWeek(1);
-            $end_date = $request->end_date ? $request->end_date :today();
+        $start_date = $request->start_date ? Carbon::parse($request->start_date) : today()->subWeek(1);
+        $end_date = $request->end_date ? Carbon::parse($request->end_date) : today();
 
-            $sells = $sells->whereBetween('sell_date', [$start_date, $end_date]);
-
-
-        if ($request->invoice_id){
-            $sells = $sells->where('invoice_id', 'like', '%'.$request->invoice_id.'%');
+        if ($start_date->diffInMonths($end_date) > 3) {
+            Toastr::error('Select date range should be less than 3 month', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
+            return redirect()->back();
         }
 
-        if ($request->table_id){
-            $sells = $sells->where('table_id', $request->table_id);
-        }
-        if ($request->order_mode){
-            $sells = $sells->where('order_mode', $request->order_mode);
-        }
+        $sells = Auth::user()->business->sell()
+            ->when($request->customer_id, fn($query) => $query->where('customer_id', $request->customer_id))
+            ->when($request->user_id, fn($query) => $query->where('created_by', $request->user_id))
+            ->when($request->start_date && $request->end_date, fn($query) =>
+                $query->whereBetween('sell_date', [$start_date, $end_date])
+            )
+            ->when($request->invoice_id, fn($query) =>
+                $query->where('invoice_id', 'like', '%'.$request->invoice_id.'%')
+            )
+            ->when($request->table_id, fn($query) => $query->where('table_id', $request->table_id))
+            ->when($request->order_mode, fn($query) => $query->where('order_mode', $request->order_mode))
+            ->with('customer')
+            ->orderBy('id', 'DESC');
 
         if ($request->export) {
-            return Excel::download(new SellExport($sells->get()), now().".xlsx");
-
+            return Excel::download(new SellExport($sells->get()), now() . ".xlsx");
         }
-        $sells = $sells->with(['customer'])->paginate(50);
 
         return view('backend.sell.index', [
-            'sells' => $sells,
-            'customers' => Auth::user()->business->customer,
+            'sells' => $sells->paginate(50),
+            'customers' => Auth::user()->business->customer()->get(),
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.

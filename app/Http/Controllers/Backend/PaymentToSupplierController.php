@@ -28,6 +28,14 @@ class PaymentToSupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
+        $start_date = $request->start_date ? Carbon::parse($request->start_date) : today()->subWeek(1);
+        $end_date = $request->end_date ? Carbon::parse($request->end_date) : today();
+
+        if ($start_date->diffInMonths($end_date) > 3) {
+            Toastr::error('Select date range should be less than 3 month', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
+            return redirect()->back();
+        }
+
         $payments = Auth::user()->business->paymenttosupplier()->orderBY('id', 'DESC');
 
 
@@ -39,12 +47,7 @@ class PaymentToSupplierController extends Controller
             $payments = $payments->where('supplier_id', $request->supplier_id);
         }
 
-        if ($request->start_date || $request->end_date ){
-            $start_date = $request->start_date ? $request->start_date : PaymentToSupplier::oldest()->pluck('payment_date')->first();
-            $end_date = $request->end_date ? $request->end_date : PaymentToSupplier::latest()->pluck('payment_date')->first();
-
             $payments = $payments->whereBetween('payment_date', [$start_date, $end_date]);
-        }
 
         $payments = $payments->paginate(50);
 

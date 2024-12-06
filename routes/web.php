@@ -113,10 +113,6 @@ Route::middleware('auth', 'active')->group(function () {
 
         Route::get('stock-report', 'Backend\StockReportController@index');
         Route::get('stock-report-pdf', 'Backend\StockReportController@stockReportPdf');
-        Route::get('payment/supplier', 'Backend\PaymentToSupplierController@pdf');
-        Route::get('payment/customer', 'Backend\PaymentFromCustomerController@pdf');
-
-
         Route::get('profit-loss', 'Backend\ProfitLoosReportController@index')->name('profitLoss');
     });
 
@@ -197,8 +193,4 @@ Route::middleware('auth', 'active')->group(function () {
         Route::get('get-dashboard-last-10-days-profit-loss','HomeController@last10DaysProfitLoss');
     });
 });
-
-Route::get('verify-license', 'Backend\SettingsController@verifyLicense')->name('verifyLicense');
-Route::post('activate-license-before-create-user', 'Backend\SettingsController@activateLicense')->name('check.purchase.key');
-Route::post('activate-license', 'Backend\SettingsController@activateLicense')->name('activateLicense');
 

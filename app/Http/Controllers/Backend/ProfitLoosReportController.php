@@ -75,11 +75,11 @@ class ProfitLoosReportController extends Controller
     }
 
     private function incomeByMonth($year, $month, $business_id){
-        $sell =  Sell::whereIn('business_id', $business_id)->whereYear('sell_date', '=', $year)
+        $sell =  Auth::user()->business->sell()->whereYear('sell_date', '=', $year)
             ->whereMonth('sell_date', '=', $month)
             ->sum('paid_amount');
 
-        $payment_from_customer = PaymentFromCustomer::whereIn('business_id', $business_id)->whereYear('payment_date', '=', $year)
+        $payment_from_customer = Auth::user()->business->paymentfromcustomer()->whereYear('payment_date', '=', $year)
             ->whereMonth('payment_date', '=', $month)
             ->sum('amount');
 
@@ -87,11 +87,11 @@ class ProfitLoosReportController extends Controller
     }
 
     private function expenseByMonth($year, $month, $business_id){
-        $expense =  Expense::whereIn('business_id', $business_id)->whereYear('expense_date', '=', $year)
+        $expense =  Auth::user()->business->expense()->whereYear('expense_date', '=', $year)
             ->whereMonth('expense_date', '=', $month)
             ->sum('amount');
 
-        $supplier_payment = PaymentToSupplier::whereIn('business_id', $business_id)->whereYear('payment_date', '=', $year)
+        $supplier_payment = Auth::user()->business->paymenttosupplier()->whereYear('payment_date', '=', $year)
             ->whereMonth('payment_date', '=', $month)
             ->sum('amount');
 
