@@ -174,45 +174,5 @@ class PaymentToSupplierController extends Controller
         return redirect()->back();
     }
 
-    public function pdf(Request $request)
-    {
-        $business_id = $request->business_id ? [$request->business_id] : PaymentToSupplier::select('business_id')->distinct()->get();
-        $supplier_id = $request->supplier_id ? [$request->supplier_id] : PaymentToSupplier::select('supplier_id')->distinct()->get();
-        $start_date = $request->start_date ? $request->start_date : PaymentToSupplier::oldest()->pluck('payment_date')->first();
-        $end_date = $request->end_date ? $request->end_date : PaymentToSupplier::latest()->pluck('payment_date')->first();
 
-        $payments = PaymentToSupplier::whereIn('business_id', $business_id)
-            ->whereIn('supplier_id', $supplier_id)
-            ->whereBetween('payment_date', [$start_date, $end_date])
-            ->orderBY('id', 'DESC')
-            ->get();
-
-
-        if ($request->business_id != ''){
-            $branch =  Branch::findOrFail($request->business_id);
-            $branch_name = $branch->title;
-        }else{
-            $branch_name = 'All';
-        }
-
-        if ($request->supplier_id != ''){
-            $supplier =  Supplier::findOrFail($request->supplier_id);
-            $supplier_name = $supplier->company_name;
-        }else{
-            $supplier_name = 'All';
-        }
-
-
-        $filter_by = [];
-        $filter_by['branch_name'] = $branch_name;
-        $filter_by['supplier_name'] = $supplier_name;
-        $filter_by['start_date'] = Carbon::parse($start_date)->format(get_option('app_date_format'));
-        $filter_by['end_date'] = Carbon::parse($end_date)->format(get_option('app_date_format'));;
-
-        $random_string = Str::random(10);
-        $pdf = PDF::loadView('backend.pdf.payment.supplier', compact('payments', 'filter_by'))->setPaper('a4');
-
-        $pdf->save('pdf/payment/supplier/' . 'payment-to-supplier-' . Carbon::now()->format('Y-m-d') . '-'. $random_string . '.pdf');
-        return redirect('pdf/payment/supplier/' . 'payment-to-supplier-' . Carbon::now()->format('Y-m-d') . '-'. $random_string .'.pdf');
-    }
 }

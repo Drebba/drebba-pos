@@ -26,6 +26,7 @@ class PurchaseController extends Controller
         if (!Auth::user()->can('manage_purchase_invoice')) {
             return redirect('home')->with(denied());
         } // end permission checking
+
         $start_date = $request->start_date ? Carbon::parse($request->start_date) : today()->subWeek(1);
         $end_date = $request->end_date ? Carbon::parse($request->end_date) : today();
 
@@ -96,6 +97,7 @@ class PurchaseController extends Controller
         if ($purchase->paid_amount > 0){
             $payment = new PaymentToSupplier();
             $payment->supplier_id = $purchase->supplier_id;
+            $payment->business_id = $purchase->business_id;
             $payment->purchase_id = $purchase->id;
             $payment->payment_date = $purchase->purchase_date;
             $payment->amount = $purchase->paid_amount;
@@ -185,9 +187,9 @@ class PurchaseController extends Controller
         Auth::user()->business->purchaseProduct()->where('purchase_id',$id)->delete();
         $this->updatePurchaseProducts($request, $purchase);
 
-        $check_payment = PaymentToSupplier::where('purchase_id', $purchase->id)->count();
+        $check_payment = Auth::user()->business->paymenttosupplier()->where('purchase_id', $purchase->id)->count();
         if ($check_payment > 0){
-            $payment = PaymentToSupplier::where('purchase_id', $purchase->id)->first();
+            $payment =  Auth::user()->business->paymenttosupplier()->where('purchase_id', $purchase->id)->first();
             $payment->amount = $purchase->paid_amount;
             $payment->save();
         }else{

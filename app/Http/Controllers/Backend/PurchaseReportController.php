@@ -194,7 +194,7 @@ class PurchaseReportController extends Controller
 
         return view('backend.report.purchase.purchases.index',[
             'purchases' => $purchases,
-            'suppliers' => Supplier::orderBy('id', 'DESC')->get(),
+            'suppliers' =>  Auth::user()->business->supplier()->orderBy('id', 'DESC')->get(),
         ]);
     }
 
@@ -327,7 +327,7 @@ class PurchaseReportController extends Controller
 
 
         if ($request->supplier_id != ''){
-            $supplier = Supplier::findOrFail($request->supplier_id);
+            $supplier = Auth::user()->business->supplier()->where('id',$request->supplier_id)->firstOrFail();;
             $supplier_name = $supplier->company_name;
         }else{
             $supplier_name = 'All';

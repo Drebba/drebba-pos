@@ -136,7 +136,7 @@ class VeuApiController extends Controller
     public function supplierDue($id){
 
         $dueAmount = Purchase::where('business_id', Auth::user()->business_id)->where('supplier_id', $id)->sum('total_amount');
-        $paidAmount =  PaymentToSupplier::where('business_id', Auth::user()->business_id)->where('supplier_id', $id)->sum('amount');
+        $paidAmount =   Auth::user()->business->paymenttosupplier()->where('supplier_id', $id)->sum('amount');
 
         $due =  $dueAmount - $paidAmount;
 

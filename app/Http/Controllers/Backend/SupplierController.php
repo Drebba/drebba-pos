@@ -118,7 +118,7 @@ class SupplierController extends Controller
             return redirect('home')->with(denied());
         } // end permission checking
 
-        $supplier = Supplier::findOrFail($id);
+        $supplier =  Auth::user()->business->supplier()->where('id',$id)->firstOrFail();
         $supplier->fill($request->all());
         if($request->hasFile('logo')){
             File::delete($supplier->logo);
