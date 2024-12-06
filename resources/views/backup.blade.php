@@ -6,8 +6,11 @@
 
         <div class="wiz-card">
             <div class="wiz-card-body">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mb-2">
                     <h5 class="wiz-card-title">Backup</h5>
+                    <div>
+                        <a href="{{ route('backup.store') }}" class="btn btn-brand-secondary btn-brand w-100 w-md-auto"><i class="fas fa-plus"></i> Create Backup</a>
+                    </div>
                 </div>
                 <div class="table-responsive-xl">
                     <table class="table table-bordered text-center wiz-table mw-col-width-skip-first">
@@ -27,35 +30,31 @@
 
                             <tr>
                                 <td>{{$key+1}}</td>
-                                <td>@formatdate($backup->created_at)</td>
-                                <td>{{$sell->user?->name}}</td>
-                                <td> @formatdate($sell->sell_date) </td>
-                                <td> {{get_option('app_currency')}}{{number_format($sell->grand_total_price, 2)}} </td>
-                                <td> {{get_option('app_currency')}}{{number_format($sell->paid_amount, 2)}} </td>
-                                <td> {{get_option('app_currency')}}{{number_format($sell->due_amount, 2)}} </td>
+                                <td>@formatdate($backup->created_at) </td>
+                                <td>{{$backup->start_at}}</td>
+                                <td> {{$backup->completed_at}} </td>
+                                <td> {{
+                                    $backup->status?'completed':'processing'
+                                    }}</td>
+
                                 <td class="font-14">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                                        {{-- <a href="{{route('sell.edit', [$sell->id])}}" class="mx-2 text-brand-primary"><i class="bi bi-pencil"></i></a> --}}
-                                        <a href="{{route('sell.show', [$sell->id])}}" class="mx-2"><i class="bi bi-eye"></i></a>
-                                        <a href="javascript:void(0);" onclick="$(this).confirmDelete($('#delete-{{$key}}')) " class="mx-2 text-danger"><i class="bi bi-trash3"></i></a>
-                                        <form action="{{ route('sell.destroy',$sell->id) }}" method="post" id="delete-{{$key}}"> @csrf @method('delete') </form>
+                                        @if ($backup->status)
+
+                                        <a href="{{route('backup.download', ['id'=>$backup->uuid])}}" class="mx-2"><i class="bi bi-download"></i></a>
+                                        @endif
+
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <th colspan="4">Total</th>
-                            <th>{{$grandtotal}}</th>
-                            <th>{{$paid}}</th>
-                            <th>{{$due}}</th>
 
-                        </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="py-3">
-                    {{$sells->appends(Request::all())->links()}}
+                    {{$backups->links()}}
                 </div>
             </div>
         </div>

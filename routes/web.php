@@ -22,8 +22,10 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('menus/{uuid}/list','HomeController@menu')->name('menus');
 Route::middleware('auth', 'active')->group(function () {
 
-    Route::get('/backup', 'HomeController@backup')->name('backup');
-    Route::get('/backup/store', 'HomeController@backup')->name('backup.store');
+    Route::get('/backup', 'BackupController@index')->name('backup');
+    Route::get('/backup/store', 'BackupController@store')->name('backup.store');
+    Route::get('/backup/{id}/download', 'BackupController@download')->name('backup.download');
+
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/home', 'HomeController@index');
     Route::get('kitchen', 'KitchenController@index');

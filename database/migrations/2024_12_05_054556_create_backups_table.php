@@ -18,6 +18,8 @@ class CreateBackupsTable extends Migration
             $table->string('business_id')->nullable();
             $table->dateTime('start_at')->nullable();
             $table->dateTime('completed_at')->nullable();
+            $table->text('path')->nullable();
+            $table->uuid('uuid');
             $table->integer('status')->default(0);
             $table->timestamps();
         });

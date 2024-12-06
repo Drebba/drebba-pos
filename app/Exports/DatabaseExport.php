@@ -1,11 +1,14 @@
 <?php
 namespace App\Exports;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class DatabaseExport implements WithMultipleSheets, ShouldAutoSize
+class DatabaseExport implements WithMultipleSheets, ShouldAutoSize,ShouldQueue
 {
+    use Exportable;
 
    protected $business_id;
 

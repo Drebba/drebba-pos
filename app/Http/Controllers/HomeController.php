@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DatabaseExport;
+use App\Models\Backup;
 use App\Models\Business;
 use App\Models\Expense;
 use App\Models\PaymentFromCustomer;
@@ -119,14 +120,5 @@ class HomeController extends Controller
     }
 
 
-    public function backup(){
-        if (!Auth::user()->can('manage_backup')){
-            abort(403);
-        }
-        return view('backup',compact('backup'));
-        $business_id = Auth::user()->business_id;
-        return Excel::download(new DatabaseExport($business_id), 'database_export.xlsx');
 
-
-    }
 }

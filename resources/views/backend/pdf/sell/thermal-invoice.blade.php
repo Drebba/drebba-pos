@@ -10,11 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
     <style>
-       #invoice-POS p,#invoice-POS h1,#invoice-POS h2,#invoice-POS h3,#invoice-POS h4,#invoice-POS h5,#invoice-POS h6,#invoice-POS div,#invoice-POS * {
+       #invoice-POS p,#invoice-POS h1,#invoice-POS h2,#invoice-POS h3,#invoice-POS h4,#invoice-POS h5,#invoice-POS h6,#invoice-POS div,#invoice-POS *,body,* {
             /* font-family: 'Nunito Sans', sans-serif!important; */
             font-family: "Silkscreen", sans-serif!important;
-
-
         }
         #invoice-POS {
             box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
