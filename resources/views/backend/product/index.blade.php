@@ -56,7 +56,7 @@
                                 <h2 class="product-title text-center">{{ Str::limit($product->title, 50)}}<br></h2>
 
                                 <div class="d-flex flex-column gap-1">
-                                    <div class="text-center">{{__('pages.sku')}}: {{$product->sku}}</div>
+                                    {{-- <div class="text-center">{{__('pages.sku')}}: {{$product->sku}}</div> --}}
                                     <div class="d-flex justify-content-center">
                                         <span class="text-brand-muted me-2"> {{__('pages.purchase')}} :</span>
                                         <span>{{get_option('app_currency')}}{{$product->purchase_price}}</span>

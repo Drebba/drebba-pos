@@ -29,7 +29,7 @@ class CategoryRequest extends FormRequest
         ];
 
         if ($this->getMethod() == 'PATCH') {
-            $rules['category.title'] = ['required', 'string','max:255', Rule::unique('categories', 'title')->ignore($this->route('category'))];
+            $rules['category.title'] = ['required', 'string','max:255'];
         }
 
         return $rules;

@@ -26,7 +26,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label for="sku" class="custom-label">{{__('pages.sku_or_product_code')}}<span class="text-danger">*</span></label>
                                 <input type="text" name="sku" id="sku" value="{{$product->sku}}" maxlength="15" placeholder="{{__('pages.sku_or_product_code')}}" class="form-control" aria-describedby="emailHelp">
@@ -34,7 +34,7 @@
                                     <div class="error">{{ $errors->first('sku') }}</div>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-3">
                             <div class="form-group">

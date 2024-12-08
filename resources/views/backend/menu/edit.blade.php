@@ -7,7 +7,6 @@
             @csrf
             @method('patch')
 
-
             <div class="wiz-card">
                 <!-- Card Header - Dropdown -->
                 <div class="wiz-card-header">
@@ -26,7 +25,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label for="sku" class="custom-label">Menu/Sku Code<span class="text-danger">*</span></label>
                                 <input type="text" name="sku" id="sku" value="{{$product->sku}}" maxlength="15" placeholder="Menu or Sku code" class="form-control" aria-describedby="emailHelp">
@@ -34,7 +33,7 @@
                                     <div class="error">{{ $errors->first('sku') }}</div>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-3">
                             <div class="form-group">

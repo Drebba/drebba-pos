@@ -31,7 +31,7 @@ class ProductRequest extends FormRequest
            'sell_price' => 'required_without:purchase_price|numeric|min:0',
             'tax_id' => 'required|numeric',
             'price_type' => 'required|numeric',
-            'sku' => 'required',
+            'sku' => 'nullable',
         ];
 
         if ($this->getMethod() == 'PATCH') {

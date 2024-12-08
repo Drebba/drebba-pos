@@ -26,7 +26,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="sku" class="custom-label">{{__('pages.sku_or_product_code')}} <span class="text-danger">*</span></label>
                                         <div class="input-group">
@@ -37,7 +37,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-3">
                                     <div class="form-group">
