@@ -69,7 +69,7 @@ class ProductController extends Controller
         return view('backend.product.create', [
             'categories' => Auth::user()->business->category()->where('type',0)->where('status', '1')->get(),
             'taxes' => Auth::user()->business->tax()->orderBy('title', 'asc')->get(),
-            'units' => Auth::user()->business->unit()->orderBy('title', 'asc')->get(),
+            'units' => Auth::user()->business->unit()->where('type',1)->orderBy('title', 'asc')->get(),
             'new_sku' => str_pad(Auth::user()->business->product()->withTrashed()->count()+1,get_option('invoice_length'),0,STR_PAD_LEFT),
         ]);
     }
