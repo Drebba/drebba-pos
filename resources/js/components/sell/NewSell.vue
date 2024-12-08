@@ -478,12 +478,12 @@
                                             placeholder="Any Information"></textarea>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <div class="flex-grow-1"><a href="javasctipt:void(0)"
+                                        <div class="flex-grow-1"><button type="button" href="javasctipt:void(0)"
                                                 class="btn btn-brand-secondary w-100"
-                                                @click="paymentTypeCash">{{ lang.cash }}</a></div>
-                                        <div class="flex-grow-1"><a href="javasctipt:void(0)"
-                                                class="btn btn-brand-dark-navy w-100"
-                                                @click="paymentTypeCard">Online/QR</a></div>
+                                                @click="paymentTypeCash">{{ lang.cash }}</button></div>
+                                        <div class="flex-grow-1"><button href="javasctipt:void(0)"
+                                                class="btn btn-brand-dark-navy w-100" type="button"
+                                                @click="paymentTypeCard">Online/QR</button></div>
                                     </div>
                                     <div class="mt-2">
                                         <a href="javascript:void(0)" class="btn btn-brand btn-brand-primary w-100"

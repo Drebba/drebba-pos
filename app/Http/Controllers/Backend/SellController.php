@@ -51,6 +51,9 @@ class SellController extends Controller
             ->when($request->invoice_id, fn($query) =>
                 $query->where('invoice_id', 'like', '%'.$request->invoice_id.'%')
             )
+            ->when($request->payment_mode, fn($query) =>
+            $query->where('payment_type', $request->payment_mode)
+        )
             ->when($request->table_id, fn($query) => $query->where('table_id', $request->table_id))
             ->when($request->order_mode, fn($query) => $query->where('order_mode', $request->order_mode))
             ->with('customer')

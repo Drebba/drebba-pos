@@ -43,8 +43,20 @@
 
                     <div class="col-sm-6 col-md-4 col-lg">
                         <div class="form-group">
+                            <select name="payment_mode" class="form-select select2-basic">
+                                <option value="">Payment Mode</option>
+                                @foreach(Auth::user()->business->user as $user)
+                                    <option value="2" {{Request::get('payment_mode') == 2 ? 'selected' : ''}}>Online </option>
+                                    <option value="1" {{Request::get('payment_mode') == 1 ? 'selected' : ''}}>Cash </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg">
+                        <div class="form-group">
                             <select name="user_id" class="form-select select2-basic">
-                                <option value="">All User</option>
+                                <option value="">All Employee</option>
                                 @foreach(Auth::user()->business->user as $user)
                                     <option value="{{$user->id}}" {{Request::get('user_id') == $user->id ? 'selected' : ''}}>{{$user->name}}, {{$user->phone}} </option>
                                 @endforeach
