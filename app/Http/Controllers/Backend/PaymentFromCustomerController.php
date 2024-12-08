@@ -38,9 +38,7 @@ class PaymentFromCustomerController extends Controller
        }
 
         $sells = $sells->whereBetween('sell_date', [$start_date, $end_date]);
-
         $sells = $sells->with('customer')->paginate(50);
-
 
         return view('backend.payment.customer.index',[
             'due_sells' => $sells,
@@ -85,6 +83,7 @@ class PaymentFromCustomerController extends Controller
 
             $payment = new PaymentFromCustomer();
             $payment->fill($request->all());
+            $payment->business_id =  Auth::user()->business_id;
             $payment->customer_id = $sell->customer_id;
             $payment->sell_id = $sell->id;
             $payment->save();

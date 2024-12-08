@@ -36,7 +36,9 @@
                     @can('manage_menu_unit')
                         <a class="aside-nav-link {{ active_if_full_match('menu-unit') }}" href="{{route('menu-unit.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span><span class="aside-nav-text">{{__('pages.units')}}</span></a>
                     @endcan
-
+                    @can('manage_tax')
+                    <a class="aside-nav-link {{ active_if_full_match('tax') }}" href="/tax"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">{{__('pages.taxes')}}</span></a>
+                @endcan
                     @can('manage_menu')
                             <a class="aside-nav-link {{ active_if_full_match('menu') }} {{ active_if_full_match('menu/*/edit') }} {{ active_if_full_match('menu/*') }} {{ active_if_full_match('menu/create') }} " href="{{route('menu.index')}}"><span class="aside-nav-icon"><i class="bi bi-circle"></i></span> <span class="aside-nav-text">Menu</span></a>
                     @endcan

@@ -10,7 +10,6 @@ class Employee extends Model
     protected $dates = ['date_of_birth','joining_date'];
 
     protected $fillable = [
-        'department_id',
         'designation_id',
         'business_id',
         'id_number',
@@ -28,15 +27,4 @@ class Employee extends Model
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-
-
-    public function department()
-    {
-        return $this->belongsTo(Department::class)->withTrashed();
-    }
-
-    public function designation()
-    {
-        return $this->belongsTo(Designation::class)->withTrashed();
-    }
 }

@@ -196,6 +196,7 @@ class PurchaseController extends Controller
             if ($purchase->paid_amount > 0){
                 $payment = new PaymentToSupplier();
                 $payment->supplier_id = $purchase->supplier_id;
+                $payment->business_id = $purchase->business_id;
                 $payment->purchase_id = $purchase->id;
                 $payment->payment_date = $purchase->purchase_date;
                 $payment->amount = $purchase->paid_amount;

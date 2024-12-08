@@ -3,17 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Requests\EmployeeRequest;
-use App\Models\Department;
-use App\Models\Designation;
 use App\Models\Employee;
 use App\Traits\RedirectControlTrait;
 use App\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 use DB;
 use Toastr;
 
@@ -51,7 +47,6 @@ class EmployeeController extends Controller
         } // end permission checking
 
         return view('backend.employee.create', [
-            'departments' => Auth::user()->business->department()->orderBy('title', 'asc')->get(),
             'designations' => Auth::user()->business->designation()->orderBy('title', 'asc')->get(),
             'roles' => Auth::user()->business->role,
         ]);
@@ -146,7 +141,6 @@ class EmployeeController extends Controller
 
 
         return view('backend.employee.edit', [
-            'departments' => Auth::user()->business->department()->orderBy('title', 'asc')->get(),
             'designations' => Auth::user()->business->designation()->orderBy('title', 'asc')->get(),
             'roles' => Auth::user()->business->role,
             'selected_role_id' => $selected_role_id,

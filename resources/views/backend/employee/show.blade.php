@@ -100,14 +100,6 @@
                                 <td>{!! ucwords(str_replace("_", " ", $role)) !!}</td>
                             </tr>
 
-                            <tr>
-                                <td class="fw-medium">{{__('pages.department')}}</td>
-                                <td>{{$employee->department ? $employee->department->title : '--'}}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-medium">{{__('pages.designation')}}</td>
-                                <td>{{$employee->designation ? $employee->designation->title : '--'}}</td>
-                            </tr>
 
                             <tr>
                                 <td class="fw-medium">{{__('pages.employee_id')}}</td>

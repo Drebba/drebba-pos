@@ -62,8 +62,6 @@ Route::middleware('auth', 'active')->group(function () {
     Route::resource('supplier', 'Backend\SupplierController');
     Route::get('change-supplier-status/{id}', 'Backend\SupplierController@changeStatus')->name('change-supplier-status');
     Route::resource('customer', 'Backend\CustomerController');
-    Route::resource('department', 'Backend\DepartmentController');
-    Route::resource('designation', 'Backend\DesignationController');
     Route::resource('employee', 'Backend\EmployeeController');
     Route::get('change-user-status/{user_id}', 'Backend\EmployeeController@changeStatus');
     Route::resource('role', 'Backend\RoleController');
@@ -82,13 +80,6 @@ Route::middleware('auth', 'active')->group(function () {
 
         Route::get('expense-category', 'Backend\TrashController@expenseCategories')->name('expense-category-trash');
         Route::post('expense-category-restore-ok', 'Backend\TrashController@expenseCategoryRestore')->name('expense-category-restore-ok');
-
-        Route::get('department-trash', 'Backend\TrashController@department')->name('department-trash');
-        Route::post('department-restore-ok', 'Backend\TrashController@departmentRestore')->name('department-restore-ok');
-
-        Route::get('designation-trash', 'Backend\TrashController@designation')->name('designation-trash');
-        Route::post('designation-restore-ok', 'Backend\TrashController@designationRestore')->name('designation-restore-ok');
-
         Route::post('branch-restore-ok', 'Backend\TrashController@branchRestore')->name('branch-restore-ok');
     });
 
@@ -168,10 +159,6 @@ Route::middleware('auth', 'active')->group(function () {
 
         Route::get('purchase-details/{purchase_id}','Backend\PurchaseController@getPurchaseDetails');
         Route::get('sell-details/{sell_id}','Backend\SellController@getSellDetails');
-        /** ======= get departments ========== */
-        Route::get('departments','Backend\DepartmentController@departments');
-        /** ====== get designations ========= */
-        Route::get('designations', 'Backend\DesignationController@designations');
         Route::get('taxes','Backend\TaxController@taxes');
     });
 

@@ -44,8 +44,6 @@ Vue.component('new-purchase', require('./components/purchase/NewPurchase.vue').d
 Vue.component('edit-purchase', require('./components/purchase/EditPurchase.vue').default);
 Vue.component('new-sell', require('./components/sell/NewSell.vue').default);
 Vue.component('edit-sell', require('./components/sell/EditSell.vue').default);
-Vue.component('department', require('./components/department/DepartmentComponent.vue').default);
-Vue.component('designation', require('./components/designation/DesignationComponent.vue').default);
 Vue.component('expense-category', require('./components/expense-category/ExpenseCategoryComponent.vue').default);
 Vue.component('tax', require('./components/tax/Tax.vue').default);
 Vue.component('role', require('./components/role/Role.vue').default);

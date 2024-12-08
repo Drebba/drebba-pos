@@ -134,36 +134,7 @@
                     <div class="form-section">
                         <h5 class="form-section-title">{{__('pages.employment_info')}}</h5>
                         <div class="row g-3">
-                        {{-- <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="department_id" class="custom-label">{{__('pages.department')}} <span class="text-danger">*</span></label>
-                                <select name="department_id" id="department_id" class="form-select select2-basic">
-                                    <option value="">{{__('pages.select_department')}}</option>
-                                    @foreach($departments as $department)
-                                        <option value="{{$department->id}}" {{$employee->department_id == $department->id ? 'selected' : ''}}>{{$department->title}}</option>
-                                    @endforeach
-                                </select>
 
-                                @if ($errors->has('department_id'))
-                                    <div class="error">{{ $errors->first('department_id') }}</div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="designation_id" class="custom-label">{{__('pages.designation')}} <span class="text-danger">*</span></label>
-                                <select name="designation_id" id="designation_id" class="form-select select2-basic" >
-                                    <option value="">{{__('pages.select_designation')}} </option>
-                                    @foreach($designations as $designation)
-                                        <option value="{{$designation->id}}" {{$employee->designation_id == $designation->id ? 'selected' : ''}}>{{$designation->title}}</option>
-                                    @endforeach
-                                </select>
-
-                                @if ($errors->has('designation_id'))
-                                    <div class="error">{{ $errors->first('designation_id') }}</div>
-                                @endif
-                            </div>
-                        </div> --}}
 
 
                         <div class="col-md-4">

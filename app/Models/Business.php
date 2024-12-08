@@ -119,14 +119,6 @@ class Business extends Model
         return $this->hasMany(PaymentToSupplier::class);
     }
 
-    public function department(){
-        return $this->hasMany(Department::class);
-    }
-
-
-    public function designation(){
-        return $this->hasMany(Designation::class);
-    }
 
     public function role(){
         return $this->hasMany(Role::class);

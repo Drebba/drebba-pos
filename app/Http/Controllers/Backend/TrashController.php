@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Branch;
 use App\Models\Category;
-use App\Models\Department;
-use App\Models\Designation;
-use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use App\Models\Tax;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Role;
 use Toastr;
 
 class TrashController extends Controller
@@ -65,40 +61,6 @@ class TrashController extends Controller
         $category->save();
 
         Toastr::success('Expense Category successfully Restore', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
-        return redirect()->back();
-    }
-
-    public function department()
-    {
-        return view('backend.trash.departments',[
-            'departments' => Department::where('deleted_at', '!=', NULL)->withTrashed()->get()
-        ]);
-    }
-
-    public function departmentRestore(Request $request)
-    {
-        $department =  Department::where('id', $request->id)->withTrashed()->firstOrFail();
-        $department->deleted_at = null;
-        $department->save();
-
-        Toastr::success('Department successfully Restore', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
-        return redirect()->back();
-    }
-
-    public function designation()
-    {
-        return view('backend.trash.designations',[
-            'designations' => Designation::where('deleted_at', '!=', NULL)->withTrashed()->get()
-        ]);
-    }
-
-    public function designationRestore(Request $request)
-    {
-        $designation =  Designation::where('id', $request->id)->withTrashed()->firstOrFail();
-        $designation->deleted_at = null;
-        $designation->save();
-
-        Toastr::success('Designation successfully Restore', '', ['progressBar' => true, 'closeButton' => true, 'positionClass' => 'toast-bottom-right']);
         return redirect()->back();
     }
 
