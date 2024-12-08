@@ -10,7 +10,6 @@ class Employee extends Model
     protected $dates = ['date_of_birth','joining_date'];
 
     protected $fillable = [
-        'designation_id',
         'business_id',
         'id_number',
         'blood_group',

@@ -47,7 +47,6 @@ class EmployeeController extends Controller
         } // end permission checking
 
         return view('backend.employee.create', [
-            'designations' => Auth::user()->business->designation()->orderBy('title', 'asc')->get(),
             'roles' => Auth::user()->business->role,
         ]);
     }
@@ -141,7 +140,6 @@ class EmployeeController extends Controller
 
 
         return view('backend.employee.edit', [
-            'designations' => Auth::user()->business->designation()->orderBy('title', 'asc')->get(),
             'roles' => Auth::user()->business->role,
             'selected_role_id' => $selected_role_id,
             'employee' => Auth::user()->business->employee()->findOrFail($id),
