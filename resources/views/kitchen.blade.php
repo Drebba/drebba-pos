@@ -10,8 +10,13 @@
     <link href="{{ asset('admin/plugin/bootstrap5/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <div class="py-2" style="background:#0C213A">
-        <h3 class="text-center text-white">{{ Auth::user()->business->name }} (Kitchen Orders)</h3>
+    <div class="py-2 d-flex justify-content-evenly" style="background:#0C213A">
+        @if (Auth::user()->can('manage_sell'))
+        <a class="text-white text-decoration-none" href="{{route('sell.index')}}">
+            <h4>⬅ All Sell</h4>
+        </a>
+        @endif
+      <h4 class="text-center text-white">{{ Auth::user()->business->name }} (Kitchen Orders)</h4>
     </div>
 
     <div class="container-fluid mt-4">

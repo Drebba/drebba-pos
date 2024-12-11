@@ -161,13 +161,13 @@
 
 
 
-    @canany(['manage_customer', 'manage_supplier','manage_department', 'manage_designation','manage_employee','manage_branch', 'manage_sells_target'])
+    @canany(['manage_customer', 'manage_supplier','manage_employee','manage_branch', 'manage_sells_target'])
         <div class="aside-menu-divider"></div>
         <li class="aside-nav-heading"> {{__('pages.hr_department')}} </li>
     @endcan
 
 
-    @canany(['manage_department', 'manage_designation','manage_employee','manage_user'])
+    @canany(['manage_employee','manage_user'])
         <li class="aside-nav-item toggleable-group">
             <a class="aside-nav-link toggler {{ active_if_match('department') }} {{ active_if_match('employee') }} {{ active_if_match('designation') }} {{ active_if_match('role') }} {{ active_if_match('settings/user/permission') }}" href="javascript:void(0)" data-toggle="collapse" data-target="#employee" aria-expanded="true" aria-controls="user">
                 <span class="aside-nav-icon"><i class="fas fa-users"></i></span>

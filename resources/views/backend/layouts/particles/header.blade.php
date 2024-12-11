@@ -120,7 +120,7 @@
 
                  )
                     <li class="nav-item">
-                        <a class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('home')}}" target="_blank">
+                        <a class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('home')}}" >
                             <i class="fas fa-fw fa-tachometer-alt me-2"></i> <span>{{__('pages.dashboard')}}</span>
                         </a>
                     </li>
@@ -129,21 +129,21 @@
 
                 @can('manage_purchase_invoice')
                     <li class="nav-item" >
-                        <a target="_blank" class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('purchase.index')}}">
+                        <a  class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('purchase.index')}}">
                             <i class="fa fa-list me-2"></i>  <span> All Purchase </span>
                         </a>
                     </li>
                 @endcan
                 @can('create_purchase_invoice')
                     <li class="nav-item">
-                        <a target="_blank" class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('purchase.create')}}">
+                        <a  class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('purchase.create')}}">
                             <i class="fa fa-plus me-2"></i>  <span> New Purchase</span>
                         </a>
                     </li>
                 @endcan
                 @can('manage_sell_invoice')
                     <li class="nav-item">
-                        <a target="_blank" class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('sell.index')}}">
+                        <a  class="text-nowrap btn btn-soft-primary btn-sm" href="{{route('sell.index')}}">
                             <i class="fa fa-list me-2"></i> <span> All Sales </span>
                         </a>
                     </li>

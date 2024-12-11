@@ -22,6 +22,7 @@
         "milon/barcode": "^8.0",
         "mpdf/mpdf": "^8.2",
         "php-curl-class/php-curl-class": "^9.1",
+        "silviolleite/laravelpwa": "^2.0",
         "spatie/laravel-permission": "^3.0"
     },
     "require-dev": {

@@ -28,6 +28,8 @@
             background-color: #0C213A!important;
         }
       </style>
+          @laravelPWA
+
 </head>
 
 <body id="page-top">

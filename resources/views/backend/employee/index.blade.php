@@ -17,8 +17,6 @@
                         <tr class="bg-secondary text-white">
                             <th>{{__('pages.sl')}}</th>
                             <th class="text-center">{{__('pages.name')}}</th>
-                            {{-- <th class="text-center">{{__('pages.branch')}}</th> --}}
-                            {{-- <th class="text-center">{{__('pages.designation')}}</th> --}}
                             <th class="text-center">{{__('pages.phone_number')}}</th>
                             <th class="text-center">{{__('pages.email')}}</th>
                             <th class="text-center">{{__('pages.status')}}</th>
@@ -30,8 +28,6 @@
                             <tr>
                                 <td class="text-center">{{$key + 1}}</td>
                                 <td class="text-center">{{$employee->user->name}}</td>
-                                {{-- <td class="text-center">{{$employee->branch->title}}</td> --}}
-                                {{-- <td class="text-center">{{$employee->designation->title}}</td> --}}
                                 <td class="text-center">{{$employee->phone_number}}</td>
                                 <td class="text-center">{{$employee->user->email}}</td>
                                 <td class="text-center">

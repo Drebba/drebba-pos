@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('admin/css/helper.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('admin/css/main.css')}}">
     @stack('css')
+    @laravelPWA
 </head>
 
 <body class="bg-gradient-primary">
